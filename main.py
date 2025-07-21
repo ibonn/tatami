@@ -113,6 +113,8 @@ class Endpoint:
 
         return self
 
+    def __repr__(self) -> str:
+        return f'<Endpoint for {self.path} ({self.method}) @ {hex(id(self))}>'
 
 def router(p: str, title: Optional[str] = None, description: Optional[str] = None, version: Optional[str] = None) -> Type[Router]:
     class _Router(Router):
