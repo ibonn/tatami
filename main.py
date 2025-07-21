@@ -1,6 +1,6 @@
 import inspect
 from types import MethodType
-from typing import Callable, Optional, Type
+from typing import Callable, Mapping, MutableSequence, Optional, Type
 
 from starlette.applications import Starlette
 from starlette.requests import Request
@@ -11,6 +11,20 @@ from starlette.routing import Route
 
 def _human_friendly_description_from_name(name: str) -> str:
     return ' '.join(name.split('_')).capitalize()
+
+
+def update_dict(d: dict, update_with: dict):
+    for k, v in update_with.items():
+        if k in d:
+            if isinstance(d[k], Mapping) and isinstance(v, Mapping):
+                update_dict(d[k], v)
+            elif isinstance(d[k], MutableSequence) and isinstance(v, MutableSequence):
+                d[k].extend(v)
+            else:
+                d[k] = v
+        else:
+            d[k] = v
+
 
 class Router(Starlette):
     path: str
@@ -142,10 +156,8 @@ def router(p: str, title: Optional[str] = None, description: Optional[str] = Non
                     }, 
                     'paths': {},
                 }
-                for attr in dir(self):
-                    val = getattr(self.__class__, attr, None)
-                    if isinstance(val, Endpoint):
-                        spec['paths'].update(val.get_openapi_spec(self.path))
+                for ep in self.endpoints:
+                    update_dict(spec['paths'], ep.get_openapi_spec(self.path))
                 return JSONResponse(spec)
             routes.append(Route("/openapi.json", openapi_endpoint, methods=["GET"]))
 
@@ -296,14 +308,6 @@ class Users(router('/users')):
 
 user_service = UserService()
 app = Users(user_service)
-
-# Print OpenAPI
-import json
-
-print(json.dumps({
-    path: method_spec for ep in app.endpoints
-    for path, method_spec in ep.get_openapi_spec(app.path).items()
-}, indent=2))
 
 # Uncomment to run
 uvicorn.run(app, host="127.0.0.1", port=8000)
