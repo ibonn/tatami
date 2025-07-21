@@ -1,6 +1,6 @@
 import inspect
 from types import MethodType
-from typing import Callable, Mapping, MutableSequence, Optional, Type
+from typing import Callable, Mapping, MutableSequence, Optional, Type, Union
 
 from starlette.applications import Starlette
 from starlette.requests import Request
@@ -38,14 +38,16 @@ class Router(Starlette):
                 eps.append(val)
         return eps
 
+Tag = Union[str, dict[str, str]]
 
 class Endpoint:
-    def __init__(self, method: str, path: str, response_type: Optional[Type[Response]] = None, summary: Optional[str] = None, description: Optional[str] = None):
+    def __init__(self, method: str, path: str, response_type: Optional[Type[Response]] = None, summary: Optional[str] = None, description: Optional[str] = None, tags: Optional[list[Tag]] = None):
         self.method = method.upper()
         self.path = path
         self.response_type = response_type
         self.summary = summary
         self.description = description
+        self.tags = tags or []
         self.ep_fn: Callable = None
 
     def __get__(self, instance, owner):
@@ -53,7 +55,7 @@ class Endpoint:
             return self
         return MethodType(self.ep_fn, instance)
 
-    def get_openapi_spec(self, base_path: str) -> dict:
+    def get_openapi_spec(self, parent_router: Router) -> dict:
         sig = inspect.signature(self.ep_fn)
         parameters = []
         request_body = None
@@ -87,6 +89,7 @@ class Endpoint:
             'summary': self.summary or _human_friendly_description_from_name(self.ep_fn.__name__),
             'description': self.description or self.ep_fn.__doc__ or _human_friendly_description_from_name(self.ep_fn.__name__),
             'parameters': parameters,
+            'tags': self.tags or [parent_router.__class__.__name__],
             'responses': {
                 '200': {
                     'description': 'Successful response'
@@ -98,7 +101,7 @@ class Endpoint:
             op['requestBody'] = request_body
 
         return {
-            base_path + self.path: {
+            parent_router.path + self.path: {
                 self.method.lower(): op
             }
         }
@@ -153,11 +156,12 @@ def router(p: str, title: Optional[str] = None, description: Optional[str] = Non
                         'title': title or f'{self.__class__.__name__} API',
                         'description': description or self.__class__.__doc__ or f'REST API for {self.__class__.__name__}',
                         'version': version,
+                        'tags': [{'name': self.__class__.__name__, 'description': self.__class__.__doc__}]
                     }, 
                     'paths': {},
                 }
                 for ep in self.endpoints:
-                    update_dict(spec['paths'], ep.get_openapi_spec(self.path))
+                    update_dict(spec['paths'], ep.get_openapi_spec(self))
                 return JSONResponse(spec)
             routes.append(Route("/openapi.json", openapi_endpoint, methods=["GET"]))
 
@@ -275,6 +279,7 @@ class UserService:
         return [User(name="Alice", age=30), User(name="Bob", age=25)]
 
 class Users(router('/users')):
+    """User management endpoints"""
     def __init__(self, users: UserService):
         self.users = users
         super().__init__()
