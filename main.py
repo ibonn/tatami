@@ -1,17 +1,62 @@
 import inspect
+import os
+from io import IOBase
 from types import MethodType
-from typing import (Awaitable, Callable, Mapping, MutableSequence, Optional,
-                    Self, Type, Union)
+from typing import (Any, Awaitable, Callable, Mapping, MutableSequence,
+                    Optional, Self, Type, Union)
 
+from jinja2 import Environment, FileSystemLoader
 from starlette.applications import Starlette
 from starlette.requests import Request
-from starlette.responses import (HTMLResponse, JSONResponse, RedirectResponse,
-                                 Response)
+from starlette.responses import (HTMLResponse, JSONResponse, Response,
+                                 StreamingResponse)
 from starlette.routing import Route
 
+def serialize_json(x: Any) -> Any:
+    if isinstance(x, BaseModel):
+        return x.model_dump()
+    
+    if isinstance(x, (list, tuple)):
+        return [serialize_json(y) for y in x]
+    
+    if isinstance(x, Mapping):
+        return {a: serialize_json(b) for a, b in x.items()}
+    
+    return x
+
+
+class TemplateResponse(HTMLResponse):
+    def __init__(self, template_name: str, content = None, status_code = 200, headers = None, media_type = None, background = None):
+        environment = Environment(loader=FileSystemLoader('templates'))
+        template = environment.get_template(template_name)
+        super().__init__(template.render(content), status_code, headers, media_type, background)
 
 def _human_friendly_description_from_name(name: str) -> str:
     return ' '.join(name.split('_')).capitalize()
+
+def wrap_response(ep_fn: Callable, ep_result: Any) -> Response:
+    try:
+        if isinstance(ep_result, BaseModel):
+            return JSONResponse(serialize_json(ep_result))
+    except:
+        pass
+    
+    for extension in ['jinja2', 'html', 'jinja']:
+        template_path = os.path.join('templates', f'{ep_fn.__name__}.{extension}')
+        if os.path.isfile(template_path):
+            return TemplateResponse(template_path, ep_result)
+        
+    try:
+        if isinstance(ep_result, IOBase) and ep_result.readable():
+            def file_iterator():
+                with ep_result as f:
+                    yield from f
+            return StreamingResponse(file_iterator())
+    except:
+        pass
+
+
+    return JSONResponse(serialize_json(ep_result))
 
 
 def update_dict(d: dict, update_with: dict):
@@ -143,7 +188,11 @@ class Endpoint:
         result = self.ep_fn(request.app, **kwargs)
         if inspect.isawaitable(result):
             result = await result
-        return JSONResponse(result)
+
+        if self.response_type is None:
+            return wrap_response(self.ep_fn, result)
+        
+        return self.response_type(result)
 
     def __call__(self, ep_fn: Callable) -> 'Endpoint':
         self.ep_fn = ep_fn
@@ -333,7 +382,7 @@ class Users(router('/users')):
 
     @get('/')
     def get_users(self):
-        return [user.model_dump() for user in self.users.get_users()]
+        return [user for user in self.users.get_users()]
 
     @post('/')
     def add_user(self, user: User):
@@ -342,11 +391,11 @@ class Users(router('/users')):
 
     @get('/{user_id}')
     def get_user_by_id(self, user_id: int):
-        return self.users.get_user(user_id).model_dump()
+        return self.users.get_user(user_id)
 
     @put('/{user_id}')
     def update_user(self, user_id: int, user: User):
-        return {'msg': f"Updated user {user_id} with {user.model_dump()}"}
+        return {'msg': f"Updated user {user_id} with {user}"}
 
     @delete('/{user_id}')
     def delete_user(self, user_id: int):
