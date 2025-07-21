@@ -1,4 +1,4 @@
-![Tatami Logo](tatami-logo.png)
+![Tatami Logo](https://raw.githubusercontent.com/ibonn/tatami/refs/heads/main/images/tatami-logo.png)
 
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ibonn/tatami/tests?style=flat-square)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/tatami?style=flat-square)
