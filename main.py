@@ -8,6 +8,9 @@ from starlette.responses import HTMLResponse, JSONResponse, RedirectResponse
 from starlette.routing import Route
 
 
+def _human_friendly_description_from_name(name: str) -> str:
+    return ' '.join(name.split('_')).capitalize()
+
 class Router(Starlette):
     path: str
 
@@ -63,7 +66,7 @@ class Endpoint:
                     }
 
         op = {
-            'summary': self.ep_fn.__name__,
+            'summary': self.ep_fn.__doc__ or _human_friendly_description_from_name(self.ep_fn.__name__),
             'parameters': parameters,
             'responses': {
                 '200': {
@@ -106,7 +109,7 @@ class Endpoint:
         return self
 
 
-def router(p: str) -> Type[Router]:
+def router(p: str, title: Optional[str] = None, description: Optional[str] = None, version: Optional[str] = None) -> Type[Router]:
     class _Router(Router):
         path: str = p
 
@@ -123,7 +126,15 @@ def router(p: str) -> Type[Router]:
 
             # /openapi.json
             async def openapi_endpoint(request: Request):
-                spec = {'openapi': '3.0.0', 'paths': {}}
+                spec = {
+                    'openapi': '3.0.0', 
+                    'info': {
+                        'title': title or f'{self.__class__.__name__} API',
+                        'description': description or self.__class__.__doc__ or f'REST API for {self.__class__.__name__}',
+                        'version': version,
+                    }, 
+                    'paths': {},
+                }
                 for attr in dir(self):
                     val = getattr(self.__class__, attr, None)
                     if isinstance(val, Endpoint):
