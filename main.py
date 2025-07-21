@@ -6,11 +6,21 @@ from typing import (Any, Awaitable, Callable, Mapping, MutableSequence,
                     Optional, Self, Type, Union)
 
 from jinja2 import Environment, FileSystemLoader
+from pydantic import BaseModel
 from starlette.applications import Starlette
 from starlette.requests import Request
 from starlette.responses import (HTMLResponse, JSONResponse, Response,
                                  StreamingResponse)
 from starlette.routing import Route
+
+
+def get_request_type(fn: Callable) -> dict[str, Type[BaseModel]]:
+    models = {}
+    annotations = inspect.get_annotations(fn)
+    for name, cls in annotations.items():
+        if issubclass(cls, BaseModel):
+            models[name] = cls
+    return models
 
 def serialize_json(x: Any) -> Any:
     if isinstance(x, BaseModel):
@@ -112,9 +122,10 @@ class Router(Starlette):
 Tag = Union[str, dict[str, str]]
 
 class Endpoint:
-    def __init__(self, method: str, path: str, response_type: Optional[Type[Response]] = None, summary: Optional[str] = None, description: Optional[str] = None, tags: Optional[list[Tag]] = None):
+    def __init__(self, method: str, path: str, request_type: Optional[BaseModel] = None, response_type: Optional[Type[Response]] = None, summary: Optional[str] = None, description: Optional[str] = None, tags: Optional[list[Tag]] = None):
         self.method = method.upper()
         self.path = path
+        self.request_type = request_type
         self.response_type = response_type
         self.summary = summary
         self.description = description
@@ -182,7 +193,10 @@ class Endpoint:
         if request.method in ('POST', 'PUT', 'PATCH'):
             try:
                 body = await request.json()
-                kwargs.update(body)
+                if self.request_type is not None:
+                    for param_name, model in self.request_type.items():
+                        kwargs.update({param_name: model(**body)})
+                
             except Exception:
                 pass  # skip if body is not present
         result = self.ep_fn(request.app, **kwargs)
@@ -196,6 +210,8 @@ class Endpoint:
 
     def __call__(self, ep_fn: Callable) -> 'Endpoint':
         self.ep_fn = ep_fn
+
+        self.request_type = self.request_type or get_request_type(ep_fn)
 
         self._build_route = lambda base_path: Route(
             path=self.path,
@@ -230,7 +246,7 @@ def router(p: str, title: Optional[str] = None, description: Optional[str] = Non
 
 # Universal request helper
 def request(method: str, path: str, response_type: Optional[Type[Response]] = None) -> Endpoint:
-    return Endpoint(method, path, response_type)
+    return Endpoint(method, path, response_type=response_type)
 
 # Convenience decorators for all HTTP verbs
 def get(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
