@@ -64,7 +64,7 @@ class Endpoint:
                     request_body = {
                         'content': {
                             'application/json': {
-                                'schema': annotation.schema()
+                                'schema': annotation.model_json_schema()
                             }
                         }
                     }
