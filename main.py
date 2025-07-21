@@ -285,7 +285,7 @@ def run(app: Tatami, host: str = 'localhost', port: int = 8000, openapi_url: Opt
         <!DOCTYPE html>
         <html>
         <head>
-            <title>ReDoc</title>
+            <title>{app.title} - ReDoc</title>
             <meta charset="utf-8"/>
         </head>
         <body>
@@ -301,7 +301,7 @@ def run(app: Tatami, host: str = 'localhost', port: int = 8000, openapi_url: Opt
         <!DOCTYPE html>
         <html>
         <head>
-            <title>Swagger UI</title>
+            <title>{app.title} - Swagger UI</title>
             <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist/swagger-ui.css" />
             <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
             <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-standalone-preset.js"></script>
@@ -326,7 +326,7 @@ def run(app: Tatami, host: str = 'localhost', port: int = 8000, openapi_url: Opt
         <!DOCTYPE html>
         <html>
         <head>
-            <title>RapiDoc</title>
+            <title>{app.title} - RapiDoc</title>
             <script type="module" src="https://unpkg.com/rapidoc/dist/rapidoc-min.js"></script>
         </head>
         <body>
