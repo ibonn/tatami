@@ -1,6 +1,7 @@
 import inspect
 from types import MethodType
-from typing import Callable, Mapping, MutableSequence, Optional, Type, Union
+from typing import (Awaitable, Callable, Mapping, MutableSequence, Optional,
+                    Self, Type, Union)
 
 from starlette.applications import Starlette
 from starlette.requests import Request
@@ -28,6 +29,31 @@ def update_dict(d: dict, update_with: dict):
 
 class Router(Starlette):
     path: str
+
+    def __init__(self, title: Optional[str] = None, description: Optional[str] = None, version: Optional[str] = None, debug = False, routes = None, middleware = None, exception_handlers = None, on_startup = None, on_shutdown = None, lifespan = None):
+        super().__init__(debug, routes, middleware, exception_handlers, on_startup, on_shutdown, lifespan)
+        self.title = title
+        self.description = description
+        self.version = version
+
+    def _get_base_openapi_spec(self) -> dict:
+        return {
+            'openapi': '3.0.0',
+            'info': {
+                'title': self.title or self.__class__.__name__,
+                'version': self.version,
+                'description': self.description or self.__doc__ or f'API for {self.__class__.__name__}',
+            },
+            'paths': {},
+            'tags': [],
+        }
+
+    def get_openapi_spec(self) -> dict:
+        spec = self._get_base_openapi_spec()
+        for ep in self.endpoints:
+            update_dict(spec['paths'], ep.get_openapi_spec(self))
+        return spec
+
 
     @property
     def endpoints(self) -> list['Endpoint']:
@@ -105,26 +131,26 @@ class Endpoint:
                 self.method.lower(): op
             }
         }
+    
+    async def run(self, request: Request) -> Union[Response, Awaitable[Response]]:
+        kwargs = dict(request.path_params)
+        if request.method in ('POST', 'PUT', 'PATCH'):
+            try:
+                body = await request.json()
+                kwargs.update(body)
+            except Exception:
+                pass  # skip if body is not present
+        result = self.ep_fn(request.app, **kwargs)
+        if inspect.isawaitable(result):
+            result = await result
+        return JSONResponse(result)
 
     def __call__(self, ep_fn: Callable) -> 'Endpoint':
         self.ep_fn = ep_fn
 
-        async def route_handler(request: Request):
-            kwargs = dict(request.path_params)
-            if request.method in ('POST', 'PUT', 'PATCH'):
-                try:
-                    body = await request.json()
-                    kwargs.update(body)
-                except Exception:
-                    pass  # skip if body is not present
-            result = self.ep_fn(request.app, **kwargs)
-            if inspect.isawaitable(result):
-                result = await result
-            return JSONResponse(result)
-
         self._build_route = lambda base_path: Route(
-            path=base_path + self.path,
-            endpoint=route_handler,
+            path=self.path,
+            endpoint=self.run,
             methods=[self.method]
         )
 
@@ -148,88 +174,6 @@ def router(p: str, title: Optional[str] = None, description: Optional[str] = Non
                 if isinstance(val, Endpoint) and hasattr(val, '_build_route'):
                     routes.append(val._build_route(self.path))
 
-            # /openapi.json
-            async def openapi_endpoint(request: Request):
-                spec = {
-                    'openapi': '3.0.0', 
-                    'info': {
-                        'title': title or f'{self.__class__.__name__} API',
-                        'description': description or self.__class__.__doc__ or f'REST API for {self.__class__.__name__}',
-                        'version': version,
-                        'tags': [{'name': self.__class__.__name__, 'description': self.__class__.__doc__}]
-                    }, 
-                    'paths': {},
-                }
-                for ep in self.endpoints:
-                    update_dict(spec['paths'], ep.get_openapi_spec(self))
-                return JSONResponse(spec)
-            routes.append(Route("/openapi.json", openapi_endpoint, methods=["GET"]))
-
-            # /docs/redoc
-            async def redoc_ui(request: Request):
-                html = """
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>ReDoc</title>
-                    <meta charset="utf-8"/>
-                </head>
-                <body>
-                    <redoc spec-url='/openapi.json'></redoc>
-                    <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"></script>
-                </body>
-                </html>
-                """
-                return HTMLResponse(html)
-            routes.append(Route("/docs/redoc", redoc_ui, methods=["GET"]))
-
-            # /docs/swagger
-            async def swagger_ui(request: Request):
-                html = """
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Swagger UI</title>
-                    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist/swagger-ui.css" />
-                    <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
-                    <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-standalone-preset.js"></script>
-                </head>
-                <body>
-                    <div id="swagger-ui"></div>
-                    <script>
-                    SwaggerUIBundle({
-                        url: '/openapi.json',
-                        dom_id: '#swagger-ui',
-                        presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
-                        layout: "BaseLayout"
-                    });
-                    </script>
-                </body>
-                </html>
-                """
-                return HTMLResponse(html)
-            routes.append(Route("/docs/swagger", swagger_ui, methods=["GET"]))
-
-            # /docs/rapidoc
-            async def rapidoc_ui(request: Request):
-                html = """
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>RapiDoc</title>
-                    <script type="module" src="https://unpkg.com/rapidoc/dist/rapidoc-min.js"></script>
-                </head>
-                <body>
-                    <rapi-doc spec-url="/openapi.json" theme="dark" show-header="true" render-style="read"></rapi-doc>
-                </body>
-                </html>
-                """
-                return HTMLResponse(html)
-            routes.append(Route("/docs/rapidoc", rapidoc_ui, methods=["GET"]))
-
-            # Optional: redirect /docs → Swagger UI
-            routes.append(Route("/docs", lambda request: RedirectResponse("/docs/swagger"), methods=["GET"]))
-
             super().__init__(routes=routes)
 
     return _Router
@@ -242,7 +186,7 @@ def request(method: str, path: str, response_type: Optional[Type[Response]] = No
 # Convenience decorators for all HTTP verbs
 def get(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
     return request('GET', path, response_type)
-def post(path: str, response_type: Optional[Type[Response]] = None) -> Callable: 
+def post(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
     return request('POST', path, response_type)
 def put(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
     return request('PUT', path, response_type)
@@ -254,6 +198,109 @@ def head(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
     return request('HEAD', path, response_type)
 def options(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
     return request('OPTIONS', path, response_type)
+
+class Tatami(Router):
+    def __init__(self, title: Optional[str] = None, description: Optional[str] = None, version: Optional[str] = None, debug = False, routes = None, middleware = None, exception_handlers = None, on_startup = None, on_shutdown = None, lifespan = None):
+        super().__init__(debug, routes, middleware, exception_handlers, on_startup, on_shutdown, lifespan)
+        self.title = title
+        self.description = description
+        self.version = version
+
+    def include_router(self, router: Router) -> Self:
+        self.mount(router.path, router)
+        return self
+    
+    def get_openapi_spec(self):
+        base = self._get_base_openapi_spec()
+
+        for route in self.routes:
+            if isinstance(route.app, Router):
+                update_dict(base['paths'], route.app.get_openapi_spec()['paths'])
+                base['tags'].append({
+                    'name': route.app.__class__.__name__,
+                    'description': route.app.__class__.__doc__ or ''
+                })
+
+        return base
+
+    
+
+def run(app: Tatami, host: str = 'localhost', port: int = 8000, openapi_url: Optional[str] = '/openapi.json', swagger_url: Optional[str] = '/docs/swagger', redoc_url: Optional[str] = '/docs/redoc', rapidoc_url: Optional[str] = '/docs/rapidoc') -> None:
+    app.path = ''
+    
+    async def openapi_endpoint(request: Request):
+        return JSONResponse(app.get_openapi_spec())
+
+    async def redocs_endpoint(request: Request):
+        html = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>ReDoc</title>
+            <meta charset="utf-8"/>
+        </head>
+        <body>
+            <redoc spec-url='{openapi_url}'></redoc>
+            <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"></script>
+        </body>
+        </html>
+        """
+        return HTMLResponse(html)
+
+    async def swagger_endpoint(request: Request):
+        html = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Swagger UI</title>
+            <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist/swagger-ui.css" />
+            <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
+            <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-standalone-preset.js"></script>
+        </head>
+        <body>
+            <div id="swagger-ui"></div>
+            <script>
+            SwaggerUIBundle({{
+                url: '{openapi_url}',
+                dom_id: '#swagger-ui',
+                presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+                layout: "BaseLayout"
+            }});
+            </script>
+        </body>
+        </html>
+        """
+        return HTMLResponse(html)
+
+    async def rapidoc_endpoint(request: Request):
+        html = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>RapiDoc</title>
+            <script type="module" src="https://unpkg.com/rapidoc/dist/rapidoc-min.js"></script>
+        </head>
+        <body>
+            <rapi-doc spec-url="{openapi_url}" theme="dark" show-header="true" render-style="read"></rapi-doc>
+        </body>
+        </html>
+        """
+        return HTMLResponse(html)
+
+    # Add the documentation routes to the root app
+    if openapi_url is not None:
+        app.routes.insert(0, Route(openapi_url, openapi_endpoint, methods=["GET"]))
+
+        if redoc_url is not None:
+            app.routes.insert(0, Route(redoc_url, redocs_endpoint, methods=["GET"]))
+        
+        if swagger_url is not None:
+            app.routes.insert(0, Route(swagger_url, swagger_endpoint, methods=["GET"]))
+        
+        if rapidoc_url is not None:
+            app.routes.insert(0, Route(rapidoc_url, rapidoc_endpoint, methods=["GET"]))
+
+    uvicorn.run(app, host=host, port=port)
 
 ########################
 # TODO build from directory structure
@@ -310,9 +357,19 @@ class Users(router('/users')):
         """Determine **what** can be done with the `/users` endpoint
         """
         return {'methods': ['GET', 'POST', 'OPTIONS']}
+    
+class Pets(router('/pets')):
+    @get('/')
+    def get_pets(self):
+        return ['NO PETS']
 
 user_service = UserService()
-app = Users(user_service)
+users = Users(user_service)
+pets = Pets()
+
+app = Tatami()
+app.include_router(users)
+app.include_router(pets)
 
 # Uncomment to run
-uvicorn.run(app, host="127.0.0.1", port=8000)
+run(app, host="127.0.0.1", port=8000)
