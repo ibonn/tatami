@@ -1,10 +1,11 @@
 import inspect
 from types import MethodType
-from typing import Callable, Type
+from typing import Callable, Optional, Type
 
 from starlette.applications import Starlette
 from starlette.requests import Request
-from starlette.responses import HTMLResponse, JSONResponse, RedirectResponse
+from starlette.responses import (HTMLResponse, JSONResponse, RedirectResponse,
+                                 Response)
 from starlette.routing import Route
 
 
@@ -25,9 +26,12 @@ class Router(Starlette):
 
 
 class Endpoint:
-    def __init__(self, method: str, path: str):
+    def __init__(self, method: str, path: str, response_type: Optional[Type[Response]] = None, summary: Optional[str] = None, description: Optional[str] = None):
         self.method = method.upper()
         self.path = path
+        self.response_type = response_type
+        self.summary = summary
+        self.description = description
         self.ep_fn: Callable = None
 
     def __get__(self, instance, owner):
@@ -66,7 +70,8 @@ class Endpoint:
                     }
 
         op = {
-            'summary': self.ep_fn.__doc__ or _human_friendly_description_from_name(self.ep_fn.__name__),
+            'summary': self.summary or _human_friendly_description_from_name(self.ep_fn.__name__),
+            'description': self.description or self.ep_fn.__doc__ or _human_friendly_description_from_name(self.ep_fn.__name__),
             'parameters': parameters,
             'responses': {
                 '200': {
@@ -213,17 +218,24 @@ def router(p: str, title: Optional[str] = None, description: Optional[str] = Non
 
 
 # Universal request helper
-def request(method: str, path: str) -> Endpoint:
-    return Endpoint(method, path)
+def request(method: str, path: str, response_type: Optional[Type[Response]] = None) -> Endpoint:
+    return Endpoint(method, path, response_type)
 
 # Convenience decorators for all HTTP verbs
-def get(path: str) -> Callable: return request('GET', path)
-def post(path: str) -> Callable: return request('POST', path)
-def put(path: str) -> Callable: return request('PUT', path)
-def patch(path: str) -> Callable: return request('PATCH', path)
-def delete(path: str) -> Callable: return request('DELETE', path)
-def head(path: str) -> Callable: return request('HEAD', path)
-def options(path: str) -> Callable: return request('OPTIONS', path)
+def get(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
+    return request('GET', path, response_type)
+def post(path: str, response_type: Optional[Type[Response]] = None) -> Callable: 
+    return request('POST', path, response_type)
+def put(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
+    return request('PUT', path, response_type)
+def patch(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
+    return request('PATCH', path, response_type)
+def delete(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
+    return request('DELETE', path, response_type)
+def head(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
+    return request('HEAD', path, response_type)
+def options(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
+    return request('OPTIONS', path, response_type)
 
 ########################
 # TODO build from directory structure
@@ -276,6 +288,8 @@ class Users(router('/users')):
 
     @options('/')
     def options_users(self):
+        """Determine **what** can be done with the `/users` endpoint
+        """
         return {'methods': ['GET', 'POST', 'OPTIONS']}
 
 user_service = UserService()
