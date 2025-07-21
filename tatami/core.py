@@ -103,6 +103,7 @@ class Endpoint:
             'description': self.description or self.ep_fn.__doc__ or _human_friendly_description_from_name(self.ep_fn.__name__),
             'parameters': parameters,
             'tags': self.tags or [parent_router.__class__.__name__],
+            'deprecated': hasattr(self.ep_fn, '__deprecated__'),
             'responses': {
                 '200': {
                     'description': 'Successful response'
