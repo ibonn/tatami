@@ -1,0 +1,32 @@
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+
+test = ["pytest", "coverage"]
+
+
+[tool.hatch.version]
+path = "tatami/__init__.py"
+
+[project]
+name = "tatami"
+version = "0.0.1-pre.0"
+authors = [
+  { name="Ibon", email="ibonescartin@gmail.com" },
+]
+description = "The clean, modular Python web floorplan"
+dependencies = []
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "LGPL-3.0-only"
+license-files = ["LICEN[CS]E*"]
+
+[project.urls]
+Homepage = "https://github.com/ibonn/tatami"
