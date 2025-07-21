@@ -253,7 +253,7 @@ class Users(router('/users')):
 
     @get('/{user_id}')
     def get_user_by_id(self, user_id: int):
-        return self.users.get_user(user_id).dict()
+        return self.users.get_user(user_id).model_dump()
 
     @put('/{user_id}')
     def update_user(self, user_id: int, user: User):
