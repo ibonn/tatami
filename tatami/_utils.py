@@ -1,0 +1,77 @@
+import inspect
+import os
+from io import IOBase
+from typing import Any, Callable, Mapping, MutableSequence, Type
+
+from jinja2 import Environment, FileSystemLoader
+from pydantic import BaseModel
+from starlette.responses import (HTMLResponse, JSONResponse, Response,
+                                 StreamingResponse)
+
+
+class TemplateResponse(HTMLResponse):
+    def __init__(self, template_name: str, content = None, status_code = 200, headers = None, media_type = None, background = None):
+        environment = Environment(loader=FileSystemLoader('templates'))
+        template = environment.get_template(template_name)
+        super().__init__(template.render(content), status_code, headers, media_type, background)
+
+
+def get_request_type(fn: Callable) -> dict[str, Type[BaseModel]]:
+    models = {}
+    annotations = inspect.get_annotations(fn)
+    for name, cls in annotations.items():
+        if issubclass(cls, BaseModel):
+            models[name] = cls
+    return models
+
+def update_dict(d: dict, update_with: dict):
+    for k, v in update_with.items():
+        if k in d:
+            if isinstance(d[k], Mapping) and isinstance(v, Mapping):
+                update_dict(d[k], v)
+            elif isinstance(d[k], MutableSequence) and isinstance(v, MutableSequence):
+                d[k].extend(v)
+            else:
+                d[k] = v
+        else:
+            d[k] = v
+
+
+def serialize_json(x: Any) -> Any:
+    if isinstance(x, BaseModel):
+        return x.model_dump()
+    
+    if isinstance(x, (list, tuple)):
+        return [serialize_json(y) for y in x]
+    
+    if isinstance(x, Mapping):
+        return {a: serialize_json(b) for a, b in x.items()}
+    
+    return x
+
+def _human_friendly_description_from_name(name: str) -> str:
+    return ' '.join(name.split('_')).capitalize()
+
+def wrap_response(ep_fn: Callable, ep_result: Any) -> Response:
+    try:
+        if isinstance(ep_result, BaseModel):
+            return JSONResponse(serialize_json(ep_result))
+    except:
+        pass
+    
+    for extension in ['jinja2', 'html', 'jinja']:
+        template_path = os.path.join('templates', f'{ep_fn.__name__}.{extension}')
+        if os.path.isfile(template_path):
+            return TemplateResponse(template_path, ep_result)
+        
+    try:
+        if isinstance(ep_result, IOBase) and ep_result.readable():
+            def file_iterator():
+                with ep_result as f:
+                    yield from f
+            return StreamingResponse(file_iterator())
+    except:
+        pass
+
+
+    return JSONResponse(serialize_json(ep_result))

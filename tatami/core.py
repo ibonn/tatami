@@ -1,85 +1,16 @@
 import inspect
-import os
-from io import IOBase
 from types import MethodType
-from typing import (Any, Awaitable, Callable, Mapping, MutableSequence,
-                    Optional, Self, Type, Union)
+from typing import Awaitable, Callable, Optional, Self, Type, Union
 
-from jinja2 import Environment, FileSystemLoader
+import uvicorn
 from pydantic import BaseModel
 from starlette.applications import Starlette
 from starlette.requests import Request
-from starlette.responses import (HTMLResponse, JSONResponse, Response,
-                                 StreamingResponse)
+from starlette.responses import HTMLResponse, JSONResponse, Response
 from starlette.routing import Route
 
-
-def get_request_type(fn: Callable) -> dict[str, Type[BaseModel]]:
-    models = {}
-    annotations = inspect.get_annotations(fn)
-    for name, cls in annotations.items():
-        if issubclass(cls, BaseModel):
-            models[name] = cls
-    return models
-
-def serialize_json(x: Any) -> Any:
-    if isinstance(x, BaseModel):
-        return x.model_dump()
-    
-    if isinstance(x, (list, tuple)):
-        return [serialize_json(y) for y in x]
-    
-    if isinstance(x, Mapping):
-        return {a: serialize_json(b) for a, b in x.items()}
-    
-    return x
-
-
-class TemplateResponse(HTMLResponse):
-    def __init__(self, template_name: str, content = None, status_code = 200, headers = None, media_type = None, background = None):
-        environment = Environment(loader=FileSystemLoader('templates'))
-        template = environment.get_template(template_name)
-        super().__init__(template.render(content), status_code, headers, media_type, background)
-
-def _human_friendly_description_from_name(name: str) -> str:
-    return ' '.join(name.split('_')).capitalize()
-
-def wrap_response(ep_fn: Callable, ep_result: Any) -> Response:
-    try:
-        if isinstance(ep_result, BaseModel):
-            return JSONResponse(serialize_json(ep_result))
-    except:
-        pass
-    
-    for extension in ['jinja2', 'html', 'jinja']:
-        template_path = os.path.join('templates', f'{ep_fn.__name__}.{extension}')
-        if os.path.isfile(template_path):
-            return TemplateResponse(template_path, ep_result)
-        
-    try:
-        if isinstance(ep_result, IOBase) and ep_result.readable():
-            def file_iterator():
-                with ep_result as f:
-                    yield from f
-            return StreamingResponse(file_iterator())
-    except:
-        pass
-
-
-    return JSONResponse(serialize_json(ep_result))
-
-
-def update_dict(d: dict, update_with: dict):
-    for k, v in update_with.items():
-        if k in d:
-            if isinstance(d[k], Mapping) and isinstance(v, Mapping):
-                update_dict(d[k], v)
-            elif isinstance(d[k], MutableSequence) and isinstance(v, MutableSequence):
-                d[k].extend(v)
-            else:
-                d[k] = v
-        else:
-            d[k] = v
+from tatami._utils import (_human_friendly_description_from_name,
+                           get_request_type, update_dict, wrap_response)
 
 
 class Router(Starlette):
@@ -366,75 +297,3 @@ def run(app: Tatami, host: str = 'localhost', port: int = 8000, openapi_url: Opt
             app.routes.insert(0, Route(rapidoc_url, rapidoc_endpoint, methods=["GET"]))
 
     uvicorn.run(app, host=host, port=port)
-
-########################
-# TODO build from directory structure
-# TODO automatically inject dependencies
-# TODO automatically detect html templates/response types
-
-import uvicorn
-from pydantic import BaseModel, Field
-
-
-class User(BaseModel):
-    name: str = Field(description='The user name')
-    age: int = Field(description='Age')
-
-class UserService:
-    def add_user(self, user: User) -> int:
-        return 42
-
-    def get_user(self, id: int) -> User:
-        return User(name="Alice", age=30)
-
-    def get_users(self) -> list[User]:
-        return [User(name="Alice", age=30), User(name="Bob", age=25)]
-
-class Users(router('/users')):
-    """User management endpoints"""
-    def __init__(self, users: UserService):
-        self.users = users
-        super().__init__()
-
-    @get('/')
-    def get_users(self):
-        return [user for user in self.users.get_users()]
-
-    @post('/')
-    def add_user(self, user: User):
-        user_id = self.users.add_user(user)
-        return {'id': user_id}
-
-    @get('/{user_id}')
-    def get_user_by_id(self, user_id: int):
-        return self.users.get_user(user_id)
-
-    @put('/{user_id}')
-    def update_user(self, user_id: int, user: User):
-        return {'msg': f"Updated user {user_id} with {user}"}
-
-    @delete('/{user_id}')
-    def delete_user(self, user_id: int):
-        return {'msg': f"Deleted user {user_id}"}
-
-    @options('/')
-    def options_users(self):
-        """Determine **what** can be done with the `/users` endpoint
-        """
-        return {'methods': ['GET', 'POST', 'OPTIONS']}
-    
-class Pets(router('/pets')):
-    @get('/')
-    def get_pets(self):
-        return ['NO PETS']
-
-user_service = UserService()
-users = Users(user_service)
-pets = Pets()
-
-app = Tatami()
-app.include_router(users)
-app.include_router(pets)
-
-# Uncomment to run
-run(app, host="127.0.0.1", port=8000)
