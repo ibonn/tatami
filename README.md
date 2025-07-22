@@ -41,7 +41,7 @@ Tatami is designed for:
 * Simplicity: Eliminate configuration and glue code.
 * Alignment: Your docs, code, and architecture reflect each other.
 
-It’s like FastAPI and Flask had a minimalist, Spring Boot-inspired child.
+It's like FastAPI and Flask had a minimalist, Spring Boot-inspired child.
 
 ## 📚 Documentation
 

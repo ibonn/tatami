@@ -14,6 +14,9 @@ from tatami._utils import (_human_friendly_description_from_name,
 
 
 class Router(Starlette):
+    """Base class for routers. In general, you should use the :func:`~tatami.core.router` class factory to
+    declare your routers
+    """
     path: str
 
     def __init__(self, title: Optional[str] = None, description: Optional[str] = None, version: Optional[str] = None, debug = False, routes = None, middleware = None, exception_handlers = None, on_startup = None, on_shutdown = None, lifespan = None):
@@ -35,6 +38,28 @@ class Router(Starlette):
         }
 
     def get_openapi_spec(self) -> dict:
+        """
+        Generate the complete OpenAPI specification dictionary by aggregating
+        the base specification with the OpenAPI specs from all registered endpoints.
+
+        This method is usually called internally to generate the OpenAPI specification.
+
+        This method calls a private method `_get_base_openapi_spec` to retrieve the
+        base OpenAPI spec, then updates the `paths` section of the spec with
+        endpoint-specific specifications.
+
+        Returns:
+            dict: A dictionary representing the full OpenAPI specification.
+
+        Usage example:
+
+        .. code-block:: python
+
+            # Assume `router` is a Router instance
+            openapi_spec = router.get_openapi_spec()
+            print(openapi_spec['paths'])  # Outputs the combined paths of all endpoints
+        
+        """
         spec = self._get_base_openapi_spec()
         for ep in self.endpoints:
             update_dict(spec['paths'], ep.get_openapi_spec(self))
@@ -53,6 +78,13 @@ class Router(Starlette):
 Tag = Union[str, dict[str, str]]
 
 class Endpoint:
+    """
+    Represents an endpoint within the framework.
+
+    This is an internal class and is not intended for general use. It should only be used when implementing advanced functionality or extending the framework.
+
+    The class stores metadata associated with endpoints. It is also callable and can be used as a decorator. Invoking the `run()` method executes the endpoint's logic.
+    """
     def __init__(self, method: str, path: str, request_type: Optional[BaseModel] = None, response_type: Optional[Type[Response]] = None, summary: Optional[str] = None, description: Optional[str] = None, tags: Optional[list[Tag]] = None):
         self.method = method.upper()
         self.path = path
@@ -69,6 +101,56 @@ class Endpoint:
         return MethodType(self.ep_fn, instance)
 
     def get_openapi_spec(self, parent_router: Router) -> dict:
+        """
+        Generate the OpenAPI specification fragment for this endpoint.
+
+        This method inspects the endpoint function signature to determine:
+        - Path parameters (parameters present in the URL path)
+        - Request body schema (Pydantic models used as non-path parameters)
+
+        It constructs the OpenAPI operation object with summary, description,
+        parameters, tags, deprecated flag, and default 200 response.
+
+        Args:
+            parent_router (Router): The router instance that contains this endpoint,
+                used to build the full path and tags.
+
+        Returns:
+            dict: A dictionary representing the OpenAPI path and method specification
+            for this endpoint.
+
+        Usage example:
+        
+        .. code-block:: python
+
+            # Assume `endpoint` is an instance of the endpoint class and `router` is the parent router
+            openapi_fragment = endpoint.get_openapi_spec(router)
+            print(openapi_fragment)
+            # Output example:
+            # {
+            #   "/users/{user_id}": {
+            #       "get": {
+            #           "summary": "Get user by ID",
+            #           "description": "Retrieve a user by their unique identifier.",
+            #           "parameters": [
+            #               {
+            #                   "name": "user_id",
+            #                   "in": "path",
+            #                   "required": True,
+            #                   "schema": {"type": "string"}
+            #               }
+            #           ],
+            #           "tags": ["UserRouter"],
+            #           "deprecated": False,
+            #           "responses": {
+            #               "200": {
+            #                   "description": "Successful response"
+            #               }
+            #           }
+            #       }
+            #   }
+            # }
+        """
         sig = inspect.signature(self.ep_fn)
         parameters = []
         request_body = None
@@ -121,6 +203,37 @@ class Endpoint:
         }
     
     async def run(self, request: Request) -> Union[Response, Awaitable[Response]]:
+        """
+        Handle an incoming HTTP request by extracting path parameters and request body,
+        invoking the endpoint function, and returning an appropriate response.
+
+        The method:
+        - Extracts path parameters from the request URL.
+        - For POST, PUT, or PATCH methods, attempts to parse the JSON body and
+        instantiate Pydantic models defined in `self.request_type`.
+        - Calls the endpoint function (`self.ep_fn`) with the app instance and
+        all extracted parameters.
+        - Awaits the result if it is awaitable.
+        - Wraps the result in a response using `self.response_type` if defined,
+        otherwise uses a default wrapper.
+
+        Args:
+            request (Request): The incoming HTTP request object.
+
+        Returns:
+            Union[Response, Awaitable[Response]]: A Starlette Response instance,
+            either directly returned or awaited.
+
+        Usage example:
+        
+        .. code-block:: python
+
+            # Assume `endpoint` is an instance with `run` method,
+            # and `request` is a Starlette Request object.
+
+            response = await endpoint.run(request)
+            # `response` is a Starlette Response object ready to be sent back to the client.
+        """
         kwargs = dict(request.path_params)
         if request.method in ('POST', 'PUT', 'PATCH'):
             try:
@@ -157,6 +270,49 @@ class Endpoint:
         return f'<Endpoint for {self.path} ({self.method}) @ {hex(id(self))}>'
 
 def router(p: str, title: Optional[str] = None, description: Optional[str] = None, version: Optional[str] = None) -> Type[Router]:
+    """
+    Factory function to create a Router subclass with a fixed base path and auto-discovered endpoints.
+
+    This function defines and returns a subclass of `Router` with:
+    - A fixed `path` attribute set to `p`.
+    - An initializer that collects all `Endpoint` instances declared as class attributes,
+      calls their `_build_route` method with the router path, and registers them as routes.
+    - Optional metadata arguments (`title`, `description`, `version`) are accepted but currently unused.
+
+    Args:
+        p (str): The base path prefix for all routes registered under this router.
+        title (Optional[str]): Optional router title metadata.
+        description (Optional[str]): Optional router description metadata.
+        version (Optional[str]): Optional router version metadata.
+
+    Returns:
+        Type[Router]: A subclass of `Router` customized with the specified base path and auto-registered endpoints.
+
+    Usage example:
+    
+    .. code-block:: python
+
+        # Define endpoints as class attributes inside the Router subclass
+        class UserRouter(router('/users')):
+            @get('/')
+            def get_users(self):
+                ...
+
+            @get('/{user_id}')
+            def get_user(self, id: int):
+                ...
+
+            @post('/')
+            def create_user(self, user_data: dict):
+                ...
+
+        # Instantiate the router
+        user_router = UserRouter()
+
+        # The router now has routes for '/users/' (GET and POST), '/users/{user_id}', etc.
+        print(user_router.routes)
+    
+    """
     class _Router(Router):
         path: str = p
 
@@ -178,25 +334,201 @@ def router(p: str, title: Optional[str] = None, description: Optional[str] = Non
 
 # Universal request helper
 def request(method: str, path: str, response_type: Optional[Type[Response]] = None) -> Endpoint:
+    """
+    Convenience factory function to create an `Endpoint` instance with the given HTTP method and path.
+    Meant to be used as a decorator.
+
+    Args:
+        method (str): The HTTP method for the endpoint (e.g., 'GET', 'POST', 'PUT', etc.).
+        path (str): The URL path pattern for the endpoint (e.g., '/users/{user_id}').
+        response_type (Optional[Type[Response]]): Optional Starlette Response subclass to use for responses.
+
+    Returns:
+        Endpoint: An instance of `Endpoint` initialized with the specified method, path, and response type.
+
+    Usage example:
+    
+    .. code-block:: python
+
+        @request('GET', '/users/{user_id}', response_type=JSONResponse)
+        def get_user_by_id(self, user_id):
+            ...
+    """
     return Endpoint(method, path, response_type=response_type)
 
 # Convenience decorators for all HTTP verbs
 def get(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
+    """
+    Create an Endpoint for an HTTP GET request.
+
+    Args:
+        path (str): The URL path pattern for the GET endpoint.
+        response_type (Optional[Type[Response]]): Optional Starlette Response subclass for the response.
+
+    Returns:
+        Callable: An Endpoint instance configured for GET requests.
+
+    Usage example:
+    
+    .. code-block:: python
+
+        @get('/items/{item_id}')
+        def get_item(self, item_id: str):
+            ...
+    """
     return request('GET', path, response_type)
 def post(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
+    """
+    Create an Endpoint for an HTTP POST request.
+
+    Args:
+        path (str): The URL path pattern for the POST endpoint.
+        response_type (Optional[Type[Response]]): Optional Starlette Response subclass for the response.
+
+    Returns:
+        Callable: An Endpoint instance configured for POST requests.
+
+    Usage example:
+    
+    .. code-block:: python
+
+        @post('/items/')
+        def create_item(self):
+            ...
+    """
     return request('POST', path, response_type)
 def put(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
+    """
+    Create an Endpoint for an HTTP PUT request.
+
+    Args:
+        path (str): The URL path pattern for the PUT endpoint.
+        response_type (Optional[Type[Response]]): Optional Starlette Response subclass for the response.
+
+    Returns:
+        Callable: An Endpoint instance configured for PUT requests.
+
+    Usage example:
+    
+    .. code-block:: python
+
+        @put('/items/{item_id}')
+        def update_item(self, item_id: str, item: Item):
+            ...
+    """
     return request('PUT', path, response_type)
 def patch(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
+    """
+    Create an Endpoint for an HTTP PATCH request.
+
+    Args:
+        path (str): The URL path pattern for the PATCH endpoint.
+        response_type (Optional[Type[Response]]): Optional Starlette Response subclass for the response.
+
+    Returns:
+        Callable: An Endpoint instance configured for PATCH requests.
+
+    Usage example:
+    
+    .. code-block:: python
+
+        @patch('/items/{item_id}')
+        def update_item(self, item_id: str, item: Item):
+            ...
+    """
     return request('PATCH', path, response_type)
 def delete(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
+    """
+    Create an Endpoint for an HTTP DELETE request.
+
+    Args:
+        path (str): The URL path pattern for the DELETE endpoint.
+        response_type (Optional[Type[Response]]): Optional Starlette Response subclass for the response.
+
+    Returns:
+        Callable: An Endpoint instance configured for DELETE requests.
+
+    Usage example:
+    
+    .. code-block:: python
+
+        @delete('/items/{item_id}')
+        def delete_item(self, item_id: str):
+            ...
+    """
     return request('DELETE', path, response_type)
 def head(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
+    """
+    Create an Endpoint for an HTTP HEAD request.
+
+    Args:
+        path (str): The URL path pattern for the HEAD endpoint.
+        response_type (Optional[Type[Response]]): Optional Starlette Response subclass for the response.
+
+    Returns:
+        Callable: An Endpoint instance configured for HEAD requests.
+
+    Usage example:
+    
+    .. code-block:: python
+
+        @put('/items/')
+        def head_items(self):
+            ...
+    """
     return request('HEAD', path, response_type)
 def options(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
+    """
+    Create an Endpoint for an HTTP OPTIONS request.
+
+    Args:
+        path (str): The URL path pattern for the OPTIONS endpoint.
+        response_type (Optional[Type[Response]]): Optional Starlette Response subclass for the response.
+
+    Returns:
+        Callable: An Endpoint instance configured for OPTIONS requests.
+
+    Usage example:
+    
+    .. code-block:: python
+
+        @options('/items/')
+        def options_items(self):
+            ...
+    """
     return request('OPTIONS', path, response_type)
 
 class Tatami(Router):
+    """
+    Main application class extending Router to provide additional features like
+    OpenAPI spec aggregation and router inclusion.
+
+    Args:
+        title (Optional[str]): The API title.
+        description (Optional[str]): The API description.
+        version (Optional[str]): The API version.
+        debug (bool): Enable debug mode.
+        routes (Optional[List]): Initial routes to add.
+        middleware (Optional[List]): Middleware to apply.
+        exception_handlers (Optional[Dict]): Custom exception handlers.
+        on_startup (Optional[Callable]): Callback for startup event.
+        on_shutdown (Optional[Callable]): Callback for shutdown event.
+        lifespan (Optional[Callable]): Lifespan context manager.
+
+    Usage example:
+    
+    .. code-block:: python
+
+        app = Tatami(title="My API", version="1.0")
+
+        # Create a router and include it
+        user_router = UserRouter()
+        app.include_router(user_router)
+
+        # Get combined OpenAPI spec
+        spec = app.get_openapi_spec()
+        print(spec)
+    """
     def __init__(self, title: Optional[str] = None, description: Optional[str] = None, version: Optional[str] = None, debug = False, routes = None, middleware = None, exception_handlers = None, on_startup = None, on_shutdown = None, lifespan = None):
         super().__init__(debug, routes, middleware, exception_handlers, on_startup, on_shutdown, lifespan)
         self.title = title
@@ -204,10 +536,38 @@ class Tatami(Router):
         self.version = version
 
     def include_router(self, router: Router) -> Self:
+        """
+        Mount another router instance under its configured path.
+
+        Args:
+            router (Router): A Router instance to include.
+
+        Returns:
+            Self: Returns self to allow chaining.
+
+        Usage example:
+        
+        .. code-block:: python
+
+            app.include_router(user_router)
+        """
         self.mount(router.path, router)
         return self
     
     def get_openapi_spec(self):
+        """
+        Aggregate the OpenAPI specification from this app and all mounted routers.
+
+        Returns:
+            dict: The combined OpenAPI specification.
+
+        Usage example:
+        
+        .. code-block:: python
+
+            spec = app.get_openapi_spec()
+            print(spec['paths'])
+        """
         base = self._get_base_openapi_spec()
 
         for route in self.routes:
@@ -223,6 +583,40 @@ class Tatami(Router):
     
 
 def run(app: Tatami, host: str = 'localhost', port: int = 8000, openapi_url: Optional[str] = '/openapi.json', swagger_url: Optional[str] = '/docs/swagger', redoc_url: Optional[str] = '/docs/redoc', rapidoc_url: Optional[str] = '/docs/rapidoc') -> None:
+    """
+    Run the Tatami application using Uvicorn, and optionally serve OpenAPI and documentation UIs.
+
+    This function:
+    - Sets the app root path to ''.
+    - Adds routes to serve the OpenAPI JSON spec and interactive API docs (Swagger UI, ReDoc, RapiDoc)
+      at the specified URLs.
+    - Starts the Uvicorn server on the specified host and port.
+
+    Args:
+        app (Tatami): The Tatami application instance to run.
+        host (str): Hostname to bind the server to. Defaults to 'localhost'.
+        port (int): Port to bind the server to. Defaults to 8000.
+        openapi_url (Optional[str]): URL path to serve OpenAPI JSON spec. Defaults to '/openapi.json'.
+            Set to None to disable.
+        swagger_url (Optional[str]): URL path to serve Swagger UI. Defaults to '/docs/swagger'.
+            Set to None to disable.
+        redoc_url (Optional[str]): URL path to serve ReDoc UI. Defaults to '/docs/redoc'.
+            Set to None to disable.
+        rapidoc_url (Optional[str]): URL path to serve RapiDoc UI. Defaults to '/docs/rapidoc'.
+            Set to None to disable.
+
+    Usage example:
+
+    .. code-block:: python
+
+        app = Tatami(title="My API")
+
+        # Run the app with default docs URLs
+        run(app, host="0.0.0.0", port=8080)
+
+    Note:
+        Requires `uvicorn` to be installed.
+    """
     app.path = ''
     
     async def openapi_endpoint(request: Request):
