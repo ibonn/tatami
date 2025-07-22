@@ -36,6 +36,6 @@ html_theme_options = {
 html_theme_options = {
   "external_links": [
       ("GitHub", "https://github.com/ibonn/tatami"),
-      ("Example (PetStore)", "https://testsite.com/petstore")
+      ("Example (PetStore)", "https://github.com/ibonn/tatami-petstore")
   ]
 }
