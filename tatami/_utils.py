@@ -1,5 +1,8 @@
+import datetime
+import decimal
 import inspect
 import os
+from dataclasses import asdict, is_dataclass
 from io import IOBase
 from typing import Any, Callable, Mapping, MutableSequence, Type, Union
 from uuid import UUID
@@ -42,7 +45,7 @@ def serialize_json(x: Any) -> Any:
     if isinstance(x, BaseModel):
         return x.model_dump()
     
-    if isinstance(x, (list, tuple)):
+    if isinstance(x, (list, tuple, set)):
         return [serialize_json(y) for y in x]
     
     if isinstance(x, Mapping):
@@ -50,6 +53,21 @@ def serialize_json(x: Any) -> Any:
     
     if isinstance(x, UUID):
         return str(x)
+    
+    if isinstance(x, decimal.Decimal):
+        return float(x)
+    
+    if is_dataclass(x):
+        return serialize_json(asdict(x))
+    
+    if isinstance(x, (datetime.datetime, datetime.date, datetime.time)):
+        return x.isoformat()
+    
+    if hasattr(x, '__slots__'):
+        return {slot: serialize_json(getattr(x, slot)) for slot in x.__slots__ if hasattr(x, slot)}
+    
+    if hasattr(x, '__dict__'):
+        return serialize_json(vars(x))
     
     return x
 
