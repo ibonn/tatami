@@ -1,7 +1,8 @@
 import inspect
+import logging
 from types import MethodType
-from typing import (TYPE_CHECKING, Awaitable, Callable, Optional, Type,
-                    TypeAlias, Union)
+from typing import (TYPE_CHECKING, Awaitable, Callable, Optional, Self, Type,
+                    TypeAlias, TypeVar, Union, overload)
 
 from pydantic import BaseModel
 from starlette.requests import Request
@@ -15,6 +16,9 @@ if TYPE_CHECKING:
     from tatami.router import Router
 
 Tag: TypeAlias = Union[str, dict[str, str]]
+F = TypeVar("F", bound=Callable)
+
+logger = logging.getLogger('tatami.endpoint')
 
 class Endpoint:
     """
@@ -192,17 +196,18 @@ class Endpoint:
         
         return self.response_type(result)
 
-    def __call__(self, ep_fn: Callable) -> 'Endpoint':
-        self.ep_fn = ep_fn
-
-        self.request_type = self.request_type or get_request_type(ep_fn)
-
-        self._build_route = lambda base_path: Route(
+    def build_route(self, base_path: str) -> Route:
+        path = base_path + self.path
+        logger.debug('Building route: %s %s', self.method, path)
+        return Route(
             path=self.path,
             endpoint=self.run,
             methods=[self.method]
         )
 
+    def __call__(self, ep_fn: Callable) -> Self:
+        self.ep_fn = ep_fn
+        self.request_type = self.request_type or get_request_type(ep_fn)
         return self
 
     def __repr__(self) -> str:
@@ -210,7 +215,14 @@ class Endpoint:
 
 
 # Universal request helper
-def request(method: str, path: str, response_type: Optional[Type[Response]] = None) -> Endpoint:
+@overload
+def request(method: str, func: F) -> F: ...
+@overload
+def request(method: str, path: str, *, response_type: Optional[str] = None) -> Callable[[F], F]: ...
+@overload
+def request(method: str, *, response_type: Optional[str] = None) -> Callable[[F], F]: ...
+
+def request(method: str, path_or_func: Optional[Union[str, Callable]] = None, *, response_type: Optional[Type[Response]] = None) -> Endpoint:
     """
     Convenience factory function to create an `Endpoint` instance with the given HTTP method and path.
     Meant to be used as a decorator.
@@ -231,148 +243,81 @@ def request(method: str, path: str, response_type: Optional[Type[Response]] = No
         def get_user_by_id(self, user_id):
             ...
     """
-    return Endpoint(method, path, response_type=response_type)
+    decorator = Endpoint(method, path_or_func if isinstance(path_or_func, str) else '/', response_type=response_type)
+    if callable(path_or_func):
+        return decorator(path_or_func)
+    return decorator
 
 
 
 # Convenience decorators for all HTTP verbs
-def get(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
-    """
-    Create an Endpoint for an HTTP GET request.
 
-    Args:
-        path (str): The URL path pattern for the GET endpoint.
-        response_type (Optional[Type[Response]]): Optional Starlette Response subclass for the response.
+# GET
+@overload
+def get(func: F) -> F: ...
+@overload
+def get(path: str, *, response_type: Optional[str] = None) -> Callable[[F], F]: ...
+@overload
+def get(*, response_type: Optional[str] = None) -> Callable[[F], F]: ...
+def get(path_or_func: Union[str, Callable, None] = None, **kwargs):
+    return request("GET", path_or_func, **kwargs)
 
-    Returns:
-        Callable: An Endpoint instance configured for GET requests.
+# POST
+@overload
+def post(func: F) -> F: ...
+@overload
+def post(path: str, *, response_type: Optional[str] = None) -> Callable[[F], F]: ...
+@overload
+def post(*, response_type: Optional[str] = None) -> Callable[[F], F]: ...
+def post(path_or_func=None, **kwargs):
+    return request("POST", path_or_func, **kwargs)
 
-    Usage example:
-    
-    .. code-block:: python
+# PUT
+@overload
+def put(func: F) -> F: ...
+@overload
+def put(path: str, *, response_type: Optional[str] = None) -> Callable[[F], F]: ...
+@overload
+def put(*, response_type: Optional[str] = None) -> Callable[[F], F]: ...
+def put(path_or_func=None, **kwargs):
+    return request("PUT", path_or_func, **kwargs)
 
-        @get('/items/{item_id}')
-        def get_item(self, item_id: str):
-            ...
-    """
-    return request('GET', path, response_type)
-def post(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
-    """
-    Create an Endpoint for an HTTP POST request.
+# PATCH
+@overload
+def patch(func: F) -> F: ...
+@overload
+def patch(path: str, *, response_type: Optional[str] = None) -> Callable[[F], F]: ...
+@overload
+def patch(*, response_type: Optional[str] = None) -> Callable[[F], F]: ...
+def patch(path_or_func=None, **kwargs):
+    return request("PATCH", path_or_func, **kwargs)
 
-    Args:
-        path (str): The URL path pattern for the POST endpoint.
-        response_type (Optional[Type[Response]]): Optional Starlette Response subclass for the response.
+# DELETE
+@overload
+def delete(func: F) -> F: ...
+@overload
+def delete(path: str, *, response_type: Optional[str] = None) -> Callable[[F], F]: ...
+@overload
+def delete(*, response_type: Optional[str] = None) -> Callable[[F], F]: ...
+def delete(path_or_func=None, **kwargs):
+    return request("DELETE", path_or_func, **kwargs)
 
-    Returns:
-        Callable: An Endpoint instance configured for POST requests.
+# HEAD
+@overload
+def head(func: F) -> F: ...
+@overload
+def head(path: str, *, response_type: Optional[str] = None) -> Callable[[F], F]: ...
+@overload
+def head(*, response_type: Optional[str] = None) -> Callable[[F], F]: ...
+def head(path_or_func=None, **kwargs):
+    return request("HEAD", path_or_func, **kwargs)
 
-    Usage example:
-    
-    .. code-block:: python
-
-        @post('/items/')
-        def create_item(self):
-            ...
-    """
-    return request('POST', path, response_type)
-def put(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
-    """
-    Create an Endpoint for an HTTP PUT request.
-
-    Args:
-        path (str): The URL path pattern for the PUT endpoint.
-        response_type (Optional[Type[Response]]): Optional Starlette Response subclass for the response.
-
-    Returns:
-        Callable: An Endpoint instance configured for PUT requests.
-
-    Usage example:
-    
-    .. code-block:: python
-
-        @put('/items/{item_id}')
-        def update_item(self, item_id: str, item: Item):
-            ...
-    """
-    return request('PUT', path, response_type)
-def patch(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
-    """
-    Create an Endpoint for an HTTP PATCH request.
-
-    Args:
-        path (str): The URL path pattern for the PATCH endpoint.
-        response_type (Optional[Type[Response]]): Optional Starlette Response subclass for the response.
-
-    Returns:
-        Callable: An Endpoint instance configured for PATCH requests.
-
-    Usage example:
-    
-    .. code-block:: python
-
-        @patch('/items/{item_id}')
-        def update_item(self, item_id: str, item: Item):
-            ...
-    """
-    return request('PATCH', path, response_type)
-def delete(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
-    """
-    Create an Endpoint for an HTTP DELETE request.
-
-    Args:
-        path (str): The URL path pattern for the DELETE endpoint.
-        response_type (Optional[Type[Response]]): Optional Starlette Response subclass for the response.
-
-    Returns:
-        Callable: An Endpoint instance configured for DELETE requests.
-
-    Usage example:
-    
-    .. code-block:: python
-
-        @delete('/items/{item_id}')
-        def delete_item(self, item_id: str):
-            ...
-    """
-    return request('DELETE', path, response_type)
-def head(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
-    """
-    Create an Endpoint for an HTTP HEAD request.
-
-    Args:
-        path (str): The URL path pattern for the HEAD endpoint.
-        response_type (Optional[Type[Response]]): Optional Starlette Response subclass for the response.
-
-    Returns:
-        Callable: An Endpoint instance configured for HEAD requests.
-
-    Usage example:
-    
-    .. code-block:: python
-
-        @put('/items/')
-        def head_items(self):
-            ...
-    """
-    return request('HEAD', path, response_type)
-def options(path: str, response_type: Optional[Type[Response]] = None) -> Callable:
-    """
-    Create an Endpoint for an HTTP OPTIONS request.
-
-    Args:
-        path (str): The URL path pattern for the OPTIONS endpoint.
-        response_type (Optional[Type[Response]]): Optional Starlette Response subclass for the response.
-
-    Returns:
-        Callable: An Endpoint instance configured for OPTIONS requests.
-
-    Usage example:
-    
-    .. code-block:: python
-
-        @options('/items/')
-        def options_items(self):
-            ...
-    """
-    return request('OPTIONS', path, response_type)
+# OPTIONS
+@overload
+def options(func: F) -> F: ...
+@overload
+def options(path: str, *, response_type: Optional[str] = None) -> Callable[[F], F]: ...
+@overload
+def options(*, response_type: Optional[str] = None) -> Callable[[F], F]: ...
+def options(path_or_func=None, **kwargs):
+    return request("OPTIONS", path_or_func, **kwargs)

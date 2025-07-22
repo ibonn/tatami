@@ -129,8 +129,8 @@ def router(p: str, title: Optional[str] = None, description: Optional[str] = Non
 
             for attr in dir(self):
                 val = getattr(self.__class__, attr, None)
-                if isinstance(val, Endpoint) and hasattr(val, '_build_route'):
-                    routes.append(val._build_route(self.path))
+                if isinstance(val, Endpoint):
+                    routes.append(val.build_route(self.path))
 
             super().__init__(title=title, description=description, version=version, routes=routes)
 

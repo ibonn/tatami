@@ -49,11 +49,11 @@ class Users(router('/users')):
     def get_users_old(self):
         return self.users.all()
 
-    @get('/')
+    @get
     def get_users(self):
         return self.users.all()
 
-    @post('/')
+    @post
     def add_user(self, user: User):
         """Add a new user"""
         user_id = self.users.add(user)
@@ -79,7 +79,7 @@ class Users(router('/users')):
     
 class Cars(router('/cars')):
     """Manage cars"""
-    @get('/')
+    @get
     def get_cars(self):
         return []
 
