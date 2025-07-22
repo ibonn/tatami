@@ -75,3 +75,6 @@ def wrap_response(ep_fn: Callable, ep_result: Any) -> Response:
 
 
     return JSONResponse(serialize_json(ep_result))
+
+def package_from_path(path: str) -> str:
+    return path.replace('/', '.').replace('\\', '.')[:-3]

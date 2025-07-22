@@ -1,4 +1,7 @@
+import importlib
 import inspect
+import logging
+import os
 from types import MethodType
 from typing import Awaitable, Callable, NoReturn, Optional, Self, Type, Union
 
@@ -10,7 +13,35 @@ from starlette.responses import HTMLResponse, JSONResponse, Response
 from starlette.routing import Route
 
 from tatami._utils import (_human_friendly_description_from_name,
-                           get_request_type, update_dict, wrap_response)
+                           get_request_type, package_from_path, update_dict,
+                           wrap_response)
+
+logger = logging.getLogger('tatami.core')
+
+def _none_if_dir_not_exists(path: str) -> Union[str, None]:
+    return path if os.path.isdir(path) else None
+
+
+def create_project(name: str, middleware_dir: str = 'middleware', routers_dir: str = 'routers', static_dir: str = 'static', templates_dir: str = 'templates', services_dir: str = 'services', tests_dir: str = 'tests') -> None:
+    middleware_path = os.path.join(name, middleware_dir)
+    routers_path = os.path.join(name, routers_dir)
+    static_path = os.path.join(name, static_dir)
+    templates_path = os.path.join(name, templates_dir)
+    services_path = os.path.join(name, services_dir)
+    tests_path = os.path.join(name, tests_dir)
+    config_path = os.path.join(name, 'config.yaml')
+
+
+    # Create the folders
+    os.makedirs(middleware_path)
+    os.makedirs(routers_path)
+    os.makedirs(static_path)
+    os.makedirs(templates_path)
+    os.makedirs(services_path)
+    os.makedirs(tests_path)
+
+    # Create the config file
+    open(config_path, 'w', encoding='utf-8').close()
 
 
 class Router(Starlette):
@@ -21,9 +52,14 @@ class Router(Starlette):
 
     def __init__(self, title: Optional[str] = None, description: Optional[str] = None, version: Optional[str] = None, debug = False, routes = None, middleware = None, exception_handlers = None, on_startup = None, on_shutdown = None, lifespan = None):
         super().__init__(debug, routes, middleware, exception_handlers, on_startup, on_shutdown, lifespan)
-        self.title = title
+        self.title = title or 'Tatami'
         self.description = description
         self.version = version
+
+    def _get_doc(self):
+        if self.__doc__ == Router.__doc__:
+            return None
+        return self.__doc__
 
     def _get_base_openapi_spec(self) -> dict:
         return {
@@ -31,7 +67,7 @@ class Router(Starlette):
             'info': {
                 'title': self.title or self.__class__.__name__,
                 'version': self.version,
-                'description': self.description or self.__doc__ or f'API for {self.__class__.__name__}',
+                'description': self.description or self._get_doc() or f'API for {self.__class__.__name__}',
             },
             'paths': {},
             'tags': [],
@@ -532,6 +568,11 @@ class Tatami(Router):
     def __init__(self, title: Optional[str] = None, description: Optional[str] = None, version: Optional[str] = None, debug = False, routes = None, middleware = None, exception_handlers = None, on_startup = None, on_shutdown = None, lifespan = None):
         super().__init__(title, description, version, debug, routes, middleware, exception_handlers, on_startup, on_shutdown, lifespan)
 
+    def _get_doc(self):
+        if self.__doc__ == Tatami.__doc__:
+            return None
+        return self.__doc__
+
     def include_router(self, router: Router) -> Self:
         """
         Mount another router instance under its configured path.
@@ -576,6 +617,66 @@ class Tatami(Router):
                 })
 
         return base
+    
+    @classmethod
+    def from_dir(cls, path: str, templates_dir_name: str = 'templates', static_dir_name: str = 'static', routes_dir_name: str = 'routes', middleware_dir_name: str = 'middleware', services_dir_name: str = 'services', config = None) -> 'Tatami':
+        templates_dir = _none_if_dir_not_exists(os.path.join(path, templates_dir_name))
+        static_dir = _none_if_dir_not_exists(os.path.join(path, static_dir_name))
+        routes_dir = _none_if_dir_not_exists(os.path.join(path, routes_dir_name))
+        middleware_dir = _none_if_dir_not_exists(os.path.join(path, middleware_dir_name))
+        services_dir = _none_if_dir_not_exists(os.path.join(path, services_dir_name))
+
+        instance = Tatami()
+
+        if templates_dir is None:
+            logger.debug('Templates dir not defined, skipping...')
+            instance.templates_path = None
+        else:
+            logger.debug('Setting templates path to %s...', templates_dir)
+            instance.templates_path = templates_dir
+
+        if static_dir is None:
+            logger.debug('Static dir not defined, skipping...')
+        else:
+            logger.debug('Building route for static files from %s...', static_dir)
+            # TODO
+
+        if services_dir is None:
+            logger.debug('Services dir not defined, skipping...')
+        else:
+            logger.debug('Loading services from %s...', services_dir)
+
+            for fn in os.listdir(services_dir):
+                service_path = os.path.join(services_dir, fn)
+                _, ext = os.path.splitext(service_path)
+                if ext == '.py':
+                    # TODO do something with this module?
+                    service_module = importlib.import_module(package_from_path(service_path))
+
+        if routes_dir is None:
+            logger.debug('Routes dir not defined, skipping...')
+        else:
+            logger.debug('Loading routers from %s...', routes_dir)
+            for fn in os.listdir(routes_dir):
+                router_path = os.path.join(routes_dir, fn)
+                _, ext = os.path.splitext(router_path)
+                if ext == '.py':
+                    router_module = importlib.import_module(package_from_path(router_path))
+                    for elem_name in dir(router_module):
+                        elem_value = getattr(router_module, elem_name)
+                        if isinstance(elem_value, type) and issubclass(elem_value, Route):
+                            logger.debug('Router found at "%s" (%s)', elem_name, router_path)
+
+                            router_instance = elem_value()
+                            instance.include_router(router_instance)
+
+        if middleware_dir is None:
+            logger.debug('Middleware dir not defined, skipping...')
+        else:
+            logger.debug('Loading middleware from %s...', middleware_dir)
+            # TODO
+
+        return instance
 
     
 
