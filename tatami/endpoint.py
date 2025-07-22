@@ -1,8 +1,8 @@
 import inspect
 import logging
 from types import MethodType
-from typing import (TYPE_CHECKING, Awaitable, Callable, Optional, Self, Type,
-                    TypeAlias, TypeVar, Union, overload)
+from typing import (TYPE_CHECKING, Awaitable, Callable, Literal, Optional,
+                    Self, Type, TypeAlias, TypeVar, Union, overload)
 
 from pydantic import BaseModel
 from starlette.requests import Request
@@ -16,6 +16,7 @@ if TYPE_CHECKING:
     from tatami.router import Router
 
 Tag: TypeAlias = Union[str, dict[str, str]]
+HTTPMethod: TypeAlias = Literal['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS']
 F = TypeVar("F", bound=Callable)
 
 logger = logging.getLogger('tatami.endpoint')
@@ -216,13 +217,13 @@ class Endpoint:
 
 # Universal request helper
 @overload
-def request(method: str, func: F) -> F: ...
+def request(method: HTTPMethod, func: F) -> F: ...
 @overload
-def request(method: str, path: str, *, response_type: Optional[Type[Response]] = None) -> Callable[[F], F]: ...
+def request(method: HTTPMethod, path: str, *, response_type: Optional[Type[Response]] = None) -> Callable[[F], F]: ...
 @overload
-def request(method: str, *, response_type: Optional[Type[Response]] = None) -> Callable[[F], F]: ...
+def request(method: HTTPMethod, *, response_type: Optional[Type[Response]] = None) -> Callable[[F], F]: ...
 
-def request(method: str, path_or_func: Optional[Union[str, Callable]] = None, *, response_type: Optional[Type[Response]] = None) -> Endpoint:
+def request(method: HTTPMethod, path_or_func: Optional[Union[str, Callable]] = None, *, response_type: Optional[Type[Response]] = None) -> Endpoint:
     """
     Convenience factory function to create an `Endpoint` instance with the given HTTP method and path.
     Meant to be used as a decorator.
