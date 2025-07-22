@@ -1,6 +1,6 @@
 import inspect
 from types import MethodType
-from typing import Awaitable, Callable, Optional, Self, Type, Union
+from typing import Awaitable, Callable, NoReturn, Optional, Self, Type, Union
 
 import uvicorn
 from pydantic import BaseModel
@@ -579,7 +579,7 @@ class Tatami(Router):
 
     
 
-def run(app: Tatami, host: str = 'localhost', port: int = 8000, openapi_url: Optional[str] = '/openapi.json', swagger_url: Optional[str] = '/docs/swagger', redoc_url: Optional[str] = '/docs/redoc', rapidoc_url: Optional[str] = '/docs/rapidoc') -> None:
+def run(app: Tatami, host: str = 'localhost', port: int = 8000, openapi_url: Optional[str] = '/openapi.json', swagger_url: Optional[str] = '/docs/swagger', redoc_url: Optional[str] = '/docs/redoc', rapidoc_url: Optional[str] = '/docs/rapidoc') -> NoReturn:
     """
     Run the Tatami application using Uvicorn, and optionally serve OpenAPI and documentation UIs.
 
