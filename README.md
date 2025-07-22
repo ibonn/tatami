@@ -1,6 +1,7 @@
 ![Tatami Logo](https://raw.githubusercontent.com/ibonn/tatami/refs/heads/main/images/tatami-logo.png)
 
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ibonn/tatami/tests?style=flat-square)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ibonn/tatami/pypi-publish.yml?style=flat-square)
+![Read the Docs](https://img.shields.io/readthedocs/tatami-framework?style=flat-square)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/tatami?style=flat-square)
 ![PyPI - Version](https://img.shields.io/pypi/v/tatami?style=flat-square)
 
