@@ -1,7 +1,7 @@
 import inspect
 import os
 from io import IOBase
-from typing import Any, Callable, Mapping, MutableSequence, Type
+from uuid import UUID
 
 from jinja2 import Environment, FileSystemLoader
 from pydantic import BaseModel
@@ -46,6 +46,9 @@ def serialize_json(x: Any) -> Any:
     
     if isinstance(x, Mapping):
         return {a: serialize_json(b) for a, b in x.items()}
+    
+    if isinstance(x, UUID):
+        return str(x)
     
     return x
 
