@@ -327,7 +327,7 @@ def router(p: str, title: Optional[str] = None, description: Optional[str] = Non
                 if isinstance(val, Endpoint) and hasattr(val, '_build_route'):
                     routes.append(val._build_route(self.path))
 
-            super().__init__(routes=routes)
+            super().__init__(title=title, description=description, version=version, routes=routes)
 
     return _Router
 
@@ -530,10 +530,7 @@ class Tatami(Router):
         print(spec)
     """
     def __init__(self, title: Optional[str] = None, description: Optional[str] = None, version: Optional[str] = None, debug = False, routes = None, middleware = None, exception_handlers = None, on_startup = None, on_shutdown = None, lifespan = None):
-        super().__init__(debug, routes, middleware, exception_handlers, on_startup, on_shutdown, lifespan)
-        self.title = title
-        self.description = description
-        self.version = version
+        super().__init__(title, description, version, debug, routes, middleware, exception_handlers, on_startup, on_shutdown, lifespan)
 
     def include_router(self, router: Router) -> Self:
         """
