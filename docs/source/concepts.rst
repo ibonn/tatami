@@ -71,3 +71,62 @@ We think the structure should describe the API — not the other way around.
 
 Want to customize everything? You still can. But if you follow the defaults, you'll write less code and worry less about glue logic.
 
+Routers
+-------
+
+In Tatami, routers are defined as classes. This might look a bit unusual at first, but it comes with some nice benefits:
+
+- **Organization**: Each router is its own class, so it's easy to group related endpoints together.
+- **Clarity**: You can immediately tell what paths and actions belong to each part of your API.
+- **Reusability**: Since routers are classes, you can use inheritance or mixins to share logic between them.
+
+Here's a basic example:
+
+.. code-block:: python
+
+   from tatami import router
+
+   class HelloRouter(router('/hello')):
+       pass
+
+This sets up a router for the ``/hello`` path, but it doesn't do anything yet — we'll add some endpoints next.
+
+Endpoints
+---------
+
+Each router can have one or more endpoints. Endpoints are just methods decorated with HTTP verbs like ``@get``, ``@post``, etc.
+
+This structure helps keep your code tidy — instead of scattering route handlers all over the place, they're grouped logically under their parent router class.
+
+Here's a more complete example:
+
+.. code-block:: python
+
+   from tatami import router, get, post, put
+
+   class HelloRouter(router('/hello')):
+
+       @get
+       def index(self):
+           return {'message': 'Hello from /hello'}
+
+       @get('/greet')
+       def greet(self):
+           return {'message': 'Greetings from /hello/greet'}
+
+       @post('/')
+       def create(self):
+           return {'message': 'You sent a POST request to /hello'}
+
+       @put('/update')
+       def update(self):
+           return {'message': 'PUT request received at /hello/update'}
+
+What's going on here?
+
+- ``@get`` with no path handles ``GET /hello``
+- ``@get('/greet')`` handles ``GET /hello/greet``
+- ``@post('/')`` handles ``POST /hello``
+- ``@put('/update')`` handles ``PUT /hello/update``
+
+By organizing routes like this, you get a clean, readable, and maintainable API structure — especially as your app grows.
