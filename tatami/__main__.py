@@ -2,6 +2,9 @@ import argparse
 import logging
 import sys
 
+from colorama import Fore, Style
+
+from tatami import __version__
 from tatami.config import load_config
 from tatami.convention import build_from_dir, create_project
 from tatami.core import run
@@ -47,6 +50,15 @@ def main():
 
         app = build_from_dir(parsed_args.project, parsed_args.mode)
 
+        print(f'{Fore.GREEN}{Style.BRIGHT}🌱 Tatami {__version__}{Style.RESET_ALL}')
+        print(f'Running app {Fore.GREEN}{parsed_args.project}{Fore.RESET} on {Fore.GREEN}http://{parsed_args.host}:{parsed_args.port}{Fore.RESET}')
+        print(f'{Fore.GREEN}{Style.BRIGHT}     • Config: {Style.RESET_ALL}{Fore.GREEN}{app.summary.config_file}')
+        print(f'{Fore.GREEN}{Style.BRIGHT}     • Routers: {Style.RESET_ALL}{Fore.GREEN}{app.summary.routers} discovered')
+        print(f'{Fore.GREEN}{Style.BRIGHT}     • Static files: {Style.RESET_ALL}{Fore.GREEN}{app.summary.static}')
+        print(f'{Fore.GREEN}{Style.BRIGHT}     • Templates: {Style.RESET_ALL}{Fore.GREEN}{app.summary.templates}')
+        print(f'{Fore.GREEN}{Style.BRIGHT}     • Middleware: {Style.RESET_ALL}{Fore.GREEN}{app.summary.middleware} loaded{Fore.RESET}')
+        print(f'Run {Style.BRIGHT}tatami doctor "{parsed_args.project}"{Style.RESET_ALL} for a more detailed analysis 🩺')
+        print('Handing control over to uvicorn...')
         # run the app
         # TODO make uvicorn the default, add option to run using another backend and check import for gunicorn, tornado, etc.
         run(app, host=parsed_args.host, port=parsed_args.port)

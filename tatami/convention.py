@@ -15,7 +15,7 @@ from starlette.staticfiles import StaticFiles
 from tatami._utils import import_from_path
 from tatami.config import Config, find_config, load_config
 from tatami.router import Router
-from tatami.tatami import Tatami
+from tatami.tatami import Summary, Tatami
 
 logger = logging.getLogger('tatami.convention')
 
@@ -141,6 +141,14 @@ def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'ro
         favicon_router = get_favicon_router(files('tatami.data.images') / 'favicon.ico')
     app.add_route('/favicon.ico', Route('/favicon.ico', favicon_router), include_in_schema=False)
         
+    app._summary = Summary(
+        config_file=os.path.basename(config_path) if config_path else None,
+        routers=0,      # TODO get number of loaded routers
+        middleware=0,   # TODO get number of loaded middleware
+        static=static_path if os.path.isdir(static_path) else None,
+        templates=templates_path if os.path.isdir(templates_path) else None,
+    )
+
     return app
 
 

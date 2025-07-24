@@ -1,14 +1,21 @@
-import importlib
 import logging
-import os
-from typing import Optional, Self
+from typing import Optional, Self, Union
 
-from starlette.routing import Route
+from pydantic import BaseModel, Field
+from starlette.middleware import Middleware
 
-from tatami._utils import package_from_path, update_dict, _none_if_dir_not_exists
+from tatami._utils import update_dict
 from tatami.router import Router
 
 logger = logging.getLogger('tatami.tatami')
+
+
+class Summary(BaseModel):
+    config_file: Optional[str] = Field(description='Path to the config file', default=None)
+    routers: int = Field(description='Number of found routers', default=0)
+    middleware: int = Field(description='Number of found middleware', default=0)
+    static: Optional[str] = Field(description='path to the static files', default=None)
+    templates: Optional[str] = Field(description='path to the directory containing the templates', default=None)
 
 
 class Tatami(Router):
@@ -44,6 +51,7 @@ class Tatami(Router):
     """
     def __init__(self, title: Optional[str] = None, description: Optional[str] = None, version: Optional[str] = None, debug = False, routes = None, middleware = None, exception_handlers = None, on_startup = None, on_shutdown = None, lifespan = None):
         super().__init__(title, description, version, debug, routes, middleware, exception_handlers, on_startup, on_shutdown, lifespan)
+        self._summary = None
 
     def _get_doc(self):
         if self.__doc__ == Tatami.__doc__:
@@ -94,3 +102,7 @@ class Tatami(Router):
                 })
 
         return base
+
+    @property
+    def summary(self) -> Union[Summary, None]:
+        return self._summary
