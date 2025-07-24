@@ -1,10 +1,14 @@
 import logging
 import os
 import warnings
+from importlib.resources import files
 from types import ModuleType
 from typing import Callable, Optional
 
 from starlette.middleware import Middleware
+from starlette.requests import Request
+from starlette.responses import FileResponse
+from starlette.routing import Route
 from starlette.staticfiles import StaticFiles
 
 from tatami._utils import import_from_path
@@ -56,7 +60,13 @@ def _add_middleware(app: Tatami) -> Callable[[ModuleType], None]:
     return add_middleware
 
 
-def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'routers', middleware_dir: str = 'middleware', mounts_dir: str = 'mounts', static_dir: str = 'static', templates_dir: str = 'templates') -> Tatami:
+def get_favicon_router(favicon_path: str) -> Callable[[Request], FileResponse]:
+    def favicon_router(request: Request) -> FileResponse:
+        return FileResponse(favicon_path)
+    return favicon_router
+
+
+def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'routers', middleware_dir: str = 'middleware', mounts_dir: str = 'mounts', static_dir: str = 'static', templates_dir: str = 'templates', favicon_file: str = 'favicon.ico') -> Tatami:
     # Load config
     config_path = find_config(path, mode)
 
@@ -80,6 +90,7 @@ def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'ro
     mounts_path = os.path.join(path, mounts_dir)
     static_path = os.path.join(path, static_dir)
     templates_path = os.path.join(path, templates_dir)
+    favicon_path = os.path.join(path, favicon_file)
 
     app = Tatami(title=config.app_name, version=config.version)
 
@@ -112,4 +123,12 @@ def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'ro
     else:
         logger.debug('No templates directory found, skipping...')
 
+    if os.path.isfile(favicon_path):
+        logger.debug('Loading favicon from %s...', favicon_path)
+        favicon_router = get_favicon_router(favicon_path)
+    else:
+        logger.debug('No favicon found, adding default favicon...')
+        favicon_router = get_favicon_router(files('tatami.data.images') / 'favicon.ico')
+    app.add_route('/favicon.ico', Route('/favicon.ico', favicon_router), include_in_schema=False)
+        
     return app
