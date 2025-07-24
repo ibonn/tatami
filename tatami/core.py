@@ -1,6 +1,5 @@
 import logging
-import os
-from typing import NoReturn, Optional, Union
+from typing import NoReturn, Optional
 
 import uvicorn
 from starlette.requests import Request
@@ -10,30 +9,6 @@ from starlette.routing import Route
 from tatami.tatami import Tatami
 
 logger = logging.getLogger('tatami.core')
-
-
-
-
-def create_project(name: str, middleware_dir: str = 'middleware', routers_dir: str = 'routers', static_dir: str = 'static', templates_dir: str = 'templates', services_dir: str = 'services', tests_dir: str = 'tests') -> None:
-    middleware_path = os.path.join(name, middleware_dir)
-    routers_path = os.path.join(name, routers_dir)
-    static_path = os.path.join(name, static_dir)
-    templates_path = os.path.join(name, templates_dir)
-    services_path = os.path.join(name, services_dir)
-    tests_path = os.path.join(name, tests_dir)
-    config_path = os.path.join(name, 'config.yaml')
-
-
-    # Create the folders
-    os.makedirs(middleware_path)
-    os.makedirs(routers_path)
-    os.makedirs(static_path)
-    os.makedirs(templates_path)
-    os.makedirs(services_path)
-    os.makedirs(tests_path)
-
-    # Create the config file
-    open(config_path, 'w', encoding='utf-8').close()
 
 
 def run(app: Tatami, host: str = 'localhost', port: int = 8000, openapi_url: Optional[str] = '/openapi.json', swagger_url: Optional[str] = '/docs/swagger', redoc_url: Optional[str] = '/docs/redoc', rapidoc_url: Optional[str] = '/docs/rapidoc') -> NoReturn:

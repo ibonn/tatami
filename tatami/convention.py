@@ -1,5 +1,6 @@
 import logging
 import os
+import shutil
 import warnings
 from importlib.resources import files
 from types import ModuleType
@@ -141,3 +142,30 @@ def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'ro
     app.add_route('/favicon.ico', Route('/favicon.ico', favicon_router), include_in_schema=False)
         
     return app
+
+
+def create_project(path: str, routers_dir: str = 'routers', middleware_dir: str = 'middleware', mounts_dir: str = 'mounts', static_dir: str = 'static', templates_dir: str = 'templates', favicon_file: str = 'favicon.ico', readme_file: str = 'README.md') -> None:
+    config_path = os.path.join(path, 'config.yaml')
+    dev_config_path = os.path.join(path, 'config-dev.yaml')
+    routers_path = os.path.join(path, routers_dir)
+    middleware_path = os.path.join(path, middleware_dir)
+    mounts_path = os.path.join(path, mounts_dir)
+    static_path = os.path.join(path, static_dir)
+    templates_path = os.path.join(path, templates_dir)
+    favicon_path = os.path.join(path, favicon_file)
+    readme_path = os.path.join(path, readme_file)
+
+    # Create the directories
+    os.makedirs(routers_path)
+    os.makedirs(middleware_path)
+    os.makedirs(mounts_path)
+    os.makedirs(static_path)
+    os.makedirs(templates_path)
+
+    # Create empty config and readme files
+    open(config_path, 'w', encoding='utf-8').close()
+    open(dev_config_path, 'w', encoding='utf-8').close()
+    open(readme_path, 'w', encoding='utf-8').close()
+
+    # Copy the favicon
+    shutil.copy(files('tatami.data.images') / 'favicon.ico', favicon_path)

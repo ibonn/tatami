@@ -3,8 +3,8 @@ import logging
 import sys
 
 from tatami.config import load_config
-from tatami.convention import build_from_dir
-from tatami.core import Tatami, create_project, run
+from tatami.convention import build_from_dir, create_project
+from tatami.core import run
 
 
 def main():
