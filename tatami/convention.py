@@ -83,9 +83,6 @@ def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'ro
 
     app = Tatami(title=config.app_name, version=config.version)
 
-    # TODO load middleware, routers, mounts
-    # TODO mount static files
-    # TODO autodetect templates
     if os.path.isdir(routers_path):
         _for_each_module_in(routers_path, _add_router(app))
     else:
