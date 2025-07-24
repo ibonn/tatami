@@ -1,0 +1,118 @@
+import logging
+import os
+import warnings
+from types import ModuleType
+from typing import Callable, Optional
+
+from starlette.middleware import Middleware
+from starlette.staticfiles import StaticFiles
+
+from tatami._utils import import_from_path
+from tatami.config import Config, find_config, load_config
+from tatami.router import Router
+from tatami.tatami import Tatami
+
+logger = logging.getLogger('tatami.convention')
+
+def _for_each_module_in(path: str, callback: Callable):
+    for filename in os.listdir(path):
+        full_path = os.path.join(path, filename)
+        _, ext = os.path.splitext(filename)
+        if os.path.isfile(full_path) and ext == '.py':
+            module = import_from_path(full_path)
+            callback(module)
+
+def _add_router(app: Tatami) -> Callable[[ModuleType], None]:
+    def add_router(router_module: ModuleType) -> None:
+        for name in dir(router_module):
+            if not name.startswith('_'):
+                value = getattr(router_module, name)
+                
+                if isinstance(value, type):
+                    if issubclass(value, Router):
+                        router = value()
+                        app.include_router(router)
+
+                    else:
+                        # TODO transform classes into routers
+                        warnings.warn("Non router class found in a file under the 'routers' directory. Tatami currently ignores such classes, but will later support automatic conversion to routers. Avoid placing non-router code here for now")
+
+    return add_router
+
+def _add_middleware(app: Tatami) -> Callable[[ModuleType], None]:
+    def add_middleware(router_module: ModuleType) -> None:
+        for name in dir(router_module):
+            if not name.startswith('_'):
+                value = getattr(router_module, name)
+
+                if issubclass(value, Middleware):
+                    # TODO find a way to pass arguments
+                    app.add_middleware(value)
+
+                else:
+                    # TODO transform classes into routers
+                    warnings.warn("Non middleware class found in a file under the 'middleware' directory. Tatami currently ignores such classes, but will later support automatic conversion to middleware. Avoid placing non-middleware code here for now")
+
+    return add_middleware
+
+
+def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'routers', middleware_dir: str = 'middleware', mounts_dir: str = 'mounts', static_dir: str = 'static', templates_dir: str = 'templates') -> Tatami:
+    # Load config
+    config_path = find_config(path, mode)
+
+    # Try to load fallback config
+    if config_path is None and mode is not None:
+        config_path = find_config(path)
+        logger.warning('Could not locate configuration for mode "%s", will try to load the default project config', mode)
+        warnings.warn(f'Could not locate configuration for mode "{mode}", will try to load the default project config')
+    
+    # If the config is still None, warn the user and load the default config
+    if config_path is None:
+        logger.warning('Could not locate any configuration files for the project. The default config will be loaded')
+        warnings.warn('Could not locate any configuration files for the project. The default config will be loaded')
+        config = Config()
+    else:
+        config = load_config(config_path)
+
+    # Paths
+    routers_path = os.path.join(path, routers_dir)
+    middleware_path = os.path.join(path, middleware_dir)
+    mounts_path = os.path.join(path, mounts_dir)
+    static_path = os.path.join(path, static_dir)
+    templates_path = os.path.join(path, templates_dir)
+
+    app = Tatami(title=config.app_name, version=config.version)
+
+    # TODO load middleware, routers, mounts
+    # TODO mount static files
+    # TODO autodetect templates
+    if os.path.isdir(routers_path):
+        _for_each_module_in(routers_path, _add_router(app))
+    else:
+        logger.debug('No routers directory found, skipping...')
+
+    if os.path.isdir(middleware_path):
+        _for_each_module_in(middleware_path, _add_middleware(app))
+    else:
+        logger.debug('No middleware directory found, skipping...')
+
+    if os.path.isdir(mounts_path):
+        # TODO allow mounting non-tatami apps (if instead of a dir it is a .py, load it and mount the found app)
+        for mount_name in os.listdir(mounts_path):
+            full_path = os.path.join(mounts_path, mount_name)
+            mount_app = build_from_dir(full_path, mode=mode)
+            app.mount(f'/{mount_name}', mount_app)
+    else:
+        logger.debug('No mounts directory found, skipping...')
+
+    if os.path.isdir(static_path):
+        app.mount('/static', StaticFiles, name='static_files')
+    else:
+        logger.debug('No static directory found, skipping...')
+
+    if os.path.isdir(templates_path):
+        pass    # TODO set templates
+    else:
+        logger.debug('No templates directory found, skipping...')
+
+    return app

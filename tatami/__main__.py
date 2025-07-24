@@ -3,6 +3,7 @@ import logging
 import sys
 
 from tatami.config import load_config
+from tatami.convention import build_from_dir
 from tatami.core import Tatami, create_project, run
 
 
@@ -44,11 +45,7 @@ def main():
             elif parsed_args.verbose == 2:
                 logger.setLevel(logging.DEBUG)
 
-        # Load the config
-        config = load_config(parsed_args.project, mode=parsed_args.mode)
-
-        # build the app from the given directory structure
-        app = Tatami.from_dir(parsed_args.project, config=config)
+        app = build_from_dir(parsed_args.project, parsed_args.mode)
 
         # run the app
         # TODO make uvicorn the default, add option to run using another backend and check import for gunicorn, tornado, etc.

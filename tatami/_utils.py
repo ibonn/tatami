@@ -1,9 +1,11 @@
 import datetime
 import decimal
+import importlib.util
 import inspect
 import os
 from dataclasses import asdict, is_dataclass
 from io import IOBase
+from types import ModuleType
 from typing import Any, Callable, Mapping, MutableSequence, Type, Union
 from uuid import UUID
 
@@ -103,3 +105,15 @@ def wrap_response(ep_fn: Callable, ep_result: Any) -> Response:
 
 def package_from_path(path: str) -> str:
     return path.replace('/', '.').replace('\\', '.')[:-3]
+
+def path_to_module(path: str) -> str:
+    fn, _ = os.path.splitext(path)
+    return fn.replace('/', '.').replace('\\', '.')
+
+
+def import_from_path(path: str) -> ModuleType:
+    module_name = path_to_module(path)
+    spec = importlib.util.spec_from_file_location(module_name, path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
