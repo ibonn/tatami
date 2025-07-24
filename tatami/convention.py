@@ -66,7 +66,7 @@ def get_favicon_router(favicon_path: str) -> Callable[[Request], FileResponse]:
     return favicon_router
 
 
-def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'routers', middleware_dir: str = 'middleware', mounts_dir: str = 'mounts', static_dir: str = 'static', templates_dir: str = 'templates', favicon_file: str = 'favicon.ico') -> Tatami:
+def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'routers', middleware_dir: str = 'middleware', mounts_dir: str = 'mounts', static_dir: str = 'static', templates_dir: str = 'templates', favicon_file: str = 'favicon.ico', readme_file: str = 'README.md') -> Tatami:
     # Load config
     config_path = find_config(path, mode)
 
@@ -91,8 +91,17 @@ def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'ro
     static_path = os.path.join(path, static_dir)
     templates_path = os.path.join(path, templates_dir)
     favicon_path = os.path.join(path, favicon_file)
+    readme_path = os.path.join(path, readme_file)
 
-    app = Tatami(title=config.app_name, version=config.version)
+    if os.path.isfile(readme_path):
+        logger.debug('Loading description from readme...')
+        with open(readme_path, 'r', encoding='utf-8') as f:
+            description = f.read()
+    else:
+        logger.debug('No readme found, skipping...')
+        description = None
+
+    app = Tatami(title=config.app_name, description=description, version=config.version)
 
     if os.path.isdir(routers_path):
         _for_each_module_in(routers_path, _add_router(app))

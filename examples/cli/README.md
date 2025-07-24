@@ -1,0 +1,1 @@
+This app is meant to be run using the `tatami run` command
