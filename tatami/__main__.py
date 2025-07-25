@@ -7,7 +7,6 @@ from colorama import Fore, Style
 from tatami import __version__
 from tatami.config import load_config
 from tatami.convention import build_from_dir, create_project
-from tatami.core import run
 
 
 def main():
@@ -61,7 +60,7 @@ def main():
         print('Handing control over to uvicorn...')
         # run the app
         # TODO make uvicorn the default, add option to run using another backend and check import for gunicorn, tornado, etc.
-        run(app, host=parsed_args.host, port=parsed_args.port)
+        app.run(host=parsed_args.host, port=parsed_args.port)
 
     else:
         parser.print_help()

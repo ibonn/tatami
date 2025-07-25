@@ -1,6 +1,5 @@
 __version__ = '0.0.1-pre.0'
 
-from tatami.core import run
 from tatami.endpoint import (delete, get, head, options, patch, post, put,
                              request)
 from tatami.router import router
