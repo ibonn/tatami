@@ -4,6 +4,7 @@
 ![Read the Docs](https://img.shields.io/readthedocs/tatami-framework?style=flat-square)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/tatami?style=flat-square)
 ![PyPI - Version](https://img.shields.io/pypi/v/tatami?style=flat-square)
+![Zen of Python - Compliance](https://img.shields.io/badge/Zen_of_Python-91%25_compliant-yellow?logo=python&logoColor=white&style=flat-square)
 
 
 ---
