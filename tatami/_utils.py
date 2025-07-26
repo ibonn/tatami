@@ -143,6 +143,12 @@ def is_path_param(t: Type) -> bool:
     return False
 
 def with_new_base(cls: Type, new_base: Type) -> Type:
-    attrs = dict(cls.__dict__)
-    attrs['__dict__'] = new_base.__dict__   # Used to avoid this -> TypeError: descriptor '__dict__' for 'X' objects doesn't apply to a 'X' object
+    # Filter out special attributes that shouldn't be copied
+    attrs = {}
+    for key, value in cls.__dict__.items():
+        # Skip special attributes that can cause issues
+        if key not in ('__dict__', '__weakref__', '__module__', '__qualname__'):
+            attrs[key] = value
+    
+    # Create new class with filtered attributes
     return type(cls.__name__, (new_base,), attrs)

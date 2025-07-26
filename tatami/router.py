@@ -384,8 +384,16 @@ class ConventionRouter(BaseRouter):
         snake_case_name = camel_to_snake(self.__class__.__name__)
         super().__init__(path=f'/{snake_case_name}')
 
-        self._regex = f'(get|post|put|patch|head|delete|options|update|create|new|remove)_(?:{snake_case_name}?)s?'
-        
+        # Enhanced regex to support more flexible naming conventions
+        # Pattern: [verb_][descriptive_words_]router_name[s][_by_criteria]
+        verbs = 'get|post|put|patch|head|delete|options|update|create|new|remove'
+        self._regex = (
+            rf'^(?:({verbs})_)?'  # Optional HTTP verb prefix with exact match
+            r'(?:[a-zA-Z0-9_]+_)*'  # Zero or more descriptive words (each ending with _)
+            rf'({snake_case_name})s?'  # Match the router name with optional pluralization  
+            r'(?:_by_[a-zA-Z0-9_]+)*$'  # Zero or more "by_<criteria>" suffixes, end of string
+        )
+
     def _collect_endpoints(self) -> list[BoundEndpoint]:
         endpoints = []
         public_names = [x for x in dir(self) if not x.startswith('_')]
@@ -393,7 +401,28 @@ class ConventionRouter(BaseRouter):
         for name in public_names:
             value = getattr(self, name)
             if callable(value) and (m := re.match(self._regex, name)):
-                http_verb = _INTENTIONS_MAPPING[m.group(1)]
+                verb = m.group(1)
+                
+                # Additional validation to prevent invalid patterns
+                # Check for cases like "gets_test_router" where "gets" looks like a verb but isn't exact
+                if verb:
+                    # Ensure the verb is at the exact start
+                    if not name.startswith(f'{verb}_'):
+                        continue
+                else:
+                    # For non-verb patterns, check if it starts with a partial verb
+                    # This catches cases like "gets_test_router" where gets_ is treated as descriptive
+                    verb_prefixes = ['get', 'post', 'put', 'patch', 'head', 'delete', 'options', 'update', 'create', 'new', 'remove']
+                    starts_with_invalid_verb = False
+                    for verb_prefix in verb_prefixes:
+                        if name.startswith(verb_prefix) and not name.startswith(f'{verb_prefix}_'):
+                            # This is something like "gets_test_router" - invalid
+                            starts_with_invalid_verb = True
+                            break
+                    if starts_with_invalid_verb:
+                        continue
+                    
+                http_verb = _INTENTIONS_MAPPING.get(verb, 'GET')  # Default to GET if no verb is specified
 
                 # Get path params
                 signature = inspect.signature(value)
@@ -403,10 +432,7 @@ class ConventionRouter(BaseRouter):
                         braced_param = f'{{{param.name}}}'
                         path_params.append(braced_param)
 
-                if len(path_params) == 0:
-                    joined_path_params = ''
-                else:
-                    joined_path_params = '/' + '/'.join(path_params)
+                joined_path_params = '/' + '/'.join(path_params) if path_params else ''
 
                 endpoints.append(
                     BoundEndpoint(

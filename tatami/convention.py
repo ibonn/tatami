@@ -30,19 +30,27 @@ def _add_router(app: BaseRouter) -> Callable[[ModuleType], None]:
     def add_router(router_module: ModuleType) -> None:
         for name in dir(router_module):
             if not name.startswith('_'):
-                value = getattr(router_module, name)
-                
-                if isinstance(value, type):
-                    if issubclass(value, BaseRouter):
-                        router = value()
-                        app.include_router(router)
+                try:
+                    value = getattr(router_module, name)
+                    
+                    if isinstance(value, type):
+                        if issubclass(value, BaseRouter):
+                            router = value()
+                            app.include_router(router)
 
-                    else:
-                        # Transform classes into routers
-                        warnings.warn("Non router class found in a file under the 'routers' directory. Tatami is starting to support automatic conversion to routers, but this feature is still experimental")
-                        router_cls = with_new_base(value, ConventionRouter)
-                        router = router_cls()
-                        app.include_router(router)
+                        else:
+                            # Transform classes into routers
+                            warnings.warn("Non router class found in a file under the 'routers' directory. Tatami is starting to support automatic conversion to routers, but this feature is still experimental")
+                            try:
+                                router_cls = with_new_base(value, ConventionRouter)
+                                router = router_cls()
+                                app.include_router(router)
+                            except Exception as e:
+                                logger.error(f"Failed to convert class {name} to router: {e}")
+                                continue
+                except Exception as e:
+                    logger.error(f"Error processing router module attribute {name}: {e}")
+                    continue
 
     return add_router
 
