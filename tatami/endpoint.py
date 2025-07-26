@@ -105,7 +105,10 @@ class BoundEndpoint(TatamiObject):
         return self._routed_method.response_type(result)
 
     def __call__(self, *args, **kwargs):
-        return self._routed_method.func(self._instance, *args, **kwargs)
+        if inspect.ismethod(self._routed_method.func):
+            return self._routed_method.func(*args, **kwargs)
+        else:
+            return self._routed_method.func(self._instance, *args, **kwargs)
     
     def get_route(self) -> Route:
         return Route(self.path, self.run, name=self._routed_method.func.__name__, methods=[self.method])

@@ -12,9 +12,9 @@ from starlette.responses import FileResponse
 from starlette.routing import Route
 from starlette.staticfiles import StaticFiles
 
-from tatami._utils import import_from_path
+from tatami._utils import import_from_path, with_new_base
 from tatami.config import Config, find_config, load_config
-from tatami.router import BaseRouter, Summary
+from tatami.router import BaseRouter, ConventionRouter, Summary
 
 logger = logging.getLogger('tatami.convention')
 
@@ -38,8 +38,11 @@ def _add_router(app: BaseRouter) -> Callable[[ModuleType], None]:
                         app.include_router(router)
 
                     else:
-                        # TODO transform classes into routers
-                        warnings.warn("Non router class found in a file under the 'routers' directory. Tatami currently ignores such classes, but will later support automatic conversion to routers. Avoid placing non-router code here for now")
+                        # Transform classes into routers
+                        warnings.warn("Non router class found in a file under the 'routers' directory. Tatami is starting to support automatic conversion to routers, but this feature is still experimental")
+                        router_cls = with_new_base(value, ConventionRouter)
+                        router = router_cls()
+                        app.include_router(router)
 
     return add_router
 

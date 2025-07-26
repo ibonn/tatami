@@ -46,7 +46,7 @@ class BaseRouter(TatamiObject):
         self.title = title
         self.description = description
         self.version = version
-        self.path = path
+        self.path = path or '/'
         self.tags = tags or []
 
         self._routers: list[BaseRouter] = []
@@ -333,7 +333,7 @@ class BaseRouter(TatamiObject):
 class ConventionRouter(BaseRouter):
     def __init__(self):
         snake_case_name = camel_to_snake(self.__class__.__name__)
-        super().__init__(f'/{snake_case_name}')
+        super().__init__(path=f'/{snake_case_name}')
 
         self._regex = f'(get|post|put|patch|head|delete|options|update|create|new|remove)_(?:{snake_case_name}?)s?'
         
