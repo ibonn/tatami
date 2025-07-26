@@ -14,8 +14,7 @@ from starlette.staticfiles import StaticFiles
 
 from tatami._utils import import_from_path
 from tatami.config import Config, find_config, load_config
-from tatami.router import Router
-from tatami.tatami import Summary, Tatami
+from tatami.router import BaseRouter, Summary
 
 logger = logging.getLogger('tatami.convention')
 
@@ -27,14 +26,14 @@ def _for_each_module_in(path: str, callback: Callable):
             module = import_from_path(full_path)
             callback(module)
 
-def _add_router(app: Tatami) -> Callable[[ModuleType], None]:
+def _add_router(app: BaseRouter) -> Callable[[ModuleType], None]:
     def add_router(router_module: ModuleType) -> None:
         for name in dir(router_module):
             if not name.startswith('_'):
                 value = getattr(router_module, name)
                 
                 if isinstance(value, type):
-                    if issubclass(value, Router):
+                    if issubclass(value, BaseRouter):
                         router = value()
                         app.include_router(router)
 
@@ -44,7 +43,7 @@ def _add_router(app: Tatami) -> Callable[[ModuleType], None]:
 
     return add_router
 
-def _add_middleware(app: Tatami) -> Callable[[ModuleType], None]:
+def _add_middleware(app: BaseRouter) -> Callable[[ModuleType], None]:
     def add_middleware(router_module: ModuleType) -> None:
         for name in dir(router_module):
             if not name.startswith('_'):
@@ -67,7 +66,7 @@ def get_favicon_router(favicon_path: str) -> Callable[[Request], FileResponse]:
     return favicon_router
 
 
-def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'routers', middleware_dir: str = 'middleware', mounts_dir: str = 'mounts', static_dir: str = 'static', templates_dir: str = 'templates', favicon_file: str = 'favicon.ico', readme_file: str = 'README.md') -> Tatami:
+def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'routers', middleware_dir: str = 'middleware', mounts_dir: str = 'mounts', static_dir: str = 'static', templates_dir: str = 'templates', favicon_file: str = 'favicon.ico', readme_file: str = 'README.md') -> BaseRouter:
     # Load config
     config_path = find_config(path, mode)
 
@@ -102,7 +101,7 @@ def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'ro
         logger.debug('No readme found, skipping...')
         description = None
 
-    app = Tatami(title=config.app_name, description=description, version=config.version)
+    app = BaseRouter(title=config.app_name, description=description, version=config.version)
 
     if os.path.isdir(routers_path):
         _for_each_module_in(routers_path, _add_router(app))
@@ -139,11 +138,11 @@ def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'ro
     else:
         logger.debug('No favicon found, adding default favicon...')
         favicon_router = get_favicon_router(files('tatami.data.images') / 'favicon.ico')
-    app.add_route('/favicon.ico', Route('/favicon.ico', favicon_router), include_in_schema=False)
+    app.add_route(Route('/favicon.ico', favicon_router, include_in_schema=False))
         
     app._summary = Summary(
         config_file=os.path.basename(config_path) if config_path else None,
-        routers=0,      # TODO get number of loaded routers
+        routers=len(app.routers),
         middleware=0,   # TODO get number of loaded middleware
         static=static_path if os.path.isdir(static_path) else None,
         templates=templates_path if os.path.isdir(templates_path) else None,

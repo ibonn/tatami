@@ -1,16 +1,16 @@
 import inspect
 import logging
-from types import MethodType
+from functools import wraps
 from typing import (TYPE_CHECKING, Awaitable, Callable, Literal, Optional,
-                    Self, Type, TypeAlias, TypeVar, Union, overload)
+                    Type, TypeAlias, TypeVar, Union, overload)
 
 from pydantic import BaseModel
 from starlette.requests import Request
-from starlette.responses import Response
+from starlette.responses import JSONResponse, Response
 from starlette.routing import Route
 
-from tatami._utils import (_human_friendly_description_from_name,
-                           get_request_type, wrap_response)
+from tatami._utils import wrap_response
+from tatami.core import TatamiObject
 
 if TYPE_CHECKING:
     from tatami.router import Router
@@ -21,131 +21,38 @@ F = TypeVar("F", bound=Callable)
 
 logger = logging.getLogger('tatami.endpoint')
 
-class Endpoint:
-    """
-    Represents an endpoint within the framework.
 
-    This is an internal class and is not intended for general use. It should only be used when implementing advanced functionality or extending the framework.
-
-    The class stores metadata associated with endpoints. It is also callable and can be used as a decorator. Invoking the `run()` method executes the endpoint's logic.
-    """
-    def __init__(self, method: str, path: str, request_type: Optional[BaseModel] = None, response_type: Optional[Type[Response]] = None, summary: Optional[str] = None, description: Optional[str] = None, tags: Optional[list[Tag]] = None):
-        self.method = method.upper()
-        self.path = path
+class Endpoint(TatamiObject):
+    def __init__(self, method: str, func: Callable, path: str = None, request_type: Optional[Union[Type[Request], Type[BaseModel]]] = None, response_type: Optional[Type[Response]] = None, tags: Optional[list[str]] = None):
+        self.func = func
+        self.method = method
+        self.path = '/' if path is None or path == '' else path
         self.request_type = request_type
-        self.response_type = response_type
-        self.summary = summary
-        self.description = description
+        self.response_type = response_type or JSONResponse
         self.tags = tags or []
-        self.ep_fn: Callable = None
+        self.__name__ = getattr(func, "__name__", None)
+        self.__doc__ = getattr(func, "__doc__", None)
 
     def __get__(self, instance, owner):
         if instance is None:
             return self
-        return MethodType(self.ep_fn, instance)
+        return BoundEndpoint(self, instance)
 
-    def get_openapi_spec(self, parent_router: 'Router') -> dict:
-        """
-        Generate the OpenAPI specification fragment for this endpoint.
 
-        This method inspects the endpoint function signature to determine:
-        - Path parameters (parameters present in the URL path)
-        - Request body schema (Pydantic models used as non-path parameters)
+class BoundEndpoint(TatamiObject):
+    def __init__(self, routed_method: Endpoint, instance):
+        self._routed_method = routed_method
+        self._instance = instance
+        self.method: str = routed_method.method
+        self.path: str = routed_method.path
+        self.include_in_schema = True
 
-        It constructs the OpenAPI operation object with summary, description,
-        parameters, tags, deprecated flag, and default 200 response.
+    @property
+    def endpoint_function(self):
+        async def _ep_fn(*args, **kwargs):
+            return await self.run(*args, **kwargs)
+        return wraps(self._routed_method.func)(_ep_fn)
 
-        Args:
-            parent_router (Router): The router instance that contains this endpoint,
-                used to build the full path and tags.
-
-        Returns:
-            dict: A dictionary representing the OpenAPI path and method specification
-            for this endpoint.
-
-        Usage example:
-        
-        .. code-block:: python
-
-            # Assume `endpoint` is an instance of the endpoint class and `router` is the parent router
-            openapi_fragment = endpoint.get_openapi_spec(router)
-            print(openapi_fragment)
-            # Output example:
-            # {
-            #   "/users/{user_id}": {
-            #       "get": {
-            #           "summary": "Get user by ID",
-            #           "description": "Retrieve a user by their unique identifier.",
-            #           "parameters": [
-            #               {
-            #                   "name": "user_id",
-            #                   "in": "path",
-            #                   "required": True,
-            #                   "schema": {"type": "string"}
-            #               }
-            #           ],
-            #           "tags": ["UserRouter"],
-            #           "deprecated": False,
-            #           "responses": {
-            #               "200": {
-            #                   "description": "Successful response"
-            #               }
-            #           }
-            #       }
-            #   }
-            # }
-        """
-        sig = inspect.signature(self.ep_fn)
-        parameters = []
-        request_body = None
-
-        for name, param in sig.parameters.items():
-            if name == 'self':
-                continue
-            annotation = param.annotation
-            # Check if it's a path param
-            if f"{{{name}}}" in self.path:
-                parameters.append({
-                    'name': name,
-                    'in': 'path',
-                    'required': True,
-                    'schema': {
-                        'type': 'string' if annotation == str else 'integer'
-                    }
-                })
-            else:
-                # Treat as body (Pydantic model)
-                if inspect.isclass(annotation) and hasattr(annotation, 'schema'):
-                    request_body = {
-                        'content': {
-                            'application/json': {
-                                'schema': annotation.model_json_schema()
-                            }
-                        }
-                    }
-
-        op = {
-            'summary': self.summary or _human_friendly_description_from_name(self.ep_fn.__name__),
-            'description': self.description or self.ep_fn.__doc__ or _human_friendly_description_from_name(self.ep_fn.__name__),
-            'parameters': parameters,
-            'tags': self.tags or [parent_router.__class__.__name__],
-            'deprecated': hasattr(self.ep_fn, '__deprecated__'),
-            'responses': {
-                '200': {
-                    'description': 'Successful response'
-                }
-            }
-        }
-
-        if request_body:
-            op['requestBody'] = request_body
-
-        return {
-            parent_router.path + self.path: {
-                self.method.lower(): op
-            }
-        }
-    
     async def run(self, request: Request) -> Union[Response, Awaitable[Response]]:
         """
         Handle an incoming HTTP request by extracting path parameters and request body,
@@ -182,38 +89,26 @@ class Endpoint:
         if request.method in ('POST', 'PUT', 'PATCH'):
             try:
                 body = await request.json()
-                if self.request_type is not None:
-                    for param_name, model in self.request_type.items():
+                if self._routed_method.request_type is not None:
+                    for param_name, model in self._routed_method.request_type.items():
                         kwargs.update({param_name: model(**body)})
                 
             except Exception:
                 pass  # skip if body is not present
-        result = self.ep_fn(request.app, **kwargs)
+        result = self(**kwargs)
         if inspect.isawaitable(result):
             result = await result
 
-        if self.response_type is None:
-            return wrap_response(self.ep_fn, result)
+        if self._routed_method.response_type is None:
+            return wrap_response(self._routed_method.func, result)
         
-        return self.response_type(result)
+        return self._routed_method.response_type(result)
 
-    def build_route(self, base_path: str) -> Route:
-        path = base_path + self.path
-        logger.debug('Building route: %s %s', self.method, path)
-        return Route(
-            path=self.path,
-            endpoint=self.run,
-            methods=[self.method]
-        )
-
-    def __call__(self, ep_fn: Callable) -> Self:
-        self.ep_fn = ep_fn
-        self.request_type = self.request_type or get_request_type(ep_fn)
-        return self
-
-    def __repr__(self) -> str:
-        return f'<Endpoint for {self.path} ({self.method}) @ {hex(id(self))}>'
-
+    def __call__(self, *args, **kwargs):
+        return self._routed_method.func(self._instance, *args, **kwargs)
+    
+    def get_route(self) -> Route:
+        return Route(self.path, self.run, name=self._routed_method.func.__name__, methods=[self.method])
 
 # Universal request helper
 @overload
@@ -244,23 +139,87 @@ def request(method: HTTPMethod, path_or_func: Optional[Union[str, Callable]] = N
         def get_user_by_id(self, user_id):
             ...
     """
-    decorator = Endpoint(method, path_or_func if isinstance(path_or_func, str) else '/', response_type=response_type)
+    def decorator(fn):
+        return wraps(fn)(Endpoint(method, fn, path_or_func if isinstance(path_or_func, str) else '', response_type))
+
     if callable(path_or_func):
         return decorator(path_or_func)
     return decorator
 
 
-
 # Convenience decorators for all HTTP verbs
-
 # GET
 @overload
-def get(func: F) -> F: ...
+def get(func: F) -> F:
+    """
+    Marks a function as a GET endpoint using the parent router's path.
+
+    This is a shorthand for declaring a GET route without specifying an additional path.
+    The endpoint will be mounted at the path defined by the class or router it belongs to.
+
+    Example:
+        @get
+        def index(): ...
+
+    Args:
+        func: The endpoint function to register.
+
+    Returns:
+        The same function, unmodified.
+    """
 @overload
 def get(path: str, *, response_type: Optional[Type[Response]] = None) -> Callable[[F], F]:
+    """
+    Marks a function as a GET endpoint at a given subpath of the parent router.
+
+    The full path will be composed by joining the parent router's path with the provided one.
+
+    Example:
+        @get("/items")
+        def list_items(): ...
+
+    Args:
+        path: Subpath relative to the parent router (must start with '/').
+        response_type: Optional response format hint (e.g., "json", "html").
+
+    Returns:
+        A decorator that registers the function as a GET endpoint.
+    """
 @overload
 def get(*, response_type: Optional[Type[Response]] = None) -> Callable[[F], F]:
+    """
+    Marks a function as a GET endpoint at the parent router's path,
+    while allowing an optional response type.
+
+    Example:
+        @get(response_type="json")
+        def index(): ...
+
+    Args:
+        response_type: Optional response format hint (e.g., "json", "html").
+
+    Returns:
+        A decorator that registers the function as a GET endpoint.
+    """
 def get(path_or_func: Union[str, Callable, None] = None, **kwargs):
+    """
+    Registers a function as a GET endpoint. This decorator supports multiple forms:
+
+    - `@get`: Registers the endpoint at the parent router's path.
+    - `@get("/subpath")`: Registers the endpoint at a subpath relative to the parent router.
+    - `@get(response_type="json")`: Registers at the parent path with a specified response type.
+    - `@get("/subpath", response_type="json")`: Registers at a subpath with response type metadata.
+
+    The full route is composed by joining the parent router's path with the provided subpath.
+
+    Args:
+        path_or_func: A subpath string (starting with '/') or the function to decorate.
+                      If omitted, the endpoint is registered at the parent router’s path.
+        **kwargs: Optional metadata such as `response_type`.
+
+    Returns:
+        Either the original function or a decorator that wraps it.
+    """
     return request("GET", path_or_func, **kwargs)
 
 # POST

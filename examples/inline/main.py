@@ -3,7 +3,7 @@ from warnings import deprecated
 
 from pydantic import BaseModel, Field
 
-from tatami import Tatami, delete, get, post, put, router, run
+from tatami import BaseRouter, delete, get, post, put, router
 
 
 # Define some models
@@ -89,9 +89,9 @@ user_service = UserService()
 users = Users(user_service)
 cars = Cars()
 
-app = Tatami(title='Car rental API', description='API example for a car rental company')
+app = BaseRouter(title='Car rental API', description='API example for a car rental company')
 app.include_router(users)
 app.include_router(cars)
 
 # Uncomment to run
-run(app, host="127.0.0.1", port=8000)
+app.run(host="127.0.0.1", port=8000)

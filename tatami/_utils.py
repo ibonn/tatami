@@ -3,6 +3,7 @@ import decimal
 import importlib.util
 import inspect
 import os
+import re
 from dataclasses import asdict, is_dataclass
 from io import IOBase
 from types import ModuleType
@@ -100,7 +101,6 @@ def wrap_response(ep_fn: Callable, ep_result: Any) -> Response:
     except:
         pass
 
-
     return JSONResponse(serialize_json(ep_result))
 
 def package_from_path(path: str) -> str:
@@ -110,10 +110,22 @@ def path_to_module(path: str) -> str:
     fn, _ = os.path.splitext(path)
     return fn.replace('/', '.').replace('\\', '.')
 
-
 def import_from_path(path: str) -> ModuleType:
     module_name = path_to_module(path)
     spec = importlib.util.spec_from_file_location(module_name, path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+def camel_to_snake(name: str) -> str:
+    return re.sub(r'(?<!^)(?=[A-Z])', '_', name).lower()
+
+def is_path_param(t: Type) -> bool:
+    if t in {int, str}:
+        return True
+    return False
+
+def with_new_base(cls: Type, new_base: Type) -> Type:
+    attrs = dict(cls.__dict__)
+    attrs['__dict__'] = new_base.__dict__   # Used to avoid this -> TypeError: descriptor '__dict__' for 'X' objects doesn't apply to a 'X' object
+    return type(cls.__name__, (new_base,), attrs)
