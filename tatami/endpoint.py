@@ -175,7 +175,7 @@ def request(method: HTTPMethod, path_or_func: Optional[Union[str, Callable]] = N
             ...
     """
     def decorator(fn):
-        return wraps(fn)(Endpoint(method, fn, path_or_func if isinstance(path_or_func, str) else '', response_type))
+        return wraps(fn)(Endpoint(method, fn, path_or_func if isinstance(path_or_func, str) else '', None, response_type))
 
     if callable(path_or_func):
         return decorator(path_or_func)
