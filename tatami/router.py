@@ -136,7 +136,7 @@ class BaseRouter(TatamiObject):
             if path not in spec['paths']:
                 spec['paths'][path] = {}
 
-            func = endpoint._routed_method.func
+            func = endpoint._endpoint.func
             docstring = func.__doc__.strip().split('\n')[0] if func.__doc__ else ''
             summary = human_friendly_description_from_name(func.__name__)
 
@@ -154,8 +154,8 @@ class BaseRouter(TatamiObject):
 
             # Request body (only if applicable)
             request_body = None
-            if endpoint._routed_method.request_type:
-                for param_name, model in endpoint._routed_method.request_type.items():
+            if endpoint._endpoint.request_type:
+                for param_name, model in endpoint._endpoint.request_type.items():
                     model_name = add_schema(model)
                     request_body = {
                         'content': {
@@ -178,13 +178,13 @@ class BaseRouter(TatamiObject):
                 }
             }
 
-            if endpoint._routed_method.response_type and issubclass(endpoint._routed_method.response_type, JSONResponse):
+            if endpoint._endpoint.response_type and issubclass(endpoint._endpoint.response_type, JSONResponse):
                 # TODO optionally try to introspect return type
                 pass
 
             # Tags
             # Order of resolution: User specified (endpoint) -> user specified (router) -> class name of the router
-            tags = endpoint._routed_method.tags or self.tags or [self.__class__.__name__]
+            tags = endpoint._endpoint.tags or self.tags or [self.__class__.__name__]
             for tag in tags:
                 if tag not in tags_seen:
                     tags_seen.add(tag)
@@ -197,7 +197,7 @@ class BaseRouter(TatamiObject):
                 'description': docstring,
                 'parameters': parameters or [],
                 'responses': responses,
-                'deprecated': hasattr(endpoint._routed_method.func, '__deprecated__')
+                'deprecated': hasattr(endpoint._endpoint.func, '__deprecated__')
             }
 
             if request_body:
@@ -361,7 +361,7 @@ class ConventionRouter(BaseRouter):
 
                 endpoints.append(
                     BoundEndpoint(
-                        routed_method=Endpoint(
+                        endpoint=Endpoint(
                             method=http_verb,
                             func=value,
                             path=joined_path_params,

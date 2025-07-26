@@ -40,18 +40,18 @@ class Endpoint(TatamiObject):
 
 
 class BoundEndpoint(TatamiObject):
-    def __init__(self, routed_method: Endpoint, instance):
-        self._routed_method = routed_method
+    def __init__(self, endpoint: Endpoint, instance):
+        self._endpoint = endpoint
         self._instance = instance
-        self.method: str = routed_method.method
-        self.path: str = routed_method.path
+        self.method: str = endpoint.method
+        self.path: str = endpoint.path
         self.include_in_schema = True
 
     @property
     def endpoint_function(self):
         async def _ep_fn(*args, **kwargs):
             return await self.run(*args, **kwargs)
-        return wraps(self._routed_method.func)(_ep_fn)
+        return wraps(self._endpoint.func)(_ep_fn)
 
     async def run(self, request: Request) -> Union[Response, Awaitable[Response]]:
         """
@@ -89,8 +89,8 @@ class BoundEndpoint(TatamiObject):
         if request.method in ('POST', 'PUT', 'PATCH'):
             try:
                 body = await request.json()
-                if self._routed_method.request_type is not None:
-                    for param_name, model in self._routed_method.request_type.items():
+                if self._endpoint.request_type is not None:
+                    for param_name, model in self._endpoint.request_type.items():
                         kwargs.update({param_name: model(**body)})
                 
             except Exception:
@@ -99,19 +99,19 @@ class BoundEndpoint(TatamiObject):
         if inspect.isawaitable(result):
             result = await result
 
-        if self._routed_method.response_type is None:
-            return wrap_response(self._routed_method.func, result)
+        if self._endpoint.response_type is None:
+            return wrap_response(self._endpoint.func, result)
         
-        return self._routed_method.response_type(result)
+        return self._endpoint.response_type(result)
 
     def __call__(self, *args, **kwargs):
-        if inspect.ismethod(self._routed_method.func):
-            return self._routed_method.func(*args, **kwargs)
+        if inspect.ismethod(self._endpoint.func):
+            return self._endpoint.func(*args, **kwargs)
         else:
-            return self._routed_method.func(self._instance, *args, **kwargs)
+            return self._endpoint.func(self._instance, *args, **kwargs)
     
     def get_route(self) -> Route:
-        return Route(self.path, self.run, name=self._routed_method.func.__name__, methods=[self.method])
+        return Route(self.path, self.run, name=self._endpoint.func.__name__, methods=[self.method])
 
 # Universal request helper
 @overload
