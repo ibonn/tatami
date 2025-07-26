@@ -60,8 +60,8 @@ It's like FastAPI and Flask had a minimalist, Spring Boot-inspired child.
 
 * 📖 [Getting Started](https://tatami-framework.readthedocs.io/en/latest/getting_started.html)
 * 🎛️ [CLI Usage](https://tatami-framework.readthedocs.io/en/latest/the_cli.html)
-* � [Core Concepts](https://tatami-framework.readthedocs.io/en/latest/concepts.html)
-* � [API Reference](https://tatami-framework.readthedocs.io/en/latest/api/tatami.html)
+* 🧠 [Core Concepts](https://tatami-framework.readthedocs.io/en/latest/concepts.html)
+* 📖 [API Reference](https://tatami-framework.readthedocs.io/en/latest/api/tatami.html)
 
 **Built-in documentation is served automatically:**
 - `/openapi.json` - OpenAPI specification
