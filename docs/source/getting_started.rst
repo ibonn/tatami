@@ -26,7 +26,7 @@ You can install Tatami either from PyPI or directly from the source.
 
 This installs Tatami in editable mode so any changes to the source are immediately reflected when running your app.
 
-Quick Start with CLI �‍♂️
+Quick Start with CLI
 --------------------------
 
 The fastest way to get started is using the Tatami CLI:
