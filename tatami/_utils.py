@@ -44,35 +44,58 @@ def update_dict(d: dict, update_with: dict):
             d[k] = v
 
 
-def serialize_json(x: Any) -> Any:
-    if isinstance(x, BaseModel):
-        return x.model_dump()
+def serialize_json(x: Any, _visited: set = None) -> Any:
+    if _visited is None:
+        _visited = set()
     
-    if isinstance(x, (list, tuple, set)):
-        return [serialize_json(y) for y in x]
+    # Check for circular references
+    obj_id = id(x)
+    if obj_id in _visited:
+        return None  # JSON-compatible way to handle circular references
     
-    if isinstance(x, Mapping):
-        return {a: serialize_json(b) for a, b in x.items()}
+    # For primitive types, return as-is without adding to visited
+    if x is None or isinstance(x, (str, int, float, bool)):
+        return x
     
-    if isinstance(x, UUID):
-        return str(x)
+    # Add to visited set for complex objects
+    _visited.add(obj_id)
     
-    if isinstance(x, decimal.Decimal):
-        return float(x)
-    
-    if is_dataclass(x):
-        return serialize_json(asdict(x))
-    
-    if isinstance(x, (datetime.datetime, datetime.date, datetime.time)):
-        return x.isoformat()
-    
-    if hasattr(x, '__slots__'):
-        return {slot: serialize_json(getattr(x, slot)) for slot in x.__slots__ if hasattr(x, slot)}
-    
-    if hasattr(x, '__dict__'):
-        return serialize_json(vars(x))
-    
-    return x
+    try:
+        if isinstance(x, BaseModel):
+            return x.model_dump()
+        
+        if isinstance(x, (list, tuple, set)):
+            return [serialize_json(y, _visited) for y in x]
+        
+        if isinstance(x, Mapping):
+            return {a: serialize_json(b, _visited) for a, b in x.items()}
+        
+        if isinstance(x, UUID):
+            return str(x)
+        
+        if isinstance(x, decimal.Decimal):
+            return float(x)
+        
+        if is_dataclass(x):
+            return serialize_json(asdict(x), _visited)
+        
+        if isinstance(x, (datetime.datetime, datetime.date, datetime.time)):
+            return x.isoformat()
+        
+        # Special handling for Pydantic model classes
+        if isinstance(x, type) and issubclass(x, BaseModel):
+            return x.model_json_schema()
+        
+        if hasattr(x, '__slots__'):
+            return {slot: serialize_json(getattr(x, slot), _visited) for slot in x.__slots__ if hasattr(x, slot)}
+        
+        if hasattr(x, '__dict__'):
+            return serialize_json(vars(x), _visited)
+        
+        return x
+    finally:
+        # Remove from visited set when done processing
+        _visited.discard(obj_id)
 
 def human_friendly_description_from_name(name: str) -> str:
     return ' '.join(name.split('_')).capitalize()
