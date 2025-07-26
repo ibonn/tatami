@@ -1,7 +1,7 @@
 import inspect
 import logging
 import re
-from typing import NoReturn, Optional, Self, Type
+from typing import NoReturn, Optional, Self, Type, Any
 
 import uvicorn
 from pydantic import BaseModel, Field
@@ -49,7 +49,7 @@ class BaseRouter(TatamiObject):
 
         self._routers: list[BaseRouter] = []
         self._routes: list[Route] = []
-        self._mounts: dict[str, Starlette] = {}
+        self._mounts: dict[str, Any] = {}
         self._summary = None
 
     def include_router(self, incl_router: 'BaseRouter') -> Self:
@@ -57,7 +57,7 @@ class BaseRouter(TatamiObject):
         self._routers.append(incl_router)
         return self
     
-    def mount(self, path: str, app: Starlette) -> Self:
+    def mount(self, path: str, app: Any) -> Self:
         logger.debug('Mounting %s on %s', app, self)
         self._mounts[path] = app
         return self
@@ -68,7 +68,7 @@ class BaseRouter(TatamiObject):
         return self
     
     @property
-    def summary(self) -> Summary:
+    def summary(self) -> Optional[Summary]:
         return self._summary
     
     @property
