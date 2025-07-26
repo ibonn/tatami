@@ -34,6 +34,18 @@ Like traditional *tatami* mats that structure a Japanese room, Tatami lets you d
 pip install tatami
 ```
 
+**Create a new project:**
+```bash
+tatami create myproject
+```
+
+**Run your project:**
+```bash
+tatami run myproject
+```
+
+Your API will be available at `http://localhost:8000` with automatic docs at `/docs/swagger`.
+
 ## 🧠 Philosophy
 
 Tatami is designed for:
@@ -46,14 +58,20 @@ It's like FastAPI and Flask had a minimalist, Spring Boot-inspired child.
 
 ## 📚 Documentation
 
-* 📖 Getting Started
-* 🔧 Project Structure
-* 🧪 Testing
-* 💡 Extending Tatami
+* 📖 [Getting Started](https://tatami-framework.readthedocs.io/en/latest/getting_started.html)
+* 🎛️ [CLI Usage](https://tatami-framework.readthedocs.io/en/latest/the_cli.html)
+* � [Core Concepts](https://tatami-framework.readthedocs.io/en/latest/concepts.html)
+* � [API Reference](https://tatami-framework.readthedocs.io/en/latest/api/tatami.html)
 
-Docs are served by default at `/docs/swagger` (Swagger) or `/docs/redoc` (ReDoc) or `/docs/rapidoc` (RapiDoc).
+**Built-in documentation is served automatically:**
+- `/openapi.json` - OpenAPI specification
+- `/docs/swagger` - Swagger UI
+- `/docs/redoc` - ReDoc
+- `/docs/rapidoc` - RapiDoc
 
 ## 🔌 Example
+
+**Using decorators (recommended):**
 ```python
 from tatami import get, post, router
 from pydantic import BaseModel
@@ -66,19 +84,38 @@ class Users(router('/users')):
     @get('/')
     def list_users(self):
         """Returns all users in the system."""
-        ...
+        return [{"id": 1, "name": "Alice", "age": 30}]
 
     @post('/')
     def create_user(self, user: User):
         """Creates a new user."""
-        ...
-```
-This defines two routes:
+        return {"message": f"Created user {user.name}"}
 
+    @get('/{user_id}')
+    def get_user(self, user_id: int):
+        """Get a specific user by ID."""
+        return {"id": user_id, "name": "Alice", "age": 30}
+```
+
+**Using convention-based routing:**
+```python
+# In routers/users.py
+class Users:
+    def get_users(self):
+        """List all users"""
+        return [{"id": 1, "name": "Alice"}]
+    
+    def post_user(self, user: User):
+        """Create a new user"""
+        return {"created": user.name}
+```
+
+This automatically creates:
 * GET /users/
 * POST /users/
+* GET /users/{user_id}
 
-...and auto-documents them with full OpenAPI schemas. For a fully featured example, check the [Tatami Pet Store](https://github.com/ibonn/tatami-petstore)
+...with full OpenAPI schemas generated automatically.
 
 ## 🌱 Still Early
 
