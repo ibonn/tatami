@@ -10,7 +10,7 @@ from starlette.requests import Request
 from starlette.responses import HTMLResponse, JSONResponse
 from starlette.routing import Route
 
-from tatami._utils import (_human_friendly_description_from_name,
+from tatami._utils import (human_friendly_description_from_name,
                            camel_to_snake, is_path_param,
                            update_dict)
 from tatami.core import TatamiObject
@@ -138,7 +138,7 @@ class BaseRouter(TatamiObject):
 
             func = endpoint._routed_method.func
             docstring = func.__doc__.strip().split('\n')[0] if func.__doc__ else ''
-            summary = _human_friendly_description_from_name(func.__name__)
+            summary = human_friendly_description_from_name(func.__name__)
 
             # Path parameters
             parameters = []

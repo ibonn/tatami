@@ -7,7 +7,7 @@ import re
 from dataclasses import asdict, is_dataclass
 from io import IOBase
 from types import ModuleType
-from typing import Any, Callable, Mapping, MutableSequence, Type, Union
+from typing import Any, Callable, Mapping, MutableSequence, Type
 from uuid import UUID
 
 from jinja2 import Environment, FileSystemLoader
@@ -74,11 +74,8 @@ def serialize_json(x: Any) -> Any:
     
     return x
 
-def _human_friendly_description_from_name(name: str) -> str:
+def human_friendly_description_from_name(name: str) -> str:
     return ' '.join(name.split('_')).capitalize()
-
-def _none_if_dir_not_exists(path: str) -> Union[str, None]:
-    return path if os.path.isdir(path) else None
 
 def wrap_response(ep_fn: Callable, ep_result: Any) -> Response:
     try:
@@ -102,9 +99,6 @@ def wrap_response(ep_fn: Callable, ep_result: Any) -> Response:
         pass
 
     return JSONResponse(serialize_json(ep_result))
-
-def package_from_path(path: str) -> str:
-    return path.replace('/', '.').replace('\\', '.')[:-3]
 
 def path_to_module(path: str) -> str:
     fn, _ = os.path.splitext(path)
