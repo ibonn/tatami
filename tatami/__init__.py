@@ -1,4 +1,4 @@
-__version__ = '0.0.1-pre.0'
+__version__ = '0.0.1-pre.1'
 
 from tatami.endpoint import (delete, get, head, options, patch, post, put,
                              request)
