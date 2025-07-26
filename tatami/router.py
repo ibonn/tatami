@@ -34,8 +34,49 @@ class Summary(BaseModel):
     config_file: Optional[str] = Field(description='Path to the config file', default=None)
     routers: int = Field(description='Number of found routers', default=0)
     middleware: int = Field(description='Number of found middleware', default=0)
+    models: int = Field(description='Number of found Pydantic models', default=0)
     static: Optional[str] = Field(description='path to the static files', default=None)
     templates: Optional[str] = Field(description='path to the directory containing the templates', default=None)
+
+
+class ProjectIntrospection(BaseModel):
+    """Comprehensive introspection data for a Tatami project."""
+    config_file: Optional[str] = Field(description='Path to the config file', default=None)
+    
+    # Routers
+    routers: list[dict] = Field(description='Discovered router classes and instances', default_factory=list)
+    
+    # Models
+    models: dict[str, type] = Field(description='Discovered Pydantic models', default_factory=dict)
+    models_source: Optional[str] = Field(description='Source of models (directory or file path)', default=None)
+    
+    # Middleware
+    middleware: list[dict] = Field(description='Discovered middleware classes', default_factory=list)
+    
+    # Static resources
+    static_path: Optional[str] = Field(description='Path to static files directory', default=None)
+    templates_path: Optional[str] = Field(description='Path to templates directory', default=None)
+    favicon_path: Optional[str] = Field(description='Path to favicon file', default=None)
+    
+    # Mounts
+    mounts: list[dict] = Field(description='Mounted sub-applications', default_factory=list)
+    
+    # Summary counts
+    @property
+    def router_count(self) -> int:
+        return len(self.routers)
+    
+    @property
+    def model_count(self) -> int:
+        return len(self.models)
+    
+    @property
+    def middleware_count(self) -> int:
+        return len(self.middleware)
+    
+    @property
+    def mount_count(self) -> int:
+        return len(self.mounts)
 
 
 class BaseRouter(TatamiObject):

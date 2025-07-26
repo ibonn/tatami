@@ -6,6 +6,7 @@ from importlib.resources import files
 from types import ModuleType
 from typing import Callable, Optional
 
+from pydantic import BaseModel
 from starlette.middleware import Middleware
 from starlette.requests import Request
 from starlette.responses import FileResponse
@@ -14,7 +15,7 @@ from starlette.staticfiles import StaticFiles
 
 from tatami._utils import import_from_path, with_new_base
 from tatami.config import Config, find_config, load_config
-from tatami.router import BaseRouter, ConventionRouter, Summary
+from tatami.router import BaseRouter, ConventionRouter, Summary, ProjectIntrospection
 
 logger = logging.getLogger('tatami.convention')
 
@@ -26,7 +27,7 @@ def _for_each_module_in(path: str, callback: Callable):
             module = import_from_path(full_path)
             callback(module)
 
-def _add_router(app: BaseRouter) -> Callable[[ModuleType], None]:
+def _add_router(app: BaseRouter, introspection: ProjectIntrospection) -> Callable[[ModuleType], None]:
     def add_router(router_module: ModuleType) -> None:
         for name in dir(router_module):
             if not name.startswith('_'):
@@ -37,6 +38,15 @@ def _add_router(app: BaseRouter) -> Callable[[ModuleType], None]:
                         if issubclass(value, BaseRouter):
                             router = value()
                             app.include_router(router)
+                            
+                            # Track in introspection
+                            introspection.routers.append({
+                                'name': name,
+                                'class': value,
+                                'instance': router,
+                                'module': getattr(router_module, '__name__', '<unknown>'),
+                                'type': 'BaseRouter'
+                            })
 
                         else:
                             # Transform classes into routers
@@ -45,6 +55,15 @@ def _add_router(app: BaseRouter) -> Callable[[ModuleType], None]:
                                 router_cls = with_new_base(value, ConventionRouter)
                                 router = router_cls()
                                 app.include_router(router)
+                                
+                                # Track in introspection
+                                introspection.routers.append({
+                                    'name': name,
+                                    'class': value,
+                                    'instance': router,
+                                    'module': getattr(router_module, '__name__', '<unknown>'),
+                                    'type': 'ConventionRouter'
+                                })
                             except Exception as e:
                                 logger.error(f"Failed to convert class {name} to router: {e}")
                                 continue
@@ -54,15 +73,22 @@ def _add_router(app: BaseRouter) -> Callable[[ModuleType], None]:
 
     return add_router
 
-def _add_middleware(app: BaseRouter) -> Callable[[ModuleType], None]:
-    def add_middleware(router_module: ModuleType) -> None:
-        for name in dir(router_module):
+def _add_middleware(app: BaseRouter, introspection: ProjectIntrospection) -> Callable[[ModuleType], None]:
+    def add_middleware(middleware_module: ModuleType) -> None:
+        for name in dir(middleware_module):
             if not name.startswith('_'):
-                value = getattr(router_module, name)
+                value = getattr(middleware_module, name)
 
                 if issubclass(value, Middleware):
                     # TODO find a way to pass arguments
                     app.add_middleware(value)
+                    
+                    # Track in introspection
+                    introspection.middleware.append({
+                        'name': name,
+                        'class': value,
+                        'module': getattr(middleware_module, '__name__', '<unknown>')
+                    })
 
                 else:
                     # TODO transform classes into routers
@@ -71,13 +97,33 @@ def _add_middleware(app: BaseRouter) -> Callable[[ModuleType], None]:
     return add_middleware
 
 
+def _load_models(introspection: ProjectIntrospection) -> Callable[[ModuleType], None]:
+    """Load Pydantic models from model modules and store them in introspection."""
+    def load_models(model_module: ModuleType) -> None:
+        for name in dir(model_module):
+            if not name.startswith('_'):
+                try:
+                    value = getattr(model_module, name)
+                    
+                    # Check if it's a class and a Pydantic model
+                    if isinstance(value, type) and issubclass(value, BaseModel):
+                        introspection.models[name] = value
+                        logger.debug(f"Loaded Pydantic model: {name}")
+                            
+                except Exception as e:
+                    logger.error(f"Error processing model module attribute {name}: {e}")
+                    continue
+
+    return load_models
+
+
 def get_favicon_router(favicon_path: str) -> Callable[[Request], FileResponse]:
     def favicon_router(request: Request) -> FileResponse:
         return FileResponse(favicon_path)
     return favicon_router
 
 
-def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'routers', middleware_dir: str = 'middleware', mounts_dir: str = 'mounts', static_dir: str = 'static', templates_dir: str = 'templates', favicon_file: str = 'favicon.ico', readme_file: str = 'README.md') -> BaseRouter:
+def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'routers', middleware_dir: str = 'middleware', models_dir: str = 'models', mounts_dir: str = 'mounts', static_dir: str = 'static', templates_dir: str = 'templates', favicon_file: str = 'favicon.ico', readme_file: str = 'README.md') -> tuple[BaseRouter, ProjectIntrospection]:
     # Load config
     config_path = find_config(path, mode)
 
@@ -98,6 +144,7 @@ def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'ro
     # Paths
     routers_path = os.path.join(path, routers_dir)
     middleware_path = os.path.join(path, middleware_dir)
+    models_path = os.path.join(path, models_dir)
     mounts_path = os.path.join(path, mounts_dir)
     static_path = os.path.join(path, static_dir)
     templates_path = os.path.join(path, templates_dir)
@@ -113,23 +160,55 @@ def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'ro
         description = None
 
     app = BaseRouter(title=config.app_name, description=description, version=config.version)
+    
+    # Create introspection object
+    introspection = ProjectIntrospection(
+        config_file=os.path.basename(config_path) if config_path else None,
+        static_path=static_path if os.path.isdir(static_path) else None,
+        templates_path=templates_path if os.path.isdir(templates_path) else None,
+        favicon_path=favicon_path if os.path.isfile(favicon_path) else None
+    )
 
     if os.path.isdir(routers_path):
-        _for_each_module_in(routers_path, _add_router(app))
+        _for_each_module_in(routers_path, _add_router(app, introspection))
     else:
         logger.debug('No routers directory found, skipping...')
 
     if os.path.isdir(middleware_path):
-        _for_each_module_in(middleware_path, _add_middleware(app))
+        _for_each_module_in(middleware_path, _add_middleware(app, introspection))
     else:
         logger.debug('No middleware directory found, skipping...')
+
+    if os.path.isdir(models_path):
+        _for_each_module_in(models_path, _load_models(introspection))
+        introspection.models_source = models_path
+        logger.debug('Loaded models from directory %s', models_path)
+    else:
+        # Check for models.py file
+        models_file = os.path.join(path, f'{models_dir}.py')
+        if os.path.isfile(models_file):
+            model_module = import_from_path(models_file)
+            _load_models(introspection)(model_module)
+            introspection.models_source = models_file
+            logger.debug('Loaded models from file %s', models_file)
+        else:
+            logger.debug('No models directory or models.py file found, skipping...')
 
     if os.path.isdir(mounts_path):
         # TODO allow mounting non-tatami apps (if instead of a dir it is a .py, load it and mount the found app)
         for mount_name in os.listdir(mounts_path):
             full_path = os.path.join(mounts_path, mount_name)
-            mount_app = build_from_dir(full_path, mode=mode)
+            mount_app, mount_introspection = build_from_dir(full_path, mode=mode)
             app.mount(f'/{mount_name}', mount_app)
+            
+            # Track in introspection
+            introspection.mounts.append({
+                'name': mount_name,
+                'path': f'/{mount_name}',
+                'source_path': full_path,
+                'app': mount_app,
+                'introspection': mount_introspection
+            })
     else:
         logger.debug('No mounts directory found, skipping...')
 
@@ -153,20 +232,31 @@ def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'ro
         
     app._summary = Summary(
         config_file=os.path.basename(config_path) if config_path else None,
-        routers=len(app.routers),
-        middleware=0,   # TODO get number of loaded middleware
+        routers=introspection.router_count,
+        middleware=introspection.middleware_count,
+        models=introspection.model_count,
         static=static_path if os.path.isdir(static_path) else None,
         templates=templates_path if os.path.isdir(templates_path) else None,
     )
 
+    return app, introspection
+
+
+def build_app_from_dir(path: str, mode: Optional[str] = None, **kwargs) -> BaseRouter:
+    """
+    Backward compatibility function that returns only the app.
+    For new code, prefer using build_from_dir which returns both app and introspection.
+    """
+    app, _ = build_from_dir(path, mode, **kwargs)
     return app
 
 
-def create_project(path: str, routers_dir: str = 'routers', middleware_dir: str = 'middleware', mounts_dir: str = 'mounts', static_dir: str = 'static', templates_dir: str = 'templates', favicon_file: str = 'favicon.ico', readme_file: str = 'README.md') -> None:
+def create_project(path: str, routers_dir: str = 'routers', middleware_dir: str = 'middleware', models_dir: str = 'models', mounts_dir: str = 'mounts', static_dir: str = 'static', templates_dir: str = 'templates', favicon_file: str = 'favicon.ico', readme_file: str = 'README.md') -> None:
     config_path = os.path.join(path, 'config.yaml')
     dev_config_path = os.path.join(path, 'config-dev.yaml')
     routers_path = os.path.join(path, routers_dir)
     middleware_path = os.path.join(path, middleware_dir)
+    models_file = os.path.join(path, f'{models_dir}.py')
     mounts_path = os.path.join(path, mounts_dir)
     static_path = os.path.join(path, static_dir)
     templates_path = os.path.join(path, templates_dir)
@@ -180,10 +270,24 @@ def create_project(path: str, routers_dir: str = 'routers', middleware_dir: str 
     os.makedirs(static_path)
     os.makedirs(templates_path)
 
-    # Create empty config and readme files
+    # Create empty config, readme, and models files
     open(config_path, 'w', encoding='utf-8').close()
     open(dev_config_path, 'w', encoding='utf-8').close()
     open(readme_path, 'w', encoding='utf-8').close()
+    
+    # Create a basic models.py file with an example
+    with open(models_file, 'w', encoding='utf-8') as f:
+        f.write('''"""
+Pydantic models for the application.
+"""
+from pydantic import BaseModel
+
+
+# Example model - replace with your own models
+# class User(BaseModel):
+#     name: str
+#     email: str
+''')
 
     # Copy the favicon
     shutil.copy(files('tatami.data.images') / 'favicon.ico', favicon_path)
