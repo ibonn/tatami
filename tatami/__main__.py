@@ -7,6 +7,7 @@ from colorama import Fore, Style
 from tatami import __version__
 from tatami.config import load_config
 from tatami.convention import build_from_dir, create_project
+from tatami.doctor import diagnose_project, MessageLevel
 
 
 def main():
@@ -25,6 +26,9 @@ def main():
     create_parser = subparsers.add_parser('create', help='Create a new project')
     create_parser.add_argument('project', action='store', help='Project name. A valid system path name')
     create_parser.add_argument('-t', '--template', action='store', default=None, help='Create the project using the provided template')
+
+    doctor_parser = subparsers.add_parser('doctor', help='Get project diagnostics')
+    doctor_parser.add_argument('project', action='store', help='Path to the project')
 
     parsed_args = parser.parse_args(sys.argv[1:])
 
@@ -59,8 +63,41 @@ def main():
         print(f'Run {Style.BRIGHT}tatami doctor "{parsed_args.project}"{Style.RESET_ALL} for a more detailed analysis 🩺')
         print('Handing control over to uvicorn...')
         # run the app
-        # TODO make uvicorn the default, add option to run using another backend and check import for gunicorn, tornado, etc.
-        app.run(host=parsed_args.host, port=parsed_args.port)
+        app.run(host=parsed_args.host, port=parsed_args.port, server=parsed_args.server)
+
+    elif parsed_args.action == 'doctor':
+        print('🩺 Tatami is checking your project...')
+        diagnose = diagnose_project(parsed_args.project)
+        
+        # Display messages by level
+        success_count = 0
+        for message in diagnose.detail:
+            if message.level == MessageLevel.DEFAULT:
+                print(f'✔ {message.message}')
+                success_count += 1
+            elif message.level == MessageLevel.WARNING:
+                print(f'{Fore.YELLOW}⚠ {message.message}{Fore.RESET}')
+            elif message.level == MessageLevel.LOW:
+                print(f'{Fore.CYAN}ℹ {message.message}{Fore.RESET}')
+            elif message.level == MessageLevel.MEDIUM:
+                print(f'{Fore.YELLOW}! {message.message}{Fore.RESET}')
+            elif message.level == MessageLevel.HIGH:
+                print(f'{Fore.RED}!! {message.message}{Fore.RESET}')
+            elif message.level == MessageLevel.CRITICAL:
+                print(f'{Fore.RED}{Style.BRIGHT}!!! {message.message}{Style.RESET_ALL}')
+        
+        print()
+        
+        # Display summary
+        summary = diagnose.summary
+        if summary.critical > 0:
+            print(f'{Fore.RED}{Style.BRIGHT}❌ Critical issues found! Your project may not work properly.{Style.RESET_ALL}')
+        elif summary.high > 0 or summary.medium > 0:
+            print(f'{Fore.YELLOW}⚠ Some issues found, but your project should work.{Style.RESET_ALL}')
+        elif summary.warning > 0 or summary.low > 0:
+            print(f'{Fore.GREEN}✅ Your project looks good! Minor suggestions available.{Style.RESET_ALL}')
+        else:
+            print(f'{Fore.GREEN}{Style.BRIGHT}✅ All systems look sharp, sensei! 🥋{Style.RESET_ALL}')
 
     else:
         parser.print_help()
