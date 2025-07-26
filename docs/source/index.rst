@@ -27,7 +27,10 @@ Like traditional *tatami* mats that structure a Japanese room, Tatami lets you d
 
    Getting started 🚀 <getting_started.rst>
    The CLI 🎛️ <the_cli.rst>
-   Concepts <concepts.rst>
-   Deprecation <deprecation.rst>
+   Concepts 🧭 <concepts.rst>
+   Modes and conventions 🏗️ <modes_conventions.rst>
+   Implementation status 🚧 <status.rst>
+   Dependency injection 💉 <dependency_injection.rst>
+   Deprecation ⛔ <deprecation.rst>
 
    api/tatami

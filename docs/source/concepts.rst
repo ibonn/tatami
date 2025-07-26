@@ -1,5 +1,5 @@
 Conventions Over Configuration 🧭
-================================
+=================================
 
 Tatami tries to stay out of your way. Instead of asking you to configure everything with long YAML files or massive Python settings modules, it leans into the idea of **“convention over configuration.”**
 
@@ -8,45 +8,109 @@ That means: if you follow some simple patterns, Tatami will Just Work™ — no 
 Project Structure 📁
 --------------------
 
-Here's a typical (minimal) project layout that Tatami understands:
+Tatami supports both manual setup and convention-based project structures:
+
+**Convention-based structure (recommended):**
 
 .. code-block::
 
    myapi/
-   ├── app.py              # Your main app file — must define a Tatami instance
-   ├── items.py            # A module containing a router
-   └── models.py           # (Optional) Pydantic models
+   ├── config.yaml         # Main configuration
+   ├── config-dev.yaml     # Development config (optional)
+   ├── README.md           # Project description (used in OpenAPI docs)
+   ├── favicon.ico         # Custom favicon (optional)
+   ├── routers/            # Router classes and modules
+   │   ├── users.py
+   │   └── items.py
+   ├── middleware/         # Middleware classes (planned)
+   ├── static/             # Static files (served at /static)
+   ├── templates/          # Template files (Jinja2, planned)
+   └── mounts/             # Sub-applications (planned)
 
-By default, you'd define your app in `app.py` like this:
-
-.. code-block:: python
-
-   from tatami import Tatami
-   from items import ItemsRouter
-
-   app = Tatami(title="My API")
-   app.include_router(ItemsRouter())
-
-Then in `items.py`:
+**Manual setup:**
 
 .. code-block:: python
 
-   from tatami import router, get
-   from starlette.responses import JSONResponse
+   from tatami import BaseRouter
+   from routers.items import Items
 
-   class ItemsRouter(router("/items")):
-       @get("/{item_id}", response_type=JSONResponse)
+   app = BaseRouter(title="My API")
+   app.include_router(Items())
+   app.run()
+
+**Using CLI for convention-based projects:**
+
+.. code-block:: bash
+
+   tatami create myapi
+   tatami run myapi
+
+Router Examples
+---------------
+
+**Decorator-based routing:**
+
+.. code-block:: python
+
+   from tatami import router, get, post
+   from pydantic import BaseModel
+
+   class Item(BaseModel):
+       name: str
+       price: float
+
+   class Items(router("/items")):
+       @get("/{item_id}")
        def show(self, item_id: str):
-           return {"id": item_id}
+           return {"id": item_id, "name": "Example Item"}
+       
+       @post("/")
+       def create(self, item: Item):
+           return {"created": item.name, "price": item.price}
+
+**Convention-based routing:**
+
+.. code-block:: python
+
+   # File: routers/items.py
+   from pydantic import BaseModel
+
+   class Item(BaseModel):
+       name: str
+       price: float
+
+   class Items:
+       def get_items(self):
+           """List all items"""
+           return [{"id": 1, "name": "Example"}]
+       
+       def post_item(self, item: Item):
+           """Create a new item"""
+           return {"created": item.name}
+       
+       def get_item_by_id(self, item_id: int):
+           """Get specific item"""
+           return {"id": item_id, "name": "Example"}
 
 Naming Things
 -------------
 
-The framework assumes:
+**Decorator-based routing:**
+- Use the `router("/path")` function to create a router class
+- HTTP method decorators (`@get`, `@post`, `@put`, `@delete`, etc.) define endpoints
+- Path parameters are extracted from function signatures
 
-- Files like `items.py` define routers related to that domain.
-- Classes like `ItemsRouter` will follow the `router("/items")` convention (URL path matches file/module name).
-- Endpoints use HTTP method decorators (`@get`, `@post`, etc.) — no need to register them manually.
+**Convention-based routing:**
+- Class names determine the base route (e.g., `Items` -> `/items`)
+- Method names follow the pattern: `{verb}_{resource}[_by_{param}]`
+- Supported verbs: `get`, `post`, `put`, `patch`, `delete`, `head`, `options`
+- Alternative verbs: `update` (PUT), `create`/`new` (POST), `remove` (DELETE)
+
+Examples:
+- `get_items()` -> `GET /items/`
+- `post_item()` -> `POST /items/`  
+- `get_item_by_id(item_id)` -> `GET /items/{item_id}`
+- `update_user_by_email(email, user)` -> `PUT /users/{email}`
 
 If you break these conventions, that's fine — but you'll need to wire things up explicitly. For example:
 

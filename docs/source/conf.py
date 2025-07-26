@@ -32,6 +32,7 @@ html_favicon = '_static/favicon.ico'
 html_theme_options = {
     'logo_only': True,
     'display_version': False,
+    'logo': '_static/tatami-logo.png',
 }
 html_theme_options = {
   "external_links": [

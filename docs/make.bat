@@ -26,6 +26,10 @@ if errorlevel 9009 (
 if "%1" == "" goto help
 
 %SPHINXBUILD% -M %1 %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
+if "%1" == "html" (
+	echo Fixing logo paths in generated HTML...
+	python fix_logo_paths.py
+)
 goto end
 
 :help

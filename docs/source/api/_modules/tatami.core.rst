@@ -1,9 +1,10 @@
 tatami.core 🧠
 ==============
 
-This module contains the core building blocks of Tatami, like the base `Tatami` app itself, the `Router` class, and the `run()` function that sets everything in motion.
+This module contains the core building blocks of Tatami. Currently, it only contains the base `TatamiObject` class that other framework components inherit from.
 
-These are the things you'll be using (or subclassing) most often when building an app with Tatami.
+.. note::
+   This module is minimal in the current version. The main functionality is in `tatami.router` and `tatami.endpoint`.
 
 .. automodule:: tatami.core
    :members:
