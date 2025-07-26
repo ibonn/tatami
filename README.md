@@ -78,7 +78,7 @@ This defines two routes:
 * GET /users/
 * POST /users/
 
-...and auto-documents them with full OpenAPI schemas. For a fully featured example, check the [Tatami Pet Store]()
+...and auto-documents them with full OpenAPI schemas. For a fully featured example, check the [Tatami Pet Store](https://github.com/ibonn/tatami-petstore)
 
 ## 🌱 Still Early
 
