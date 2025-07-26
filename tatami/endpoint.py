@@ -9,7 +9,7 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse, Response
 from starlette.routing import Route
 
-from tatami._utils import wrap_response
+from tatami._utils import human_friendly_description_from_name, wrap_response
 from tatami.core import TatamiObject
 
 if TYPE_CHECKING:
@@ -37,6 +37,10 @@ class Endpoint(TatamiObject):
         if instance is None:
             return self
         return BoundEndpoint(self, instance)
+    
+    @property
+    def deprecated(self) -> bool:
+        return hasattr(self.func, '__deprecated__')
 
 
 class BoundEndpoint(TatamiObject):
@@ -46,6 +50,34 @@ class BoundEndpoint(TatamiObject):
         self.method: str = endpoint.method
         self.path: str = endpoint.path
         self.include_in_schema = True
+
+    @property
+    def tags(self) -> list[str]:
+        return self._endpoint.tags
+    
+    @property
+    def summary(self) -> str:
+        return human_friendly_description_from_name(self._endpoint.func.__name__)
+    
+    @property
+    def docs(self) -> str:
+        return self._endpoint.func.__doc__
+    
+    @property
+    def signature(self) -> inspect.Signature:
+        return inspect.signature(self._endpoint.func)
+    
+    @property
+    def request_type(self) -> Union[Request, BaseModel, None]:
+        return self._endpoint.request_type
+    
+    @property
+    def response_type(self) -> Union[Type[Response], Type[BaseModel], None]:
+        return self._endpoint.response_type
+    
+    @property
+    def deprecated(self) -> bool:
+        return self._endpoint.deprecated
 
     @property
     def endpoint_function(self):

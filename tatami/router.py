@@ -10,9 +10,7 @@ from starlette.requests import Request
 from starlette.responses import HTMLResponse, JSONResponse
 from starlette.routing import Route
 
-from tatami._utils import (human_friendly_description_from_name,
-                           camel_to_snake, is_path_param,
-                           update_dict)
+from tatami._utils import camel_to_snake, is_path_param, update_dict
 from tatami.core import TatamiObject
 from tatami.endpoint import BoundEndpoint, Endpoint
 
@@ -136,14 +134,12 @@ class BaseRouter(TatamiObject):
             if path not in spec['paths']:
                 spec['paths'][path] = {}
 
-            func = endpoint._endpoint.func
-            docstring = func.__doc__.strip().split('\n')[0] if func.__doc__ else ''
-            summary = human_friendly_description_from_name(func.__name__)
+            docstring = endpoint.docs.strip().split('\n')[0] if endpoint.docs else ''
 
             # Path parameters
             parameters = []
-            sig = inspect.signature(func)
-            for param in sig.parameters.values():
+        
+            for param in endpoint.signature.parameters.values():
                 if is_path_param(param.annotation):
                     parameters.append({
                         'name': param.name,
@@ -154,8 +150,8 @@ class BaseRouter(TatamiObject):
 
             # Request body (only if applicable)
             request_body = None
-            if endpoint._endpoint.request_type:
-                for param_name, model in endpoint._endpoint.request_type.items():
+            if endpoint.request_type:
+                for param_name, model in endpoint.request_type.items():
                     model_name = add_schema(model)
                     request_body = {
                         'content': {
@@ -178,13 +174,13 @@ class BaseRouter(TatamiObject):
                 }
             }
 
-            if endpoint._endpoint.response_type and issubclass(endpoint._endpoint.response_type, JSONResponse):
+            if endpoint.response_type and issubclass(endpoint.response_type, JSONResponse):
                 # TODO optionally try to introspect return type
                 pass
 
             # Tags
             # Order of resolution: User specified (endpoint) -> user specified (router) -> class name of the router
-            tags = endpoint._endpoint.tags or self.tags or [self.__class__.__name__]
+            tags = endpoint.tags or self.tags or [self.__class__.__name__]
             for tag in tags:
                 if tag not in tags_seen:
                     tags_seen.add(tag)
@@ -193,11 +189,11 @@ class BaseRouter(TatamiObject):
 
             spec['paths'][path][method] = {
                 'tags': tags,
-                'summary': summary,
+                'summary': endpoint.summary,
                 'description': docstring,
                 'parameters': parameters or [],
                 'responses': responses,
-                'deprecated': hasattr(endpoint._endpoint.func, '__deprecated__')
+                'deprecated': endpoint.deprecated,
             }
 
             if request_body:
