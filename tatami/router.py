@@ -141,11 +141,22 @@ class BaseRouter(TatamiObject):
         
             for param in endpoint.signature.parameters.values():
                 if is_path_param(param.annotation):
+                    # Determine schema type based on annotation
+                    schema = {'type': 'string'}  # default
+                    if param.annotation == int:
+                        schema = {'type': 'integer'}
+                    elif param.annotation == float:
+                        schema = {'type': 'number'}
+                    elif param.annotation == bool:
+                        schema = {'type': 'boolean'}
+                    elif hasattr(param.annotation, '__origin__') and param.annotation.__origin__ is list:
+                        schema = {'type': 'array', 'items': {'type': 'string'}}
+                    
                     parameters.append({
                         'name': param.name,
                         'in': 'path',
                         'required': True,
-                        'schema': {'type': 'string'},  # TODO Could be smarter
+                        'schema': schema,
                     })
 
             # Request body (only if applicable)
@@ -166,17 +177,59 @@ class BaseRouter(TatamiObject):
             responses = {
                 "200": {
                     "description": "Successful response",
-                    "content": {
-                        "application/json": {
-                            "schema": {"type": "object"}  # TODO Could also be smarter
-                        }
-                    }
                 }
             }
 
-            if endpoint.response_type and issubclass(endpoint.response_type, JSONResponse):
-                # TODO optionally try to introspect return type
-                pass
+            # Try to introspect return type from function signature
+            if endpoint.response_type:
+                if issubclass(endpoint.response_type, JSONResponse):
+                    responses["200"]["content"] = {
+                        "application/json": {
+                            "schema": {"type": "object"}
+                        }
+                    }
+                elif issubclass(endpoint.response_type, HTMLResponse):
+                    responses["200"]["content"] = {
+                        "text/html": {
+                            "schema": {"type": "string"}
+                        }
+                    }
+                else:
+                    # Default to JSON
+                    responses["200"]["content"] = {
+                        "application/json": {
+                            "schema": {"type": "object"}
+                        }
+                    }
+            else:
+                # Try to get return annotation from function signature
+                return_annotation = endpoint.signature.return_annotation
+                if return_annotation and return_annotation != inspect.Signature.empty:
+                    if return_annotation == str:
+                        responses["200"]["content"] = {
+                            "text/plain": {
+                                "schema": {"type": "string"}
+                            }
+                        }
+                    elif return_annotation == dict or hasattr(return_annotation, '__dict__'):
+                        responses["200"]["content"] = {
+                            "application/json": {
+                                "schema": {"type": "object"}
+                            }
+                        }
+                    else:
+                        responses["200"]["content"] = {
+                            "application/json": {
+                                "schema": {"type": "object"}
+                            }
+                        }
+                else:
+                    # Default response
+                    responses["200"]["content"] = {
+                        "application/json": {
+                            "schema": {"type": "object"}
+                        }
+                    }
 
             # Tags
             # Order of resolution: User specified (endpoint) -> user specified (router) -> class name of the router
