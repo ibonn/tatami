@@ -126,7 +126,7 @@ def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'ro
         logger.debug('No mounts directory found, skipping...')
 
     if os.path.isdir(static_path):
-        app.mount('/static', StaticFiles, name='static_files')
+        app.mount('/static', StaticFiles(directory=static_path))
     else:
         logger.debug('No static directory found, skipping...')
 
