@@ -45,28 +45,11 @@ def _add_router(app: BaseRouter, introspection: ProjectIntrospection) -> Callabl
                                 'class': value,
                                 'instance': router,
                                 'module': getattr(router_module, '__name__', '<unknown>'),
-                                'type': 'BaseRouter'
+                                'type': value.__class__.__name__
                             })
 
                         else:
-                            # Transform classes into routers
-                            warnings.warn("Non router class found in a file under the 'routers' directory. Tatami is starting to support automatic conversion to routers, but this feature is still experimental")
-                            try:
-                                router_cls = with_new_base(value, ConventionRouter)
-                                router = router_cls()
-                                app.include_router(router)
-                                
-                                # Track in introspection
-                                introspection.routers.append({
-                                    'name': name,
-                                    'class': value,
-                                    'instance': router,
-                                    'module': getattr(router_module, '__name__', '<unknown>'),
-                                    'type': 'ConventionRouter'
-                                })
-                            except Exception as e:
-                                logger.error(f"Failed to convert class {name} to router: {e}")
-                                continue
+                           warnings.warn('Non router class found at routers: {value.__name__}')
                 except Exception as e:
                     logger.error(f"Error processing router module attribute {name}: {e}")
                     continue
