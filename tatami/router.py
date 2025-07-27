@@ -6,13 +6,14 @@ from typing import Any, NoReturn, Optional, Self, Type
 import uvicorn
 from pydantic import BaseModel, Field
 from starlette.applications import Starlette
-from starlette.requests import Request
-from starlette.responses import HTMLResponse, JSONResponse
 from starlette.routing import Route
 
-from tatami._utils import camel_to_snake, update_dict
+from tatami._utils import camel_to_snake
 from tatami.core import TatamiObject
-from tatami.endpoint import BoundEndpoint, Endpoint, _extract_parameters
+from tatami.endpoint import BoundEndpoint, Endpoint
+from tatami.openapi import (create_openapi_endpoint, create_rapidoc_endpoint,
+                            create_redoc_endpoint, create_swagger_endpoint,
+                            generate_openapi_spec)
 from tatami.param import Path
 
 logger = logging.getLogger('tatami.router')
@@ -141,237 +142,8 @@ class BaseRouter(TatamiObject):
         return app
     
     def get_openapi_spec(self) -> dict:
-        endpoints = self._collect_endpoints()
-
-        spec = {
-            'openapi': '3.0.0',
-            'info': {
-                'title': self.title or self.__class__.__name__,
-                'version': self.version,
-                'description': self.description or self.__doc__ or f'API for {self.__class__.__name__}',
-            },
-            'paths': {},
-            'tags': [],
-            'components': {
-                'schemas': {}
-            },
-        }
-
-        tags_seen = set()
-        schemas = {}
-
-        def add_schema(model: type[BaseModel]) -> str:
-            """Add a Pydantic model schema to the OpenAPI spec with examples"""
-            name = model.__name__
-            if name not in schemas:
-                schema = model.model_json_schema(ref_template='#/components/schemas/{model}')
-                
-                # Add examples if available from Field descriptions
-                if 'properties' in schema:
-                    for prop_name, prop_schema in schema['properties'].items():
-                        field_info = model.model_fields.get(prop_name)
-                        if field_info and hasattr(field_info, 'examples') and field_info.examples:
-                            prop_schema['examples'] = field_info.examples
-                        elif field_info and hasattr(field_info, 'description') and field_info.description:
-                            prop_schema['description'] = field_info.description
-                
-                # Try to generate an example instance
-                try:
-                    # Create example with default or example values
-                    example_data = {}
-                    for field_name, field_info in model.model_fields.items():
-                        if hasattr(field_info, 'examples') and field_info.examples:
-                            example_data[field_name] = field_info.examples[0]
-                        elif hasattr(field_info, 'default') and field_info.default is not None:
-                            example_data[field_name] = field_info.default
-                        else:
-                            # Generate reasonable default based on type
-                            field_type = field_info.annotation
-                            if field_type == str:
-                                example_data[field_name] = "string"
-                            elif field_type == int:
-                                example_data[field_name] = 0
-                            elif field_type == float:
-                                example_data[field_name] = 0.0
-                            elif field_type == bool:
-                                example_data[field_name] = True
-                    
-                    if example_data:
-                        schema['example'] = example_data
-                except Exception:
-                    pass  # Skip example generation if it fails
-                
-                schemas[name] = schema
-            return name
-
-        def get_parameter_schema(param_type: type) -> dict:
-            """Get OpenAPI schema for a parameter type"""
-            if param_type == int:
-                return {'type': 'integer', 'format': 'int32'}
-            elif param_type == float:
-                return {'type': 'number', 'format': 'float'}
-            elif param_type == bool:
-                return {'type': 'boolean'}
-            elif param_type == str:
-                return {'type': 'string'}
-            else:
-                return {'type': 'string'}  # default fallback
-
-        for endpoint in endpoints:
-            if not endpoint.include_in_schema:
-                continue
-
-            method = endpoint.method.lower()
-            path = (self.path or '') + endpoint.path
-
-            if path not in spec['paths']:
-                spec['paths'][path] = {}
-
-            docstring = endpoint.docs.strip().split('\n')[0] if endpoint.docs else ''
-
-            # Extract all parameters using the new system
-            parameters = []
-            request_body = None
-            
-            # Get parameter information from endpoint signature
-            parameters_info = _extract_parameters(endpoint._endpoint.func, endpoint.path)
-            
-            # Process path parameters
-            for param_name, param_info in parameters_info.get('path', {}).items():
-                parameters.append({
-                    'name': param_info['key'],
-                    'in': 'path',
-                    'required': True,
-                    'schema': get_parameter_schema(param_info['type']),
-                    'description': f'Path parameter {param_info["key"]}'
-                })
-            
-            # Process query parameters
-            for param_name, param_info in parameters_info.get('query', {}).items():
-                parameters.append({
-                    'name': param_info['key'],
-                    'in': 'query',
-                    'required': False,  # Query parameters are optional by default
-                    'schema': get_parameter_schema(param_info['type']),
-                    'description': f'Query parameter {param_info["key"]}'
-                })
-            
-            # Process header parameters
-            for param_name, param_info in parameters_info.get('headers', {}).items():
-                parameters.append({
-                    'name': param_info['key'],
-                    'in': 'header',
-                    'required': False,  # Headers are optional by default
-                    'schema': get_parameter_schema(param_info['type']),
-                    'description': f'Header parameter {param_info["key"]}'
-                })
-            
-            # Process body parameters
-            for param_name, model_class in parameters_info.get('body', {}).items():
-                if issubclass(model_class, BaseModel):
-                    schema_name = add_schema(model_class)
-                    request_body = {
-                        'required': True,
-                        'content': {
-                            'application/json': {
-                                'schema': {'$ref': f'#/components/schemas/{schema_name}'}
-                            }
-                        }
-                    }
-
-            # Response body
-            responses = {
-                "200": {
-                    "description": "Successful response",
-                }
-            }
-
-            # Try to introspect return type from function signature
-            if endpoint.response_type:
-                if issubclass(endpoint.response_type, JSONResponse):
-                    responses["200"]["content"] = {
-                        "application/json": {
-                            "schema": {"type": "object"}
-                        }
-                    }
-                elif issubclass(endpoint.response_type, HTMLResponse):
-                    responses["200"]["content"] = {
-                        "text/html": {
-                            "schema": {"type": "string"}
-                        }
-                    }
-                else:
-                    # Default to JSON
-                    responses["200"]["content"] = {
-                        "application/json": {
-                            "schema": {"type": "object"}
-                        }
-                    }
-            else:
-                # Try to get return annotation from function signature
-                return_annotation = endpoint.signature.return_annotation
-                if return_annotation and return_annotation != inspect.Signature.empty:
-                    if return_annotation == str:
-                        responses["200"]["content"] = {
-                            "text/plain": {
-                                "schema": {"type": "string"}
-                            }
-                        }
-                    elif return_annotation == dict or hasattr(return_annotation, '__dict__'):
-                        responses["200"]["content"] = {
-                            "application/json": {
-                                "schema": {"type": "object"}
-                            }
-                        }
-                    else:
-                        responses["200"]["content"] = {
-                            "application/json": {
-                                "schema": {"type": "object"}
-                            }
-                        }
-                else:
-                    # Default response
-                    responses["200"]["content"] = {
-                        "application/json": {
-                            "schema": {"type": "object"}
-                        }
-                    }
-
-            # Tags
-            # Order of resolution: User specified (endpoint) -> user specified (router) -> class name of the router
-            tags = endpoint.tags or self.tags or [self.__class__.__name__]
-            for tag in tags:
-                if tag not in tags_seen:
-                    tags_seen.add(tag)
-                    if len(tags) == 1 and tags[0] == self.__class__.__name__:
-                        spec['tags'].append({'name': tag, 'description': self.summary or tag})
-
-            spec['paths'][path][method] = {
-                'tags': tags,
-                'summary': endpoint.summary,
-                'description': docstring,
-                'parameters': parameters or [],
-                'responses': responses,
-                'deprecated': endpoint.deprecated,
-            }
-
-            if request_body:
-                spec['paths'][path][method]['requestBody'] = request_body
-
-        # Merge child routers' paths
-        for child_router in self._routers:
-            child_spec = child_router.get_openapi_spec()
-            update_dict(spec['paths'], child_spec['paths'])
-            update_dict(spec['components']['schemas'], child_spec.get('components', {}).get('schemas', {}))
-            for tag in child_spec.get('tags', []):
-                if tag['name'] not in tags_seen:
-                    spec['tags'].append(tag)
-                    tags_seen.add(tag['name'])
-
-        # Inject collected schemas
-        spec['components']['schemas'].update(schemas)
-
-        return spec
+        """Get the OpenAPI specification for this router."""
+        return generate_openapi_spec(self)
 
         
     def run(self, host: str = 'localhost', port: int = 8000, openapi_url: Optional[str] = '/openapi.json', swagger_url: Optional[str] = '/docs/swagger', redoc_url: Optional[str] = '/docs/redoc', rapidoc_url: Optional[str] = '/docs/rapidoc') -> NoReturn:
@@ -411,71 +183,18 @@ class BaseRouter(TatamiObject):
         """
         app = self._starlette()
         
-        async def openapi_endpoint(request: Request):
-            return JSONResponse(self.get_openapi_spec())
-
-        async def redocs_endpoint(request: Request):
-            html = f"""
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>{self.title} - ReDoc</title>
-                <meta charset="utf-8"/>
-            </head>
-            <body>
-                <redoc spec-url='{openapi_url}'></redoc>
-                <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"></script>
-            </body>
-            </html>
-            """
-            return HTMLResponse(html)
-
-        async def swagger_endpoint(request: Request):
-            html = f"""
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>{self.title} - Swagger UI</title>
-                <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist/swagger-ui.css" />
-                <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
-                <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-standalone-preset.js"></script>
-            </head>
-            <body>
-                <div id="swagger-ui"></div>
-                <script>
-                SwaggerUIBundle({{
-                    url: '{openapi_url}',
-                    dom_id: '#swagger-ui',
-                    presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
-                    layout: "BaseLayout"
-                }});
-                </script>
-            </body>
-            </html>
-            """
-            return HTMLResponse(html)
-
-        async def rapidoc_endpoint(request: Request):
-            html = f"""
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>{self.title} - RapiDoc</title>
-                <script type="module" src="https://unpkg.com/rapidoc/dist/rapidoc-min.js"></script>
-            </head>
-            <body>
-                <rapi-doc spec-url="{openapi_url}" theme="dark" show-header="true" render-style="read"></rapi-doc>
-            </body>
-            </html>
-            """
-            return HTMLResponse(html)
+        # Create documentation endpoints using the new OpenAPI module
+        openapi_endpoint = create_openapi_endpoint(self)
+        redoc_endpoint = create_redoc_endpoint(self, openapi_url)
+        swagger_endpoint = create_swagger_endpoint(self, openapi_url)
+        rapidoc_endpoint = create_rapidoc_endpoint(self, openapi_url)
 
         # Add the documentation routes to the root app
         if openapi_url is not None:
             app.routes.insert(0, Route(openapi_url, openapi_endpoint, methods=["GET"]))
 
             if redoc_url is not None:
-                app.routes.insert(0, Route(redoc_url, redocs_endpoint, methods=["GET"]))
+                app.routes.insert(0, Route(redoc_url, redoc_endpoint, methods=["GET"]))
             
             if swagger_url is not None:
                 app.routes.insert(0, Route(swagger_url, swagger_endpoint, methods=["GET"]))
