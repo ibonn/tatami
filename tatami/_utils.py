@@ -137,11 +137,6 @@ def import_from_path(path: str) -> ModuleType:
 def camel_to_snake(name: str) -> str:
     return re.sub(r'(?<!^)(?=[A-Z])', '_', name).lower()
 
-def is_path_param(t: Type) -> bool:
-    if t in {int, str}:
-        return True
-    return False
-
 def with_new_base(cls: Type, new_base: Type) -> Type:
     # Filter out special attributes that shouldn't be copied
     attrs = {}

@@ -1,19 +1,20 @@
 import inspect
 import logging
 from functools import wraps
-from typing import (TYPE_CHECKING, Awaitable, Callable, Literal, Optional,
-                    Type, TypeAlias, TypeVar, Union, overload)
+from typing import (TYPE_CHECKING, Annotated, Awaitable, Callable, Literal,
+                    Optional, Type, TypeAlias, TypeVar, Union, get_args,
+                    get_origin, overload)
 
 from pydantic import BaseModel
 from starlette.requests import Request
 from starlette.responses import JSONResponse, Response
 from starlette.routing import Route
 
-from tatami._utils import human_friendly_description_from_name, wrap_response
+from tatami._utils import (human_friendly_description_from_name,
+                           serialize_json, wrap_response)
 from tatami.core import TatamiObject
+from tatami.param import Header, Path, Query
 
-if TYPE_CHECKING:
-    from tatami.router import Router
 
 Tag: TypeAlias = Union[str, dict[str, str]]
 HTTPMethod: TypeAlias = Literal['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS']
@@ -22,13 +23,130 @@ F = TypeVar("F", bound=Callable)
 logger = logging.getLogger('tatami.endpoint')
 
 
+def _format_header_name(name: str) -> str:
+    """Convert parameter name to HTTP header format (replace _ with -, title case)."""
+    return name.replace('_', '-').title()
+
+
+def _convert_parameter_value(value: str, target_type) -> any:
+    """Convert string parameter value to target type."""
+    if target_type == str or target_type is None:
+        return value
+    elif target_type == int:
+        try:
+            return int(value)
+        except (ValueError, TypeError):
+            return value
+    elif target_type == float:
+        try:
+            return float(value)
+        except (ValueError, TypeError):
+            return value
+    elif target_type == bool:
+        return value.lower() in ('true', '1', 'yes', 'on')
+    else:
+        # For other types, try direct conversion
+        try:
+            return target_type(value)
+        except (TypeError, ValueError):
+            return value
+
+
+def _extract_param_info(param_name: str, annotation, path: str) -> tuple[str, str, any]:
+    """
+    Extract parameter information from type annotation.
+    
+    Returns:
+        tuple: (param_type, param_name, actual_type)
+        where param_type is one of 'headers', 'query', 'path', 'body'
+    """
+    # Check if it's an Annotated type
+    if get_origin(annotation) is Annotated:
+        args = get_args(annotation)
+        if len(args) >= 2:
+            actual_type = args[0]
+            metadata = args[1:]
+            
+            # Look for Header, Query, or Path in metadata
+            for meta in metadata:
+                if isinstance(meta, Header):
+                    header_name = meta.name if meta.name is not None else _format_header_name(param_name)
+                    return 'headers', header_name, actual_type
+                elif isinstance(meta, Query):
+                    query_name = meta.name if meta.name is not None else param_name
+                    return 'query', query_name, actual_type
+                elif isinstance(meta, Path):
+                    path_name = meta.name if meta.name is not None else param_name
+                    return 'path', path_name, actual_type
+    
+    # Check if it's a BaseModel (body parameter)
+    try:
+        if inspect.isclass(annotation) and issubclass(annotation, BaseModel):
+            return 'body', param_name, annotation
+    except TypeError:
+        pass
+    
+    # For unannotated parameters, infer based on path presence
+    # If parameter name exists in path, it's a path parameter
+    if f'{{{param_name}}}' in path:
+        param_type = annotation if annotation != inspect.Parameter.empty else str
+        return 'path', param_name, param_type
+    else:
+        # Otherwise, it's a query parameter
+        param_type = annotation if annotation != inspect.Parameter.empty else str
+        return 'query', param_name, param_type
+    raise ValueError(f"Parameter '{param_name}' must be explicitly annotated with Query(), Header(), Path(), or be a BaseModel")
+
+
+def _extract_parameters(func: Callable, path: str) -> dict:
+    """
+    Extract parameter information from function signature.
+    
+    Path and Query parameters can be inferred automatically:
+    - If parameter name exists in path (e.g., {user_id}), it's a path parameter
+    - Otherwise, it's a query parameter
+    - Headers and body parameters must be explicitly annotated
+    
+    Returns:
+        dict: Contains 'headers', 'query', 'path', and 'body' parameter mappings
+        Each mapping contains param_name -> {'key': str, 'type': type}
+    """
+    sig = inspect.signature(func)
+    params = {
+        'headers': {},  # param_name -> {'key': header_name, 'type': type}
+        'query': {},    # param_name -> {'key': query_name, 'type': type}  
+        'path': {},     # param_name -> {'key': path_name, 'type': type}
+        'body': {}      # param_name -> model_class
+    }
+    
+    for param_name, param in sig.parameters.items():
+        # Skip 'self' parameter
+        if param_name == 'self':
+            continue
+            
+        annotation = param.annotation
+        
+        # Handle both annotated and unannotated parameters
+        param_type, param_key, actual_type = _extract_param_info(param_name, annotation, path)
+        
+        if param_type == 'body':
+            params['body'][param_name] = actual_type
+        else:
+            params[param_type][param_name] = {'key': param_key, 'type': actual_type}
+    
+    return params
+
+class JSONWrappedResponse(JSONResponse):
+    def __init__(self, content, status_code = 200, headers = None, media_type = None, background = None):
+        super().__init__(serialize_json(content), status_code, headers, media_type, background)
+
 class Endpoint(TatamiObject):
     def __init__(self, method: str, func: Callable, path: str = None, request_type: Optional[Union[Type[Request], Type[BaseModel]]] = None, response_type: Optional[Type[Response]] = None, tags: Optional[list[str]] = None):
         self.func = func
         self.method = method
         self.path = '/' if path is None or path == '' else path
         self.request_type = request_type
-        self.response_type = response_type or JSONResponse
+        self.response_type = response_type or JSONWrappedResponse
         self.tags = tags or []
         self.__name__ = getattr(func, "__name__", None)
         self.__doc__ = getattr(func, "__doc__", None)
@@ -87,13 +205,16 @@ class BoundEndpoint(TatamiObject):
 
     async def run(self, request: Request) -> Union[Response, Awaitable[Response]]:
         """
-        Handle an incoming HTTP request by extracting path parameters and request body,
-        invoking the endpoint function, and returning an appropriate response.
+        Handle an incoming HTTP request by extracting path parameters, query parameters,
+        headers, and request body based on function annotations, invoking the endpoint 
+        function, and returning an appropriate response.
 
         The method:
         - Extracts path parameters from the request URL.
+        - Extracts query parameters from the request query string.
+        - Extracts headers from the request headers.
         - For POST, PUT, or PATCH methods, attempts to parse the JSON body and
-        instantiate Pydantic models defined in `self.request_type`.
+        instantiate Pydantic models defined in function annotations.
         - Calls the endpoint function (`self.ep_fn`) with the app instance and
         all extracted parameters.
         - Awaits the result if it is awaitable.
@@ -117,16 +238,44 @@ class BoundEndpoint(TatamiObject):
             response = await endpoint.run(request)
             # `response` is a Starlette Response object ready to be sent back to the client.
         """
-        kwargs = dict(request.path_params)
-        if request.method in ('POST', 'PUT', 'PATCH'):
+        # Extract parameter configuration from function signature
+        params_config = _extract_parameters(self._endpoint.func, self.path)
+        kwargs = {}
+        
+        # Extract path parameters
+        for param_name, param_info in params_config['path'].items():
+            param_key = param_info['key']
+            param_type = param_info['type']
+            if param_key in request.path_params:
+                raw_value = request.path_params[param_key]
+                kwargs[param_name] = _convert_parameter_value(raw_value, param_type)
+        
+        # Extract query parameters
+        for param_name, param_info in params_config['query'].items():
+            param_key = param_info['key']
+            param_type = param_info['type']
+            if param_key in request.query_params:
+                raw_value = request.query_params[param_key]
+                kwargs[param_name] = _convert_parameter_value(raw_value, param_type)
+        
+        # Extract header parameters
+        for param_name, param_info in params_config['headers'].items():
+            param_key = param_info['key']
+            param_type = param_info['type']
+            if param_key.lower() in request.headers:
+                raw_value = request.headers[param_key.lower()]
+                kwargs[param_name] = _convert_parameter_value(raw_value, param_type)
+        
+        # Extract body parameters for POST, PUT, PATCH requests
+        if request.method in ('POST', 'PUT', 'PATCH') and params_config['body']:
             try:
                 body = await request.json()
-                if self._endpoint.request_type is not None:
-                    for param_name, model in self._endpoint.request_type.items():
-                        kwargs.update({param_name: model(**body)})
-                
+                for param_name, model_class in params_config['body'].items():
+                    kwargs[param_name] = model_class(**body)
             except Exception:
-                pass  # skip if body is not present
+                pass  # skip if body is not present or invalid
+        
+        # Call the endpoint function
         result = self(**kwargs)
         if inspect.isawaitable(result):
             result = await result

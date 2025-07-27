@@ -1,7 +1,7 @@
 import inspect
 import logging
 import re
-from typing import NoReturn, Optional, Self, Type, Any
+from typing import Any, NoReturn, Optional, Self, Type
 
 import uvicorn
 from pydantic import BaseModel, Field
@@ -10,9 +10,10 @@ from starlette.requests import Request
 from starlette.responses import HTMLResponse, JSONResponse
 from starlette.routing import Route
 
-from tatami._utils import camel_to_snake, is_path_param, update_dict
+from tatami._utils import camel_to_snake, update_dict
 from tatami.core import TatamiObject
-from tatami.endpoint import BoundEndpoint, Endpoint
+from tatami.endpoint import BoundEndpoint, Endpoint, _extract_parameters
+from tatami.param import Path
 
 logger = logging.getLogger('tatami.router')
 
@@ -160,10 +161,61 @@ class BaseRouter(TatamiObject):
         schemas = {}
 
         def add_schema(model: type[BaseModel]) -> str:
+            """Add a Pydantic model schema to the OpenAPI spec with examples"""
             name = model.__name__
             if name not in schemas:
-                schemas[name] = model.model_json_schema(ref_template='#/components/schemas/{model}')
+                schema = model.model_json_schema(ref_template='#/components/schemas/{model}')
+                
+                # Add examples if available from Field descriptions
+                if 'properties' in schema:
+                    for prop_name, prop_schema in schema['properties'].items():
+                        field_info = model.model_fields.get(prop_name)
+                        if field_info and hasattr(field_info, 'examples') and field_info.examples:
+                            prop_schema['examples'] = field_info.examples
+                        elif field_info and hasattr(field_info, 'description') and field_info.description:
+                            prop_schema['description'] = field_info.description
+                
+                # Try to generate an example instance
+                try:
+                    # Create example with default or example values
+                    example_data = {}
+                    for field_name, field_info in model.model_fields.items():
+                        if hasattr(field_info, 'examples') and field_info.examples:
+                            example_data[field_name] = field_info.examples[0]
+                        elif hasattr(field_info, 'default') and field_info.default is not None:
+                            example_data[field_name] = field_info.default
+                        else:
+                            # Generate reasonable default based on type
+                            field_type = field_info.annotation
+                            if field_type == str:
+                                example_data[field_name] = "string"
+                            elif field_type == int:
+                                example_data[field_name] = 0
+                            elif field_type == float:
+                                example_data[field_name] = 0.0
+                            elif field_type == bool:
+                                example_data[field_name] = True
+                    
+                    if example_data:
+                        schema['example'] = example_data
+                except Exception:
+                    pass  # Skip example generation if it fails
+                
+                schemas[name] = schema
             return name
+
+        def get_parameter_schema(param_type: type) -> dict:
+            """Get OpenAPI schema for a parameter type"""
+            if param_type == int:
+                return {'type': 'integer', 'format': 'int32'}
+            elif param_type == float:
+                return {'type': 'number', 'format': 'float'}
+            elif param_type == bool:
+                return {'type': 'boolean'}
+            elif param_type == str:
+                return {'type': 'string'}
+            else:
+                return {'type': 'string'}  # default fallback
 
         for endpoint in endpoints:
             if not endpoint.include_in_schema:
@@ -177,41 +229,54 @@ class BaseRouter(TatamiObject):
 
             docstring = endpoint.docs.strip().split('\n')[0] if endpoint.docs else ''
 
-            # Path parameters
+            # Extract all parameters using the new system
             parameters = []
-        
-            for param in endpoint.signature.parameters.values():
-                if is_path_param(param.annotation):
-                    # Determine schema type based on annotation
-                    schema = {'type': 'string'}  # default
-                    if param.annotation == int:
-                        schema = {'type': 'integer'}
-                    elif param.annotation == float:
-                        schema = {'type': 'number'}
-                    elif param.annotation == bool:
-                        schema = {'type': 'boolean'}
-                    elif hasattr(param.annotation, '__origin__') and param.annotation.__origin__ is list:
-                        schema = {'type': 'array', 'items': {'type': 'string'}}
-                    
-                    parameters.append({
-                        'name': param.name,
-                        'in': 'path',
-                        'required': True,
-                        'schema': schema,
-                    })
-
-            # Request body (only if applicable)
             request_body = None
-            if endpoint.request_type:
-                for param_name, model in endpoint.request_type.items():
-                    model_name = add_schema(model)
+            
+            # Get parameter information from endpoint signature
+            parameters_info = _extract_parameters(endpoint._endpoint.func, endpoint.path)
+            
+            # Process path parameters
+            for param_name, param_info in parameters_info.get('path', {}).items():
+                parameters.append({
+                    'name': param_info['key'],
+                    'in': 'path',
+                    'required': True,
+                    'schema': get_parameter_schema(param_info['type']),
+                    'description': f'Path parameter {param_info["key"]}'
+                })
+            
+            # Process query parameters
+            for param_name, param_info in parameters_info.get('query', {}).items():
+                parameters.append({
+                    'name': param_info['key'],
+                    'in': 'query',
+                    'required': False,  # Query parameters are optional by default
+                    'schema': get_parameter_schema(param_info['type']),
+                    'description': f'Query parameter {param_info["key"]}'
+                })
+            
+            # Process header parameters
+            for param_name, param_info in parameters_info.get('headers', {}).items():
+                parameters.append({
+                    'name': param_info['key'],
+                    'in': 'header',
+                    'required': False,  # Headers are optional by default
+                    'schema': get_parameter_schema(param_info['type']),
+                    'description': f'Header parameter {param_info["key"]}'
+                })
+            
+            # Process body parameters
+            for param_name, model_class in parameters_info.get('body', {}).items():
+                if issubclass(model_class, BaseModel):
+                    schema_name = add_schema(model_class)
                     request_body = {
+                        'required': True,
                         'content': {
                             'application/json': {
-                                'schema': {'$ref': f"#/components/schemas/{model_name}"}
+                                'schema': {'$ref': f'#/components/schemas/{schema_name}'}
                             }
-                        },
-                        'required': True
+                        }
                     }
 
             # Response body
@@ -465,13 +530,22 @@ class ConventionRouter(BaseRouter):
                     
                 http_verb = _INTENTIONS_MAPPING.get(verb, 'GET')  # Default to GET if no verb is specified
 
-                # Get path params
+                # Get path params using parameter extraction system
                 signature = inspect.signature(value)
                 path_params = []
-                for param in signature.parameters.values():
-                    if is_path_param(param.annotation):
-                        braced_param = f'{{{param.name}}}'
-                        path_params.append(braced_param)
+                
+                for param_name, param in signature.parameters.items():
+                    # TODO ignore first parameter instead of checking for param_name == 'self'?
+                    if param_name == 'self':
+                        continue
+                    
+                    # Only check for explicitly annotated path parameters
+                    if hasattr(param.annotation, '__metadata__'):
+                        for metadata in param.annotation.__metadata__:
+                            if isinstance(metadata, Path):
+                                braced_param = f'{{{param_name}}}'
+                                path_params.append(braced_param)
+                                break
 
                 joined_path_params = '/' + '/'.join(path_params) if path_params else ''
 
