@@ -21,7 +21,6 @@ def main():
     run_parser.add_argument('--port', type=int, action='store', default='8000', help='The host where the app server will be listening')
     run_parser.add_argument('--mode', action='store', default=None, help='The config the app will be using. If not provided, the default config will be loaded')
     run_parser.add_argument('-v', '--verbose', action='count', default=0, help='How verbose should I be?')
-    run_parser.add_argument('--server', action='store', default='uvicorn', choices=['uvicorn', 'gunicorn'], help='Which server backend should be used? Default is uvicorn')
 
     create_parser = subparsers.add_parser('create', help='Create a new project')
     create_parser.add_argument('project', action='store', help='Project name. A valid system path name')
@@ -51,7 +50,7 @@ def main():
             elif parsed_args.verbose == 2:
                 logger.setLevel(logging.DEBUG)
 
-        app = build_from_dir(parsed_args.project, parsed_args.mode)
+        app, introspection = build_from_dir(parsed_args.project, parsed_args.mode)
 
         print(f'{Fore.GREEN}{Style.BRIGHT}🌱 Tatami {__version__}{Style.RESET_ALL}')
         print(f'Running app {Fore.GREEN}{parsed_args.project}{Fore.RESET} on {Fore.GREEN}http://{parsed_args.host}:{parsed_args.port}{Fore.RESET}')
@@ -63,7 +62,7 @@ def main():
         print(f'Run {Style.BRIGHT}tatami doctor "{parsed_args.project}"{Style.RESET_ALL} for a more detailed analysis 🩺')
         print('Handing control over to uvicorn...')
         # run the app
-        app.run(host=parsed_args.host, port=parsed_args.port, server=parsed_args.server)
+        app.run(host=parsed_args.host, port=parsed_args.port)
 
     elif parsed_args.action == 'doctor':
         print('🩺 Tatami is checking your project...')
