@@ -4,3 +4,4 @@ from tatami.endpoint import (delete, get, head, options, patch, post, put,
                              request)
 from tatami.param import Header, Query, Path
 from tatami.router import BaseRouter, ConventionRouter, DecoratedRouter, router
+from tatami.validation import ValidationException, validate_parameter

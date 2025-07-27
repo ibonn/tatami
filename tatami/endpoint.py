@@ -14,6 +14,7 @@ from tatami._utils import (human_friendly_description_from_name,
                            serialize_json, wrap_response)
 from tatami.core import TatamiObject
 from tatami.param import Header, Path, Query
+from tatami.validation import ValidationException, validate_parameter, create_validation_error_response, create_multiple_validation_errors_response
 
 
 Tag: TypeAlias = Union[str, dict[str, str]]
@@ -28,28 +29,22 @@ def _format_header_name(name: str) -> str:
     return name.replace('_', '-').title()
 
 
-def _convert_parameter_value(value: str, target_type) -> any:
-    """Convert string parameter value to target type."""
-    if target_type == str or target_type is None:
-        return value
-    elif target_type == int:
-        try:
-            return int(value)
-        except (ValueError, TypeError):
-            return value
-    elif target_type == float:
-        try:
-            return float(value)
-        except (ValueError, TypeError):
-            return value
-    elif target_type == bool:
-        return value.lower() in ('true', '1', 'yes', 'on')
-    else:
-        # For other types, try direct conversion
-        try:
-            return target_type(value)
-        except (TypeError, ValueError):
-            return value
+def _convert_and_validate_parameter(value: str, target_type, field_name: str) -> any:
+    """
+    Convert and validate string parameter value to target type using the validation system.
+    
+    Args:
+        value: The string value from the request
+        target_type: The target type to convert to
+        field_name: Name of the field for error reporting
+        
+    Returns:
+        The validated and converted value
+        
+    Raises:
+        ValidationException: If validation fails
+    """
+    return validate_parameter(value, target_type, field_name)
 
 
 def _extract_param_info(param_name: str, annotation, path: str) -> tuple[str, str, any]:
@@ -213,6 +208,7 @@ class BoundEndpoint(TatamiObject):
         - Extracts headers from the request headers.
         - For POST, PUT, or PATCH methods, attempts to parse the JSON body and
         instantiate Pydantic models defined in function annotations.
+        - Validates all parameters against their type annotations.
         - Calls the endpoint function (`self.ep_fn`) with the app instance and
         all extracted parameters.
         - Awaits the result if it is awaitable.
@@ -239,39 +235,65 @@ class BoundEndpoint(TatamiObject):
         # Extract parameter configuration from function signature
         params_config = _extract_parameters(self._endpoint.func, self.path)
         kwargs = {}
+        validation_errors = []
         
-        # Extract path parameters
+        # Extract and validate path parameters
         for param_name, param_info in params_config['path'].items():
             param_key = param_info['key']
             param_type = param_info['type']
             if param_key in request.path_params:
                 raw_value = request.path_params[param_key]
-                kwargs[param_name] = _convert_parameter_value(raw_value, param_type)
+                try:
+                    kwargs[param_name] = _convert_and_validate_parameter(raw_value, param_type, param_name)
+                except ValidationException as e:
+                    validation_errors.append(e)
         
-        # Extract query parameters
+        # Extract and validate query parameters
         for param_name, param_info in params_config['query'].items():
             param_key = param_info['key']
             param_type = param_info['type']
             if param_key in request.query_params:
                 raw_value = request.query_params[param_key]
-                kwargs[param_name] = _convert_parameter_value(raw_value, param_type)
+                try:
+                    kwargs[param_name] = _convert_and_validate_parameter(raw_value, param_type, param_name)
+                except ValidationException as e:
+                    validation_errors.append(e)
         
-        # Extract header parameters
+        # Extract and validate header parameters
         for param_name, param_info in params_config['headers'].items():
             param_key = param_info['key']
             param_type = param_info['type']
             if param_key.lower() in request.headers:
                 raw_value = request.headers[param_key.lower()]
-                kwargs[param_name] = _convert_parameter_value(raw_value, param_type)
+                try:
+                    kwargs[param_name] = _convert_and_validate_parameter(raw_value, param_type, param_name)
+                except ValidationException as e:
+                    validation_errors.append(e)
         
-        # Extract body parameters for POST, PUT, PATCH requests
+        # Extract and validate body parameters for POST, PUT, PATCH requests
         if request.method in ('POST', 'PUT', 'PATCH') and params_config['body']:
             try:
                 body = await request.json()
                 for param_name, model_class in params_config['body'].items():
-                    kwargs[param_name] = model_class(**body)
-            except Exception:
-                pass  # skip if body is not present or invalid
+                    try:
+                        kwargs[param_name] = validate_parameter(body, model_class, param_name)
+                    except ValidationException as e:
+                        validation_errors.append(e)
+            except Exception as e:
+                # Failed to parse JSON body
+                validation_errors.append(ValidationException(
+                    "request_body", 
+                    "invalid_json", 
+                    dict, 
+                    f"Failed to parse JSON body: {str(e)}"
+                ))
+        
+        # Return validation errors if any occurred
+        if validation_errors:
+            if len(validation_errors) == 1:
+                return create_validation_error_response(validation_errors[0])
+            else:
+                return create_multiple_validation_errors_response(validation_errors)
         
         # Call the endpoint function
         result = self(**kwargs)
