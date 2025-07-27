@@ -7,7 +7,7 @@ from typing import (TYPE_CHECKING, Annotated, Awaitable, Callable, Literal,
 
 from pydantic import BaseModel
 from starlette.requests import Request
-from starlette.responses import JSONResponse, Response
+from tatami.responses import JSONResponse, Response
 from starlette.routing import Route
 
 from tatami._utils import (human_friendly_description_from_name,
@@ -136,9 +136,7 @@ def _extract_parameters(func: Callable, path: str) -> dict:
     
     return params
 
-class JSONWrappedResponse(JSONResponse):
-    def __init__(self, content, status_code = 200, headers = None, media_type = None, background = None):
-        super().__init__(serialize_json(content), status_code, headers, media_type, background)
+
 
 class Endpoint(TatamiObject):
     def __init__(self, method: str, func: Callable, path: str = None, request_type: Optional[Union[Type[Request], Type[BaseModel]]] = None, response_type: Optional[Type[Response]] = None, tags: Optional[list[str]] = None):
@@ -146,7 +144,7 @@ class Endpoint(TatamiObject):
         self.method = method
         self.path = '/' if path is None or path == '' else path
         self.request_type = request_type
-        self.response_type = response_type or JSONWrappedResponse
+        self.response_type = response_type or JSONResponse
         self.tags = tags or []
         self.__name__ = getattr(func, "__name__", None)
         self.__doc__ = getattr(func, "__doc__", None)
