@@ -85,7 +85,7 @@ def _validate_basic_type(value: Any, target_type: type, field_name: str, allow_n
             lower_value = value.lower()
             if lower_value in ('true', '1', 'yes', 'on'):
                 return True
-            elif lower_value in ('false', '0', 'no', 'off'):
+            elif lower_value in ('false', '0', 'no', 'off', ''):
                 return False
             else:
                 raise ValidationException(field_name, value, target_type,
