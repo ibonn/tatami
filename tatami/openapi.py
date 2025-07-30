@@ -14,10 +14,11 @@ from typing import TYPE_CHECKING
 from jinja2 import Environment, PackageLoader, TemplateNotFound
 from pydantic import BaseModel
 from starlette.requests import Request
-from starlette.responses import HTMLResponse, JSONResponse
+from starlette.responses import HTMLResponse
 
 from tatami._utils import update_dict
 from tatami.endpoint import _extract_parameters
+from tatami.responses import JSONResponse
 
 if TYPE_CHECKING:
     from tatami.router import BaseRouter

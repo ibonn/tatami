@@ -12,6 +12,7 @@ from uuid import UUID
 
 from jinja2 import Environment, FileSystemLoader
 from pydantic import BaseModel
+from pydantic_core import PydanticUndefinedType
 from starlette.responses import (HTMLResponse, JSONResponse, Response,
                                  StreamingResponse)
 
@@ -94,6 +95,9 @@ def serialize_json(x: Any, _visited: set = None) -> Any:
         
         if hasattr(x, '__dict__'):
             return serialize_json(vars(x), _visited)
+        
+        if isinstance(x, PydanticUndefinedType):
+            return None
         
         return x
     finally:
