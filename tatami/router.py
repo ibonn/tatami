@@ -1,6 +1,7 @@
 import inspect
 import logging
 import re
+import warnings
 from typing import Any, NoReturn, Optional, Self, Type
 
 import uvicorn
@@ -206,6 +207,7 @@ class BaseRouter(TatamiObject):
 
 class ConventionRouter(BaseRouter):
     def __init__(self):
+        warnings.warn('You are using convention-based routing, which is discouraged. Use explicit decorators (@get, @post, etc.) with the router() class factory for clearer, more reliable routing.')
         snake_case_name = camel_to_snake(self.__class__.__name__)
         super().__init__(path=f'/{snake_case_name}')
 
