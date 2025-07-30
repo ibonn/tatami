@@ -145,7 +145,7 @@ class BaseRouter(TatamiObject):
         return generate_openapi_spec(self)
 
         
-    def run(self, host: str = 'localhost', port: int = 8000, openapi_url: Optional[str] = '/openapi.json', swagger_url: Optional[str] = '/docs/swagger', redoc_url: Optional[str] = '/docs/redoc', rapidoc_url: Optional[str] = '/docs/rapidoc') -> NoReturn:
+    def run(self, host: str = 'localhost', port: int = 8000, openapi_url: Optional[str] = '/openapi.json', swagger_url: Optional[str] = '/docs/swagger', redoc_url: Optional[str] = '/docs/redoc', rapidoc_url: Optional[str] = '/docs/rapidoc', docs_landing_page: bool = True) -> NoReturn:
         """
         Run the Tatami application using Uvicorn, and optionally serve OpenAPI and documentation UIs.
 
@@ -206,8 +206,8 @@ class BaseRouter(TatamiObject):
                 app.routes.insert(0, Route(rapidoc_url, rapidoc_endpoint, methods=["GET"]))
                 enabled_docs.append(("RapiDoc", rapidoc_url))
 
-            # Add landing page if more than 1 documentation endpoint is enabled
-            if len(enabled_docs) > 1:
+            # Add landing page if requested and more than 1 documentation endpoint is enabled
+            if docs_landing_page and len(enabled_docs) > 1:
                 docs_landing_endpoint = create_docs_landing_page(self, enabled_docs)
                 app.routes.insert(0, Route("/docs", docs_landing_endpoint, methods=["GET"]))
 
