@@ -50,6 +50,9 @@ class ProjectIntrospection(BaseModel):
     # Routers
     routers: list[dict] = Field(description='Discovered router classes and instances', default_factory=list)
     
+    # Services
+    services: list[dict] = Field(description='Discovered services (injectable classes)', default_factory=list)
+
     # Models
     models: dict[str, type] = Field(description='Discovered Pydantic models', default_factory=dict)
     models_source: Optional[str] = Field(description='Source of models (directory or file path)', default=None)

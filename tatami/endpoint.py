@@ -7,15 +7,18 @@ from typing import (TYPE_CHECKING, Annotated, Awaitable, Callable, Literal,
 
 from pydantic import BaseModel
 from starlette.requests import Request
-from tatami.responses import JSONResponse, Response
 from starlette.routing import Route
 
 from tatami._utils import (human_friendly_description_from_name,
                            serialize_json, wrap_response)
 from tatami.core import TatamiObject
+from tatami.di import inject
 from tatami.param import Header, Path, Query
-from tatami.validation import ValidationException, validate_parameter, create_validation_error_response, create_multiple_validation_errors_response
-
+from tatami.responses import JSONResponse, Response
+from tatami.validation import (ValidationException,
+                               create_multiple_validation_errors_response,
+                               create_validation_error_response,
+                               validate_parameter)
 
 Tag: TypeAlias = Union[str, dict[str, str]]
 HTTPMethod: TypeAlias = Literal['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS']
@@ -344,7 +347,7 @@ def request(method: HTTPMethod, path_or_func: Optional[Union[str, Callable]] = N
             ...
     """
     def decorator(fn):
-        return wraps(fn)(Endpoint(method, fn, path_or_func if isinstance(path_or_func, str) else '', None, response_type))
+        return wraps(fn)(Endpoint(method, inject(fn), path_or_func if isinstance(path_or_func, str) else '', None, response_type))
 
     if callable(path_or_func):
         return decorator(path_or_func)

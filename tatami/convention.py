@@ -1,6 +1,7 @@
 import logging
 import os
 import shutil
+import sys
 import warnings
 from importlib.resources import files
 from types import ModuleType
@@ -16,6 +17,7 @@ from starlette.staticfiles import StaticFiles
 
 from tatami._utils import import_from_path
 from tatami.config import Config, find_config, load_config
+from tatami.di import is_injectable, inject
 from tatami.router import BaseRouter, ProjectIntrospection
 
 logger = logging.getLogger('tatami.convention')
@@ -37,6 +39,7 @@ def _add_router(app: BaseRouter, introspection: ProjectIntrospection) -> Callabl
                     
                     if isinstance(value, type):
                         if issubclass(value, BaseRouter):
+                            value.__init__ = inject(value.__init__)
                             router = value()
                             app.include_router(router)
                             
@@ -57,6 +60,20 @@ def _add_router(app: BaseRouter, introspection: ProjectIntrospection) -> Callabl
 
     return add_router
 
+def _add_service(introspection: ProjectIntrospection) -> Callable[[ModuleType], None]:
+    def add_service(service_module: ModuleType) -> None:
+        for name in dir(service_module):
+            value = getattr(service_module, name)
+            if is_injectable(value):
+                introspection.services.append({
+                        'name': name,
+                        'class': value,
+                        'module': getattr(service_module, '__name__', '<unknown>')
+                    })
+            else:
+                warnings.warn("Non service class found in a file under the 'services' directory")
+    return add_service
+
 def _add_middleware(app: BaseRouter, introspection: ProjectIntrospection) -> Callable[[ModuleType], None]:
     def add_middleware(middleware_module: ModuleType) -> None:
         for name in dir(middleware_module):
@@ -76,7 +93,7 @@ def _add_middleware(app: BaseRouter, introspection: ProjectIntrospection) -> Cal
 
                 else:
                     # TODO transform classes into routers
-                    warnings.warn("Non middleware class found in a file under the 'middleware' directory. Tatami currently ignores such classes, but will later support automatic conversion to middleware. Avoid placing non-middleware code here for now")
+                    warnings.warn("Non middleware class found in a file under the 'middleware' directory")
 
     return add_middleware
 
@@ -107,9 +124,11 @@ def get_favicon_router(favicon_path: str) -> Callable[[Request], FileResponse]:
     return favicon_router
 
 
-def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'routers', middleware_dir: str = 'middleware', models_dir: str = 'models', mounts_dir: str = 'mounts', static_dir: str = 'static', templates_dir: str = 'templates', favicon_file: str = 'favicon.ico', readme_file: str = 'README.md') -> tuple[BaseRouter, ProjectIntrospection]:
+def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'routers', services_dir: str = 'services', middleware_dir: str = 'middleware', models_dir: str = 'models', mounts_dir: str = 'mounts', static_dir: str = 'static', templates_dir: str = 'templates', favicon_file: str = 'favicon.ico', readme_file: str = 'README.md') -> tuple[BaseRouter, ProjectIntrospection]:
     # Load config
     config_path = find_config(path, mode)
+
+    sys.path.append(os.path.join(path, '..'))
 
     # Try to load fallback config
     if config_path is None and mode is not None:
@@ -127,6 +146,7 @@ def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'ro
 
     # Paths
     routers_path = os.path.join(path, routers_dir)
+    services_path = os.path.join(path, services_dir)
     middleware_path = os.path.join(path, middleware_dir)
     models_path = os.path.join(path, models_dir)
     mounts_path = os.path.join(path, mounts_dir)
@@ -157,6 +177,12 @@ def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'ro
         _for_each_module_in(routers_path, _add_router(app, introspection))
     else:
         logger.debug('No routers directory found, skipping...')
+
+    if os.path.isdir(services_path):
+        _for_each_module_in(services_path, _add_service(introspection))
+        pass
+    else:
+        logger.debug('No services directory found, skipping...')
 
     if os.path.isdir(middleware_path):
         _for_each_module_in(middleware_path, _add_middleware(app, introspection))
@@ -226,10 +252,11 @@ def build_app_from_dir(path: str, mode: Optional[str] = None, **kwargs) -> BaseR
     return app
 
 
-def create_project(path: str, routers_dir: str = 'routers', middleware_dir: str = 'middleware', models_dir: str = 'models', mounts_dir: str = 'mounts', static_dir: str = 'static', templates_dir: str = 'templates', favicon_file: str = 'favicon.ico', readme_file: str = 'README.md') -> None:
+def create_project(path: str, routers_dir: str = 'routers', services_dir: str = 'services', middleware_dir: str = 'middleware', models_dir: str = 'models', mounts_dir: str = 'mounts', static_dir: str = 'static', templates_dir: str = 'templates', favicon_file: str = 'favicon.ico', readme_file: str = 'README.md') -> None:
     config_path = os.path.join(path, 'config.yaml')
     dev_config_path = os.path.join(path, 'config-dev.yaml')
     routers_path = os.path.join(path, routers_dir)
+    services_path = os.path.join(path, services_dir)
     middleware_path = os.path.join(path, middleware_dir)
     models_file = os.path.join(path, f'{models_dir}.py')
     mounts_path = os.path.join(path, mounts_dir)
@@ -240,6 +267,7 @@ def create_project(path: str, routers_dir: str = 'routers', middleware_dir: str 
 
     # Create the directories
     os.makedirs(routers_path)
+    os.makedirs(services_path)
     os.makedirs(middleware_path)
     os.makedirs(mounts_path)
     os.makedirs(static_path)
@@ -249,6 +277,9 @@ def create_project(path: str, routers_dir: str = 'routers', middleware_dir: str 
     open(config_path, 'w', encoding='utf-8').close()
     open(dev_config_path, 'w', encoding='utf-8').close()
     open(readme_path, 'w', encoding='utf-8').close()
+
+    # Create the __init__.py file
+    open(os.path.join(path, '__init__.py'), 'w', encoding='utf-8').close()
     
     # Create a basic models.py file with an example
     with open(models_file, 'w', encoding='utf-8') as f:
