@@ -238,7 +238,8 @@ def generate_openapi_spec(router_instance: 'BaseRouter') -> dict:
             if tag not in tags_seen:
                 tags_seen.add(tag)
                 if len(tags) == 1 and tags[0] == router_instance.__class__.__name__:
-                    spec['tags'].append({'name': tag, 'description': router_instance.summary or tag})
+                    if router_instance.summary is not None:
+                        spec['tags'].append({'name': tag, 'description': router_instance.summary})
 
         spec['paths'][path][method] = {
             'tags': tags,
