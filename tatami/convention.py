@@ -50,7 +50,7 @@ def _add_router(app: BaseRouter, introspection: ProjectIntrospection) -> Callabl
                             })
 
                         else:
-                           warnings.warn('Non router class found at routers: {value.__name__}')
+                           warnings.warn(f'Non router class found at routers: {value.__name__}')
                 except Exception as e:
                     logger.error(f"Error processing router module attribute {name}: {e}")
                     continue
