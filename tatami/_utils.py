@@ -151,7 +151,7 @@ def with_new_base(cls: Type, new_base: Type) -> Type:
     # Create new class with filtered attributes
     return type(cls.__name__, (new_base,), attrs)
 
-def route_priority(endpoint: 'BoundEndpoint') -> tuple[int, int, int, str]:
+def route_priority(endpoint: 'BoundEndpoint') -> tuple[int, int, int, str, str]:
         path = endpoint.path
         # Get number of segments
         path_segments = [s for s in path.split('/') if s]
@@ -165,5 +165,6 @@ def route_priority(endpoint: 'BoundEndpoint') -> tuple[int, int, int, str]:
             -static_segments,    # More static segments -> higher priority
             param_segments,      # Fewer parameters -> higher priority  
             -len(path_segments), # More total segments -> higher priority 
-            path                 # Alphabetical order for consistency
+            path,                # Alphabetical order for consistency
+            endpoint.method,     # HTTP method for even more consistency (I currently see no difference, but it makes sense in my head)
         )
