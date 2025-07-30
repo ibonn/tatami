@@ -9,13 +9,18 @@ This module handles all OpenAPI-related functionality including:
 """
 
 import inspect
+from typing import TYPE_CHECKING
 
+from jinja2 import Environment, PackageLoader, TemplateNotFound
 from pydantic import BaseModel
 from starlette.requests import Request
 from starlette.responses import HTMLResponse, JSONResponse
 
 from tatami._utils import update_dict
 from tatami.endpoint import _extract_parameters
+
+if TYPE_CHECKING:
+    from tatami.router import BaseRouter
 
 
 def get_parameter_schema(param_type: type) -> dict:
@@ -77,7 +82,7 @@ def add_schema_to_spec(model: type[BaseModel], schemas: dict) -> str:
     return name
 
 
-def generate_openapi_spec(router_instance) -> dict:
+def generate_openapi_spec(router_instance: 'BaseRouter') -> dict:
     """
     Generate OpenAPI 3.0 specification for a router and its endpoints.
     
@@ -336,3 +341,31 @@ def create_rapidoc_endpoint(router_instance, openapi_url: str):
         """
         return HTMLResponse(html)
     return rapidoc_endpoint
+
+
+def create_docs_landing_page(router_instance: 'BaseRouter', available_docs: list[tuple[str, str]]):
+    """Create a landing page that lists all available documentation endpoints.
+    
+    Args:
+        router_instance: The router instance
+        available_docs: List of tuples (name, url) for available docs endpoints
+        
+    Returns:
+        An endpoint function that serves the docs landing page with status 300
+    """
+
+    # If the router has a templates directory mounted, look for a __tatami__ subdirectory
+    # If a __tatami__ subdirectory exists, try to load the docs.jinja2 template
+    # If either of them does not exist or the template cannot be found, render the default template
+    
+    template = Environment(loader=PackageLoader('tatami.data')).get_template('docs.jinja2') # Load the default template
+    if router_instance.templates is not None:
+        try:
+            template = router_instance.templates.get_template('__tatami__/docs.jinja2')
+        except TemplateNotFound:
+            pass    # Use the default template loaded before
+
+    async def docs_landing_page(_request: Request):
+        html = template.render(title=router_instance.title, docs_links=available_docs)
+        return HTMLResponse(html, status_code=300)
+    return docs_landing_page

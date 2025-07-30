@@ -54,11 +54,11 @@ def main():
 
         print(f'{Fore.GREEN}{Style.BRIGHT}🌱 Tatami {__version__}{Style.RESET_ALL}')
         print(f'Running app {Fore.GREEN}{parsed_args.project}{Fore.RESET} on {Fore.GREEN}http://{parsed_args.host}:{parsed_args.port}{Fore.RESET}')
-        print(f'{Fore.GREEN}{Style.BRIGHT}     • Config: {Style.RESET_ALL}{Fore.GREEN}{app.summary.config_file}')
-        print(f'{Fore.GREEN}{Style.BRIGHT}     • Routers: {Style.RESET_ALL}{Fore.GREEN}{app.summary.routers} discovered')
-        print(f'{Fore.GREEN}{Style.BRIGHT}     • Static files: {Style.RESET_ALL}{Fore.GREEN}{app.summary.static}')
-        print(f'{Fore.GREEN}{Style.BRIGHT}     • Templates: {Style.RESET_ALL}{Fore.GREEN}{app.summary.templates}')
-        print(f'{Fore.GREEN}{Style.BRIGHT}     • Middleware: {Style.RESET_ALL}{Fore.GREEN}{app.summary.middleware} loaded{Fore.RESET}')
+        print(f'{Fore.GREEN}{Style.BRIGHT}     • Config: {Style.RESET_ALL}{Fore.GREEN}{introspection.config_file}')
+        print(f'{Fore.GREEN}{Style.BRIGHT}     • Routers: {Style.RESET_ALL}{Fore.GREEN}{introspection.router_count} discovered')
+        print(f'{Fore.GREEN}{Style.BRIGHT}     • Static files: {Style.RESET_ALL}{Fore.GREEN}{introspection.static_path}')
+        print(f'{Fore.GREEN}{Style.BRIGHT}     • Templates: {Style.RESET_ALL}{Fore.GREEN}{introspection.templates_path}')
+        print(f'{Fore.GREEN}{Style.BRIGHT}     • Middleware: {Style.RESET_ALL}{Fore.GREEN}{introspection.middleware_count} loaded{Fore.RESET}')
         print(f'Run {Style.BRIGHT}tatami doctor "{parsed_args.project}"{Style.RESET_ALL} for a more detailed analysis 🩺')
         print('Handing control over to uvicorn...')
         # run the app

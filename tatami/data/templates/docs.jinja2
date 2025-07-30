@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ title }} - Documentation</title>
+        <meta charset="utf-8" />
+        <style>
+            body {
+                font-family: "Montserrat", "Helvetica", Arial, sans-serif;
+                color: #333333;
+                overflow: hidden;
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background-color: #fff3f3;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .container {
+                background: white;
+                margin: auto;
+                padding: 2rem;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+            h1 {
+                color: #333333;
+                border-bottom: 2px solid #333333;
+                padding-bottom: 0.5rem;
+            }
+            ul {
+                list-style-type: none;
+                padding: 0;
+            }
+
+            li {
+                text-transform: uppercase;
+                margin: 0.5rem;
+                padding: 1rem;
+                background-color: #dbdbdb;
+            }
+
+            li:nth-child(1) {
+                background-color: #d35f5f;
+            }
+
+            li:nth-child(2) {
+                background-color: #ff5555;
+            }
+
+            li:nth-child(3) {
+                background-color: #ffb380;
+            }
+
+            li:nth-child(1) a, li:nth-child(2) a, li:nth-child(3) a {
+                color: #ffffff;
+            }
+
+            a {
+                color: #1a1a1a;
+                text-decoration: none;
+                font-weight: 500;
+                font-size: 1.1rem;
+                
+            }
+
+            a:hover {
+                color: #ffffff;
+                text-decoration: underline;
+            }
+
+            .footer {
+                text-align: center;b
+            }
+
+            small img {
+                max-height: 1em;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>{{ title }} - Documentation</h1>
+            <p>Multiple documentation formats are available</p>
+            <ul>
+                {% for name, url in docs_links %}
+                <li><a href="{{ url }}">{{ name }}</a></li>
+                {% endfor %}
+            </ul>
+            <div class="footer">
+                <small>Powered by <img src="data:image/png;base64,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" alt="Tatami logo"> <b>Tatami</b></small>
+            </div>
+            
+        </div>
+    </body>
+</html>

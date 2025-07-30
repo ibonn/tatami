@@ -5,6 +5,7 @@ import warnings
 from typing import Any, NoReturn, Optional, Self, Type
 
 import uvicorn
+from jinja2 import Environment
 from pydantic import BaseModel, Field
 from starlette.applications import Starlette
 from starlette.routing import Route
@@ -12,9 +13,9 @@ from starlette.routing import Route
 from tatami._utils import camel_to_snake, route_priority
 from tatami.core import TatamiObject
 from tatami.endpoint import BoundEndpoint, Endpoint
-from tatami.openapi import (create_openapi_endpoint, create_rapidoc_endpoint,
-                            create_redoc_endpoint, create_swagger_endpoint,
-                            generate_openapi_spec)
+from tatami.openapi import (create_docs_landing_page, create_openapi_endpoint,
+                            create_rapidoc_endpoint, create_redoc_endpoint,
+                            create_swagger_endpoint, generate_openapi_spec)
 from tatami.param import Path
 
 logger = logging.getLogger('tatami.router')
@@ -83,10 +84,11 @@ class ProjectIntrospection(BaseModel):
 
 
 class BaseRouter(TatamiObject):
-    def __init__(self, title: Optional[str] = None, description: Optional[str] = None, version: str = '0.0.1', path: Optional[str] = None, tags: Optional[list[str]] = None):
+    def __init__(self, title: Optional[str] = None, description: Optional[str] = None, summary: Optional[str] = None, version: str = '0.0.1', path: Optional[str] = None, tags: Optional[list[str]] = None):
         super().__init__()
         self.title = title
         self.description = description
+        self.summary = summary
         self.version = version
         self.path = path or '/'
         self.tags = tags or []
@@ -94,7 +96,7 @@ class BaseRouter(TatamiObject):
         self._routers: list[BaseRouter] = []
         self._routes: list[Route] = []
         self._mounts: dict[str, Any] = {}
-        self._summary = None
+        self.templates: Optional[Environment] = None
 
     def include_router(self, incl_router: 'BaseRouter') -> Self:
         logger.debug('Including router %s on %s', incl_router, self)
@@ -110,10 +112,6 @@ class BaseRouter(TatamiObject):
         logger.debug('Adding route %s to %s', route, self)
         self._routes.append(route)
         return self
-    
-    @property
-    def summary(self) -> Optional[Summary]:
-        return self._summary
     
     @property
     def routers(self) -> list['BaseRouter']:
@@ -194,14 +192,24 @@ class BaseRouter(TatamiObject):
         if openapi_url is not None:
             app.routes.insert(0, Route(openapi_url, openapi_endpoint, methods=["GET"]))
 
+            # Collect enabled documentation endpoints
+            enabled_docs = []
             if redoc_url is not None:
                 app.routes.insert(0, Route(redoc_url, redoc_endpoint, methods=["GET"]))
+                enabled_docs.append(("ReDoc", redoc_url))
             
             if swagger_url is not None:
                 app.routes.insert(0, Route(swagger_url, swagger_endpoint, methods=["GET"]))
+                enabled_docs.append(("Swagger UI", swagger_url))
             
             if rapidoc_url is not None:
                 app.routes.insert(0, Route(rapidoc_url, rapidoc_endpoint, methods=["GET"]))
+                enabled_docs.append(("RapiDoc", rapidoc_url))
+
+            # Add landing page if more than 1 documentation endpoint is enabled
+            if len(enabled_docs) > 1:
+                docs_landing_endpoint = create_docs_landing_page(self, enabled_docs)
+                app.routes.insert(0, Route("/docs", docs_landing_endpoint, methods=["GET"]))
 
         uvicorn.run(app, host=host, port=port)
 

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ title }} - Documentation</title>
+        <meta charset="utf-8" />
+    </head>
+    <body>
+        <div>
+            <h1>Custom documentation landing page</h1>
+            <p>This app serves multiple documentation endpoints, choose the one you like the most:</p>
+            <ul>
+                {% for name, url in docs_links %}
+                <li><a href="{{ url }}">{{ name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </body>
+</html>

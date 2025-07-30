@@ -6,6 +6,7 @@ from importlib.resources import files
 from types import ModuleType
 from typing import Callable, Optional
 
+from jinja2 import Environment, FileSystemLoader
 from pydantic import BaseModel
 from starlette.middleware import Middleware
 from starlette.requests import Request
@@ -13,9 +14,9 @@ from starlette.responses import FileResponse
 from starlette.routing import Route
 from starlette.staticfiles import StaticFiles
 
-from tatami._utils import import_from_path, with_new_base
+from tatami._utils import import_from_path
 from tatami.config import Config, find_config, load_config
-from tatami.router import BaseRouter, ConventionRouter, Summary, ProjectIntrospection
+from tatami.router import BaseRouter, ProjectIntrospection
 
 logger = logging.getLogger('tatami.convention')
 
@@ -201,7 +202,7 @@ def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'ro
         logger.debug('No static directory found, skipping...')
 
     if os.path.isdir(templates_path):
-        pass    # TODO set templates
+        app.templates = Environment(loader=FileSystemLoader(templates_path))
     else:
         logger.debug('No templates directory found, skipping...')
 
@@ -212,15 +213,6 @@ def build_from_dir(path: str, mode: Optional[str] = None, routers_dir: str = 'ro
         logger.debug('No favicon found, adding default favicon...')
         favicon_router = get_favicon_router(files('tatami.data.images') / 'favicon.ico')
     app.add_route(Route('/favicon.ico', favicon_router, include_in_schema=False))
-        
-    app._summary = Summary(
-        config_file=os.path.basename(config_path) if config_path else None,
-        routers=introspection.router_count,
-        middleware=introspection.middleware_count,
-        models=introspection.model_count,
-        static=static_path if os.path.isdir(static_path) else None,
-        templates=templates_path if os.path.isdir(templates_path) else None,
-    )
 
     return app, introspection
 
