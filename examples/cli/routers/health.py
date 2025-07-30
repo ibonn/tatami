@@ -31,6 +31,10 @@ class Post(router('/post')):
     def create_post(self, p: Post):
         return {'success': True, 'post': p}
     
+    @get('/error')
+    def raise_exception(self):
+        raise RuntimeError('This endpoint fails')
+    
 
 class NonRouter:
     def get_nothing(self):
