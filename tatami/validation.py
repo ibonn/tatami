@@ -66,21 +66,21 @@ def _validate_basic_type(value: Any, target_type: type, field_name: str, allow_n
     
     # Handle string inputs (common from HTTP requests)
     if isinstance(value, str):
-        if target_type == str:
+        if target_type is str:
             return value
-        elif target_type == int:
+        elif target_type is int:
             try:
                 return int(value)
             except (ValueError, TypeError) as e:
                 raise ValidationException(field_name, value, target_type, 
                                         f"{field_name}: '{value}' is not a valid integer") from e
-        elif target_type == float:
+        elif target_type is float:
             try:
                 return float(value)
             except (ValueError, TypeError) as e:
                 raise ValidationException(field_name, value, target_type,
                                         f"{field_name}: '{value}' is not a valid float") from e
-        elif target_type == bool:
+        elif target_type is bool:
             # Handle boolean conversion from string
             lower_value = value.lower()
             if lower_value in ('true', '1', 'yes', 'on'):
