@@ -7,13 +7,16 @@ import re
 from dataclasses import asdict, is_dataclass
 from io import IOBase
 from types import ModuleType
-from typing import Any, Callable, Mapping, MutableSequence, Type
+from typing import TYPE_CHECKING, Any, Callable, Mapping, MutableSequence, Type
 from uuid import UUID
 
 from jinja2 import Environment, FileSystemLoader
 from pydantic import BaseModel
 from starlette.responses import (HTMLResponse, JSONResponse, Response,
                                  StreamingResponse)
+
+if TYPE_CHECKING:
+    from tatami.endpoint import BoundEndpoint
 
 
 class TemplateResponse(HTMLResponse):
@@ -147,3 +150,20 @@ def with_new_base(cls: Type, new_base: Type) -> Type:
     
     # Create new class with filtered attributes
     return type(cls.__name__, (new_base,), attrs)
+
+def route_priority(endpoint: 'BoundEndpoint') -> tuple[int, int, int, str]:
+        path = endpoint.path
+        # Get number of segments
+        path_segments = [s for s in path.split('/') if s]
+        
+        # Count different types of segments
+        static_segments = sum(1 for s in path_segments if not s.startswith('{'))
+        param_segments = sum(1 for s in path_segments if s.startswith('{'))
+        
+        # Determine the priority (lower values = higher priority)
+        return (
+            -static_segments,    # More static segments -> higher priority
+            param_segments,      # Fewer parameters -> higher priority  
+            -len(path_segments), # More total segments -> higher priority 
+            path                 # Alphabetical order for consistency
+        )

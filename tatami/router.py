@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 from starlette.applications import Starlette
 from starlette.routing import Route
 
-from tatami._utils import camel_to_snake
+from tatami._utils import camel_to_snake, route_priority
 from tatami.core import TatamiObject
 from tatami.endpoint import BoundEndpoint, Endpoint
 from tatami.openapi import (create_openapi_endpoint, create_rapidoc_endpoint,
@@ -292,6 +292,8 @@ class DecoratedRouter(BaseRouter):
 
             if callable(value) and isinstance(value, BoundEndpoint):
                 routes.append(value)
+
+        routes.sort(key=route_priority)
 
         return routes
 
