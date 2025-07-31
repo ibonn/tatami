@@ -1,5 +1,5 @@
 tatami.core 🧠
-==============
+=============
 
 This module contains the core building blocks of Tatami. Currently, it only contains the base `TatamiObject` class that other framework components inherit from.
 
