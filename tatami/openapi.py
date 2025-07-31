@@ -10,7 +10,7 @@ This module handles all OpenAPI-related functionality including:
 
 from functools import lru_cache
 import inspect
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, get_args, get_origin, Annotated
 
 from jinja2 import Environment, PackageLoader, TemplateNotFound
 from pydantic import BaseModel
@@ -20,20 +20,93 @@ from starlette.responses import HTMLResponse
 from tatami._utils import update_dict
 from tatami.endpoint import _extract_parameters
 from tatami.responses import JSONResponse
+from tatami.di import is_injectable, Inject
 
 if TYPE_CHECKING:
     from tatami.router import BaseRouter
 
+def _process_injected_dependencies(injected_params: dict, parameters: list, endpoint_path: str, processed_factories: set = None):
+    if processed_factories is None:
+        processed_factories = set()
+    
+    for param_type in injected_params.values():
+        # Skip Request types as they don't need to be in the OpenAPI spec
+        if param_type is Request or (hasattr(param_type, '__origin__') and param_type.__origin__ is type(Request)):
+            continue
+            
+        # Handle Annotated types with Inject FIRST (before checking is_injectable)
+        if get_origin(param_type) is Annotated:
+            args = get_args(param_type)
+            if len(args) >= 2:
+                # TODO type info?
+                actual_type, *metadata = args
+                
+                for meta in metadata:
+                    if isinstance(meta, Inject) and meta.factory is not None:
+                        # Avoid infinite loops by tracking processed factories
+                        factory_id = id(meta.factory)
+                        if factory_id in processed_factories:
+                            continue
+                        processed_factories.add(factory_id)
+                        
+                        # Extract parameters from the factory function
+                        factory_params = _extract_parameters(meta.factory, endpoint_path)
+                        
+                        # Add factory's direct parameters to the OpenAPI spec
+                        # TODO remove code duplication, this block is repeated below
+                        for _, param_info in factory_params.get('headers', {}).items():
+                            # Check if this parameter is already in the list to avoid duplicates
+                            if not any(p.get('name') == param_info['key'] and p.get('in') == 'header' for p in parameters):
+                                parameters.append({
+                                    'name': param_info['key'],
+                                    'in': 'header',
+                                    'required': False,
+                                    'schema': get_parameter_schema(param_info['type']),
+                                    'description': f'Header parameter {param_info["key"]} (via dependency injection)'   # TODO get description from Headers parameter object
+                                })
+                        
+                        for _, param_info in factory_params.get('query', {}).items():
+                            # Check if this parameter is already in the list to avoid duplicates
+                            if not any(p.get('name') == param_info['key'] and p.get('in') == 'query' for p in parameters):
+                                parameters.append({
+                                    'name': param_info['key'], 
+                                    'in': 'query',
+                                    'required': False,
+                                    'schema': get_parameter_schema(param_info['type']),
+                                    'description': f'Query parameter {param_info["key"]} (via dependency injection)'    # TODO get description from Query parameter object
+                                })
+                        
+                        for _, param_info in factory_params.get('path', {}).items():
+                            # Check if this parameter is already in the list to avoid duplicates
+                            if not any(p.get('name') == param_info['key'] and p.get('in') == 'path' for p in parameters):
+                                parameters.append({
+                                    'name': param_info['key'],
+                                    'in': 'path',
+                                    'required': True,
+                                    'schema': get_parameter_schema(param_info['type']),
+                                    'description': f'Path parameter {param_info["key"]} (via dependency injection)' # TODO get description from Path parameter object
+                                })
+                        
+                        # Recursively process nested injected dependencies
+                        _process_injected_dependencies(factory_params.get('injected', {}), parameters, endpoint_path, processed_factories)
+            
+            # Continue to next iteration since we processed this Annotated type
+            continue
+            
+        # Handle injectable classes directly (after checking for Annotated)
+        if is_injectable(param_type):
+            continue  # Injectable classes don't contribute parameters to the API
+
 
 def get_parameter_schema(param_type: type) -> dict:
     """Get OpenAPI schema for a parameter type"""
-    if param_type == int:
+    if param_type is int:
         return {'type': 'integer', 'format': 'int32'}
-    elif param_type == float:
+    elif param_type is float:
         return {'type': 'number', 'format': 'float'}
-    elif param_type == bool:
+    elif param_type is bool:
         return {'type': 'boolean'}
-    elif param_type == str:
+    elif param_type is str:
         return {'type': 'string'}
     else:
         return {'type': 'string'}  # default fallback
@@ -66,13 +139,13 @@ def add_schema_to_spec(model: type[BaseModel], schemas: dict) -> str:
                 else:
                     # Generate reasonable default based on type
                     field_type = field_info.annotation
-                    if field_type == str:
+                    if field_type is str:
                         example_data[field_name] = "string"
-                    elif field_type == int:
+                    elif field_type is int:
                         example_data[field_name] = 0
-                    elif field_type == float:
+                    elif field_type is float:
                         example_data[field_name] = 0.0
-                    elif field_type == bool:
+                    elif field_type is bool:
                         example_data[field_name] = True
             
             if example_data:
@@ -130,7 +203,7 @@ def generate_openapi_spec(router_instance: 'BaseRouter') -> dict:
         request_body = None
         
         # Get parameter information from endpoint signature
-        parameters_info = _extract_parameters(endpoint._endpoint.func, endpoint.path)
+        parameters_info = _extract_parameters(endpoint.endpoint_function, endpoint.path)
         
         # Process path parameters
         for _, param_info in parameters_info.get('path', {}).items():
@@ -139,7 +212,7 @@ def generate_openapi_spec(router_instance: 'BaseRouter') -> dict:
                 'in': 'path',
                 'required': True,
                 'schema': get_parameter_schema(param_info['type']),
-                'description': f'Path parameter {param_info["key"]}'
+                'description': f'Path parameter {param_info["key"]}'    # TODO get description from Path parameter object
             })
         
         # Process query parameters
@@ -149,7 +222,7 @@ def generate_openapi_spec(router_instance: 'BaseRouter') -> dict:
                 'in': 'query',
                 'required': False,  # Query parameters are optional by default
                 'schema': get_parameter_schema(param_info['type']),
-                'description': f'Query parameter {param_info["key"]}'
+                'description': f'Query parameter {param_info["key"]}'   # TODO get description from Query parameter object
             })
         
         # Process header parameters
@@ -159,8 +232,11 @@ def generate_openapi_spec(router_instance: 'BaseRouter') -> dict:
                 'in': 'header',
                 'required': False,  # Headers are optional by default
                 'schema': get_parameter_schema(param_info['type']),
-                'description': f'Header parameter {param_info["key"]}'
+                'description': f'Header parameter {param_info["key"]}'  # TODO get description from Header parameter object
             })
+        
+        # Process injected dependencies recursively
+        _process_injected_dependencies(parameters_info.get('injected', {}), parameters, endpoint.path)
         
         # Process body parameters
         for _, model_class in parameters_info.get('body', {}).items():
@@ -207,13 +283,13 @@ def generate_openapi_spec(router_instance: 'BaseRouter') -> dict:
             # Try to get return annotation from function signature
             return_annotation = endpoint.signature.return_annotation
             if return_annotation and return_annotation != inspect.Signature.empty:
-                if return_annotation == str:
+                if return_annotation is str:
                     responses["200"]["content"] = {
                         "text/plain": {
                             "schema": {"type": "string"}
                         }
                     }
-                elif return_annotation == dict or hasattr(return_annotation, '__dict__'):
+                elif return_annotation is dict or hasattr(return_annotation, '__dict__'):
                     responses["200"]["content"] = {
                         "application/json": {
                             "schema": {"type": "object"}
