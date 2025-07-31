@@ -9,7 +9,7 @@ from typing import Callable, Optional
 
 from jinja2 import Environment, FileSystemLoader
 from pydantic import BaseModel
-from starlette.middleware import Middleware
+from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import FileResponse
 from starlette.routing import Route
@@ -80,9 +80,12 @@ def _add_middleware(app: BaseRouter, introspection: ProjectIntrospection) -> Cal
             if not name.startswith('_'):
                 value = getattr(middleware_module, name)
 
-                if issubclass(value, Middleware):
+                if isinstance(value, type) and issubclass(value, BaseHTTPMiddleware):
                     # TODO find a way to pass arguments
-                    app.add_middleware(value)
+                    if value is BaseHTTPMiddleware:
+                        continue
+                    else:
+                        app.add_middleware(value)
                     
                     # Track in introspection
                     introspection.middleware.append({

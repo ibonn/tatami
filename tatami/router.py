@@ -8,6 +8,8 @@ import uvicorn
 from jinja2 import Environment
 from pydantic import BaseModel, Field
 from starlette.applications import Starlette
+from starlette.middleware import Middleware
+from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.routing import Route
 
 from tatami._utils import camel_to_snake, route_priority
@@ -98,6 +100,7 @@ class BaseRouter(TatamiObject):
 
         self._routers: list[BaseRouter] = []
         self._routes: list[Route] = []
+        self._middleware: list[BaseHTTPMiddleware] = []
         self._mounts: dict[str, Any] = {}
         self.templates: Optional[Environment] = None
 
@@ -116,6 +119,10 @@ class BaseRouter(TatamiObject):
         self._routes.append(route)
         return self
     
+    def add_middleware(self, middleware) -> Self:
+        self._middleware.append(middleware)
+        return self
+    
     @property
     def routers(self) -> list['BaseRouter']:
         return self._routers
@@ -130,7 +137,7 @@ class BaseRouter(TatamiObject):
 
         logger.debug('%s + %s additional routes found', len(routes), len(self._routes))
         app = Starlette(
-            routes=routes + self._routes
+            routes=routes + self._routes, middleware=[Middleware(m) for m in self._middleware]
         )
 
         logger.debug('Mounting routers...')
