@@ -248,7 +248,7 @@ class Endpoint(TatamiObject):
     def __init__(self, method: str, func: Callable, path: str = None, request_type: Optional[Union[Type[Request], Type[BaseModel]]] = None, response_type: Optional[Type[Response]] = None, tags: Optional[list[str]] = None):
         self.func = func
         self.method = method
-        self.path = '/' if path is None or path == '' else path
+        self.path = '' if path is None else path
         self.request_type = request_type
         self.response_type = response_type or JSONResponse
         self.tags = tags or []

@@ -130,20 +130,55 @@ class BaseRouter(TatamiObject):
     def _collect_endpoints(self) -> list[BoundEndpoint]:
         return []
 
+    def _collect_all_routes(self) -> list[Route]:
+        routes = []
+        
+        # Add routes from this router
+        endpoints = self._collect_endpoints()
+        for endpoint in endpoints:
+            # Join router path with endpoint path
+            full_path = self._combine_paths(self.path, endpoint.path)
+            # Create route with full path
+            route = Route(full_path, endpoint.run, name=endpoint.endpoint_function.__name__, methods=[endpoint.method])
+            routes.append(route)
+        
+        # Add additional routes
+        routes.extend(self._routes)
+        
+        # Recursively collect routes from sub-routers
+        for sub_router in self._routers:
+            sub_routes = sub_router._collect_all_routes()
+            routes.extend(sub_routes)
+        
+        return routes
+    
+    def _combine_paths(self, router_path: str, endpoint_path: str) -> str:
+        # Normalize router path
+        router_path = router_path.rstrip('/') if router_path != '/' else ''
+        
+        # Handle endpoint path
+        if endpoint_path == '':
+            # For @request with no args, use router path without trailing slash
+            return router_path if router_path else '/'
+        elif endpoint_path == '/':
+            # Explicit '/' path gets trailing slash
+            return router_path + '/'
+        else:
+            # Normal operation
+            return router_path + endpoint_path
+
     def _starlette(self) -> Starlette:
         logger.debug('Building starlette app...')
-        endpoints = self._collect_endpoints()
-        routes = [endpoint.get_route() for endpoint in endpoints]
-
-        logger.debug('%s + %s additional routes found', len(routes), len(self._routes))
+        
+        # Collect all routes with full paths (no mounting)
+        all_routes = self._collect_all_routes()
+        
+        logger.debug('%s routes found', len(all_routes))
         app = Starlette(
-            routes=routes + self._routes, middleware=[Middleware(m) for m in self._middleware]
+            routes=all_routes, middleware=[Middleware(m) for m in self._middleware]
         )
 
-        logger.debug('Mounting routers...')
-        for sub_router in self._routers:
-            app.mount(sub_router.path, sub_router._starlette())
-
+        # Handle mounts separately  
         logger.debug('Mounting apps...')
         for mount_path, mount_app in self._mounts.items():
             app.mount(mount_path, mount_app)
