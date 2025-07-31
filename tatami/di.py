@@ -126,9 +126,11 @@ def inject(fn: Callable) -> Callable:
                         non_singletons[parameter.name] = inject_object.factory
             
 
+    @wraps(fn)
     def injected_fn(*args, **kwargs):
+        # TODO inject request
         for name, factory in non_singletons.items():
             injected[name] = factory()
         return fn(*args, **{**kwargs, **injected})
         
-    return wraps(fn)(injected_fn)
+    return injected_fn
