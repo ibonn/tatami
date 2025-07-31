@@ -1,9 +1,9 @@
 import inspect
 import logging
 from functools import wraps
-from typing import (TYPE_CHECKING, Annotated, Any, Awaitable, Callable, Literal,
-                    Optional, Type, TypeAlias, TypeVar, Union, get_args,
-                    get_origin, overload)
+from typing import (TYPE_CHECKING, Annotated, Any, Awaitable, Callable,
+                    Literal, Optional, Type, TypeAlias, TypeVar, Union,
+                    get_args, get_origin, overload)
 
 from pydantic import BaseModel
 from starlette.requests import Request
@@ -12,7 +12,8 @@ from starlette.routing import Route
 from tatami._utils import (human_friendly_description_from_name,
                            serialize_json, wrap_response)
 from tatami.core import TatamiObject
-from tatami.di import Inject, is_injectable, is_tatami_object
+from tatami.di import (__TATAMI_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED,
+                       Inject, Scope, is_injectable, is_tatami_object)
 from tatami.param import Header, Path, Query
 from tatami.responses import JSONResponse, Response
 from tatami.validation import (ValidationException,
@@ -164,12 +165,24 @@ async def _resolve_parameters(func: Callable, request: Request, path: Optional[s
             
             if inject_object.factory is None:
                 if is_injectable(actual_type):
-                    instance = actual_type()
+                    metadata = getattr(actual_type, __TATAMI_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED)
+                    if metadata.scope == Scope.SINGLETON:
+                        if metadata.singleton is None:
+                            metadata.singleton = actual_type()
+                        instance = metadata.singleton
+                    else:
+                        instance = actual_type()
                 else:
                     raise TypeError(f'Cannot inject object of type {inject_object}')
             else:
                 factory_kwargs, factory_validation_errors = await _resolve_parameters(inject_object.factory, request)
-                instance = inject_object.factory(**factory_kwargs)
+                if inject_object.metadata.scope == Scope.SINGLETON:
+                    if inject_object.metadata.singleton is None:
+                        inject_object.metadata.singleton = instance = inject_object.factory(**factory_kwargs)
+                    instance = inject_object.metadata.singleton
+                else:
+                    instance = inject_object.factory(**factory_kwargs)
+                
                 validation_errors.extend(factory_validation_errors)
 
             kwargs[param_name] = instance

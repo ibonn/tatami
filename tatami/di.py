@@ -32,6 +32,7 @@ class Inject:
     def __init__(self, factory: Optional[Callable] = None, scope: Scope = Scope.SINGLETON):
         self.scope = scope
         self.factory = factory
+        self.metadata = InjectableMetadata(scope=scope)
 
 @overload
 def injectable(cls: type[T]) -> T:
