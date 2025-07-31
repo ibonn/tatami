@@ -15,7 +15,6 @@ include = [
 
 [project]
 name = "tatami"
-version = "0.0.1-pre.1"
 authors = [{ name = "Ibon", email = "ibonescartin@gmail.com" }]
 description = "The clean, modular Python web floorplan"
 dependencies = [
