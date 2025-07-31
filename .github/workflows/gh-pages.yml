@@ -41,7 +41,7 @@ jobs:
       - name: Install dependencies
         run: python3 -m pip install -r docs-requirements.txt
 
-      - run: mkdocs build
+      - run: make html
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
