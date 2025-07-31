@@ -10,9 +10,13 @@ import sys
 # Add the project root directory to the Python path so Sphinx can import tatami
 sys.path.insert(0, os.path.abspath('../..'))
 
+from tatami import __version__
+
 project = 'Tatami'
 copyright = '2025, Ibon'
 author = 'Ibon'
+version = __version__
+release = __version__
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
