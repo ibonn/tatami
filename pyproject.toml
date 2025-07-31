@@ -36,7 +36,7 @@ license-files = ["LICEN[CS]E*"]
 
 [project.urls]
 Homepage = "https://github.com/ibonn/tatami"
-Documentation = "https://tatami-framework.readthedocs.io"
+Documentation = "https://ibonn.github.io/tatami/"
 Repository = "https://github.com/ibonn/tatami.git"
 
 [project.scripts]

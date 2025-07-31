@@ -55,13 +55,9 @@ Tatami is designed for:
 It's like FastAPI and Flask had a minimalist, Spring Boot-inspired child.
 
 ## 📚 Documentation
+You can access the whole documentation for Tatami [here](https://ibonn.github.io/tatami/)
 
-* 🚀 [Getting Started](https://tatami-framework.readthedocs.io/en/latest/getting_started.html)
-* 🎛️ [CLI Usage](https://tatami-framework.readthedocs.io/en/latest/the_cli.html)
-* 🧠 [Core Concepts](https://tatami-framework.readthedocs.io/en/latest/concepts.html)
-* 📖 [API Reference](https://tatami-framework.readthedocs.io/en/latest/api/tatami.html)
-
-**Built-in documentation is served automatically:**
+By the way, Tatami automatically generates your application’s documentation at the following endpoints:
 - `/openapi.json` - OpenAPI specification
 - `/docs/swagger` - Swagger UI
 - `/docs/redoc` - ReDoc
