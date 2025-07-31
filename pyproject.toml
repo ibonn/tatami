@@ -15,6 +15,7 @@ include = [
 
 [project]
 name = "tatami"
+dynamic = ["version"]
 authors = [{ name = "Ibon", email = "ibonescartin@gmail.com" }]
 description = "The clean, modular Python web floorplan"
 dependencies = [
