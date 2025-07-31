@@ -40,12 +40,7 @@ autodoc_typehints = 'description'
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-# html_theme = 'press'                #
-# html_theme = 'sphinxawesome_theme'  #
-# html_theme = 'furo'                 #
-# html_theme = 'sphinx_book_theme'    #
 html_theme = 'shibuya'    #
-# html_theme = 'piccolo_theme'          #
 html_static_path = ['_static']
 html_logo = '_static/tatami-logo.png'
 html_favicon = '_static/favicon.ico'
