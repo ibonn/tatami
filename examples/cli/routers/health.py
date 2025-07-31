@@ -44,6 +44,10 @@ class UserRouter(router('/users')):
     def __init__(self, users: UserService):
         super().__init__()
         self.users = users
+
+    @get
+    def get_all(self):
+        return self.users.all()
         
     @get('/{user_id}')
     def get_user(self, user_id: UUID) -> User:

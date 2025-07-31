@@ -29,3 +29,6 @@ class UserService:
 
     def delete_user(self, uuid: UUID) -> None:
         del self.users[uuid]
+
+    def all(self) -> dict[User]:
+        return self.users
