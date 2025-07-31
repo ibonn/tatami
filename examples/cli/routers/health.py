@@ -1,13 +1,23 @@
+import random
 from typing import Annotated
+from uuid import UUID
 
 from pydantic import BaseModel, Field
-
+from starlette.requests import Request
 from tatami import get, post, router
-from uuid import UUID
+from tatami.di import Inject, Scope
 from tatami.param import Query
 
-from cli.services import UserService
 from cli.models.user import User
+from tatami.param import Header
+from cli.services import UserService
+
+
+def get_start(some_header: Annotated[str, Header('x-some-header')]) -> str:
+    return f'This is the auth with number {random.randint(0, 100)} and header {some_header}'
+
+def get_auth(request: Request, start: Annotated[str, Inject(factory=get_start, scope=Scope.REQUEST)], user_agent: Annotated[str, Header()]):
+    return f'{start}: {request.headers.get("user-agent")} (from request); {user_agent} (from headers)'
 
 
 class Post(BaseModel):
@@ -21,7 +31,7 @@ class Health(router('/health')):
         """Get app status"""
         return 'OK'
     
-class Post(router('/post')):
+class PostRouter(router('/post')):
     @get('/{post_id}')
     def get_post(self, post_id: int, get_comments: Annotated[bool, Query('show_comments')] = False):
         result = {'content': 'lorem ipsum', 'id': post_id}
@@ -32,8 +42,8 @@ class Post(router('/post')):
         return result
     
     @post
-    def create_post(self, p: Post):
-        return {'success': True, 'post': p}
+    def create_post(self, p: Post, auth: Annotated[str, Inject(factory=get_auth, scope=Scope.REQUEST)]):
+        return {'success': True, 'post': p, 'auth': auth}
     
     @get('/error')
     def raise_exception(self):

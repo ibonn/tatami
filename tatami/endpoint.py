@@ -1,7 +1,7 @@
 import inspect
 import logging
 from functools import wraps
-from typing import (TYPE_CHECKING, Annotated, Awaitable, Callable, Literal,
+from typing import (TYPE_CHECKING, Annotated, Any, Awaitable, Callable, Literal,
                     Optional, Type, TypeAlias, TypeVar, Union, get_args,
                     get_origin, overload)
 
@@ -12,7 +12,7 @@ from starlette.routing import Route
 from tatami._utils import (human_friendly_description_from_name,
                            serialize_json, wrap_response)
 from tatami.core import TatamiObject
-from tatami.di import inject
+from tatami.di import Inject, is_injectable, is_tatami_object
 from tatami.param import Header, Path, Query
 from tatami.responses import JSONResponse, Response
 from tatami.validation import (ValidationException,
@@ -76,6 +76,8 @@ def _extract_param_info(param_name: str, annotation, path: str) -> tuple[str, st
                 elif isinstance(meta, Path):
                     path_name = meta.name if meta.name is not None else param_name
                     return 'path', path_name, actual_type
+                elif isinstance(meta, Inject):
+                    return 'injected', param_name, annotation
     
     # Check if it's a BaseModel (body parameter)
     try:
@@ -83,6 +85,17 @@ def _extract_param_info(param_name: str, annotation, path: str) -> tuple[str, st
             return 'body', param_name, annotation
     except TypeError:
         pass
+
+    # Same for requests
+    try:
+        if inspect.isclass(annotation) and issubclass(annotation, Request):
+            return 'injected', param_name, annotation
+    except TypeError:
+        pass
+
+    # and more injectable objects
+    if is_injectable(annotation):
+        return 'injected', param_name, annotation
     
     # For unannotated parameters, infer based on path presence
     # If parameter name exists in path, it's a path parameter
@@ -114,7 +127,8 @@ def _extract_parameters(func: Callable, path: str) -> dict:
         'headers': {},  # param_name -> {'key': header_name, 'type': type}
         'query': {},    # param_name -> {'key': query_name, 'type': type}  
         'path': {},     # param_name -> {'key': path_name, 'type': type}
-        'body': {}      # param_name -> model_class
+        'body': {},     # param_name -> model_class
+        'injected': {}, # param_name -> injected_object
     }
     
     for param_name, param in sig.parameters.items():
@@ -129,12 +143,92 @@ def _extract_parameters(func: Callable, path: str) -> dict:
         
         if param_type == 'body':
             params['body'][param_name] = actual_type
+        elif param_type == 'injected':
+            params['injected'][param_name] = actual_type
         else:
             params[param_type][param_name] = {'key': param_key, 'type': actual_type}
     
     return params
 
+async def _resolve_parameters(func: Callable, request: Request, path: Optional[str] = None):
+    params_config = _extract_parameters(func, path)
+    kwargs = {}
+    validation_errors = []
 
+    for param_name, param_type in params_config['injected'].items():
+        if isinstance(param_type, type) and issubclass(param_type, Request):
+            kwargs[param_name] = request
+        
+        elif get_origin(param_type) is Annotated:
+            actual_type, inject_object = get_args(param_type)
+            
+            if inject_object.factory is None:
+                if is_injectable(actual_type):
+                    instance = actual_type()
+                else:
+                    raise TypeError(f'Cannot inject object of type {inject_object}')
+            else:
+                factory_kwargs, factory_validation_errors = await _resolve_parameters(inject_object.factory, request)
+                instance = inject_object.factory(**factory_kwargs)
+                validation_errors.extend(factory_validation_errors)
+
+            kwargs[param_name] = instance
+
+    # Extract and validate path parameters
+    for param_name, param_info in params_config['path'].items():
+        param_key = param_info['key']
+        param_type = param_info['type']
+        if param_key in request.path_params:
+            raw_value = request.path_params[param_key]
+            try:
+                kwargs[param_name] = _convert_and_validate_parameter(raw_value, param_type, param_name)
+            except ValidationException as e:
+                validation_errors.append(e)
+    
+    # Extract and validate query parameters
+    for param_name, param_info in params_config['query'].items():
+        param_key = param_info['key']
+        param_type = param_info['type']
+        if param_key in request.query_params:
+            raw_value = request.query_params[param_key]
+            try:
+                kwargs[param_name] = _convert_and_validate_parameter(raw_value, param_type, param_name)
+            except ValidationException as e:
+                validation_errors.append(e)
+    
+    # Extract and validate header parameters
+    for param_name, param_info in params_config['headers'].items():
+        param_key = param_info['key']
+        param_type = param_info['type']
+        if param_key.lower() in request.headers:
+            raw_value = request.headers[param_key.lower()]
+            try:
+                kwargs[param_name] = _convert_and_validate_parameter(raw_value, param_type, param_name)
+            except ValidationException as e:
+                validation_errors.append(e)
+        else:
+            # TODO raise a bad request error (400), the header is missing. We will set it to None for now
+            kwargs[param_name] = None
+    
+    # Extract and validate body parameters for POST, PUT, PATCH requests
+    if request.method in ('POST', 'PUT', 'PATCH') and params_config['body']:
+        try:
+            body = await request.json()
+            for param_name, model_class in params_config['body'].items():
+                try:
+                    kwargs[param_name] = validate_parameter(body, model_class, param_name)
+                except ValidationException as e:
+                    validation_errors.append(e)
+        except Exception as e:
+            # Failed to parse JSON body
+            validation_errors.append(ValidationException(
+                "request_body", 
+                "invalid_json", 
+                dict, 
+                f"Failed to parse JSON body: {str(e)}"
+            ))
+
+    return kwargs, validation_errors
 
 class Endpoint(TatamiObject):
     def __init__(self, method: str, func: Callable, path: str = None, request_type: Optional[Union[Type[Request], Type[BaseModel]]] = None, response_type: Optional[Type[Response]] = None, tags: Optional[list[str]] = None):
@@ -236,60 +330,7 @@ class BoundEndpoint(TatamiObject):
             # `response` is a Starlette Response object ready to be sent back to the client.
         """
         # Extract parameter configuration from function signature
-        params_config = _extract_parameters(self._endpoint.func, self.path)
-        kwargs = {}
-        validation_errors = []
-        
-        # Extract and validate path parameters
-        for param_name, param_info in params_config['path'].items():
-            param_key = param_info['key']
-            param_type = param_info['type']
-            if param_key in request.path_params:
-                raw_value = request.path_params[param_key]
-                try:
-                    kwargs[param_name] = _convert_and_validate_parameter(raw_value, param_type, param_name)
-                except ValidationException as e:
-                    validation_errors.append(e)
-        
-        # Extract and validate query parameters
-        for param_name, param_info in params_config['query'].items():
-            param_key = param_info['key']
-            param_type = param_info['type']
-            if param_key in request.query_params:
-                raw_value = request.query_params[param_key]
-                try:
-                    kwargs[param_name] = _convert_and_validate_parameter(raw_value, param_type, param_name)
-                except ValidationException as e:
-                    validation_errors.append(e)
-        
-        # Extract and validate header parameters
-        for param_name, param_info in params_config['headers'].items():
-            param_key = param_info['key']
-            param_type = param_info['type']
-            if param_key.lower() in request.headers:
-                raw_value = request.headers[param_key.lower()]
-                try:
-                    kwargs[param_name] = _convert_and_validate_parameter(raw_value, param_type, param_name)
-                except ValidationException as e:
-                    validation_errors.append(e)
-        
-        # Extract and validate body parameters for POST, PUT, PATCH requests
-        if request.method in ('POST', 'PUT', 'PATCH') and params_config['body']:
-            try:
-                body = await request.json()
-                for param_name, model_class in params_config['body'].items():
-                    try:
-                        kwargs[param_name] = validate_parameter(body, model_class, param_name)
-                    except ValidationException as e:
-                        validation_errors.append(e)
-            except Exception as e:
-                # Failed to parse JSON body
-                validation_errors.append(ValidationException(
-                    "request_body", 
-                    "invalid_json", 
-                    dict, 
-                    f"Failed to parse JSON body: {str(e)}"
-                ))
+        kwargs, validation_errors = await _resolve_parameters(self._endpoint.func, request, self.path)
         
         # Return validation errors if any occurred
         if validation_errors:
@@ -347,7 +388,7 @@ def request(method: HTTPMethod, path_or_func: Optional[Union[str, Callable]] = N
             ...
     """
     def decorator(fn):
-        return wraps(fn)(Endpoint(method, inject(fn), path_or_func if isinstance(path_or_func, str) else '', None, response_type))
+        return wraps(fn)(Endpoint(method, fn, path_or_func if isinstance(path_or_func, str) else '', None, response_type))
 
     if callable(path_or_func):
         return decorator(path_or_func)

@@ -30,9 +30,6 @@ __TATAMI_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = '__TATAMI_INTERNALS_DO_NOT_
 
 class Inject:
     def __init__(self, factory: Optional[Callable] = None, scope: Scope = Scope.SINGLETON):
-        if factory is not None:
-            factory = inject(factory)
-        
         self.scope = scope
         self.factory = factory
 
@@ -89,7 +86,7 @@ def _inject_object_instance(t: type):
     
     return t()
 
-def _inject_instance_depending_on_scope(name: str, type_ :type, scope: Scope, injected: dict[str, Any], non_singletons: dict[str, Callable]):
+def _inject_instance_depending_on_scope(name: str, type_: type, scope: Scope, injected: dict[str, Any], non_singletons: dict[str, Callable]):
     if scope == Scope.SINGLETON:
         injected[name] = _inject_object_instance(type_)
     else:
@@ -120,6 +117,8 @@ def inject(fn: Callable) -> Callable:
                         raise TypeError(f'Cannot inject object of type {target_type}')
                 else:
                     # Here singletons are injected only
+                    # TODO refactor, code duplication: a call to _inject_instance_depending_on_scope() can be used
+                    #  _inject_instance_depending_on_scope(parameter.name, inject_object.factory, inject_object.scope, injected, non_singletons)
                     if inject_object.scope == Scope.SINGLETON:
                         injected[parameter.name] = inject_object.factory()
                     else:
@@ -128,7 +127,6 @@ def inject(fn: Callable) -> Callable:
 
     @wraps(fn)
     def injected_fn(*args, **kwargs):
-        # TODO inject request
         for name, factory in non_singletons.items():
             injected[name] = factory()
         return fn(*args, **{**kwargs, **injected})
