@@ -167,50 +167,64 @@ def validate_parameter(value: Any, annotation: type, field_name: str, allow_none
 
 def create_validation_error_response(error: ValidationException) -> JSONResponse:
     """
-    Create a standardized error response for validation failures.
+    Create a standardized error response for validation failures using RFC 7807 Problem Details format.
     
     Args:
         error: The validation exception
         
     Returns:
-        JSONResponse with error details
+        JSONResponse with error details in RFC 7807 format
     """
     return JSONResponse(
         status_code=422,
         content={
-            "error": "Validation Error",
-            "detail": {
-                "field": error.field_name,
-                "message": error.message,
-                "received_value": str(error.value),
-                "expected_type": error.expected_type.__name__ if hasattr(error.expected_type, '__name__') else str(error.expected_type)
-            }
-        }
+            "type": "https://datatracker.ietf.org/doc/html/rfc7807#section-3",
+            "title": "Validation Error",
+            "status": 422,
+            "detail": f"Field '{error.field_name}' failed validation: {error.message}",
+            "field": error.field_name,
+            "input_value": error.value,
+            "expected_type": error.expected_type.__name__ if hasattr(error.expected_type, '__name__') else str(error.expected_type),
+            "field_path": error.field_name.split('.')
+        },
+        headers={"Content-Type": "application/problem+json"}
     )
 
 
 def create_multiple_validation_errors_response(errors: list[ValidationException]) -> JSONResponse:
     """
-    Create a response for multiple validation errors.
+    Create a response for multiple validation errors using RFC 7807 Problem Details format.
     
     Args:
         errors: List of validation exceptions
         
     Returns:
-        JSONResponse with all error details
+        JSONResponse with all error details in RFC 7807 format
     """
+    # Create detailed information about each validation error
+    validation_errors = []
+    for error in errors:
+        validation_errors.append({
+            "field": error.field_name,
+            "field_path": error.field_name.split('.'),
+            "input_value": error.value,
+            "expected_type": error.expected_type.__name__ if hasattr(error.expected_type, '__name__') else str(error.expected_type),
+            "message": error.message
+        })
+    
+    # Summary of all errors
+    field_names = [error.field_name for error in errors]
+    summary = f"Validation failed for {len(errors)} field(s): {', '.join(field_names)}"
+    
     return JSONResponse(
         status_code=422,
         content={
-            "error": "Multiple Validation Errors",
-            "details": [
-                {
-                    "field": error.field_name,
-                    "message": error.message,
-                    "received_value": str(error.value),
-                    "expected_type": error.expected_type.__name__ if hasattr(error.expected_type, '__name__') else str(error.expected_type)
-                }
-                for error in errors
-            ]
-        }
+            "type": "https://datatracker.ietf.org/doc/html/rfc7807#section-3",
+            "title": "Multiple Validation Errors",
+            "status": 422,
+            "detail": summary,
+            "validation_errors": validation_errors,
+            "total_errors": len(errors)
+        },
+        headers={"Content-Type": "application/problem+json"}
     )
