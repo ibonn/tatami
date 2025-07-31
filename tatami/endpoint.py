@@ -1,7 +1,7 @@
 import asyncio
 import inspect
 import logging
-from functools import wraps
+from functools import lru_cache, wraps
 from typing import (TYPE_CHECKING, Annotated, Any, Awaitable, Callable,
                     Literal, Optional, Type, TypeAlias, TypeVar, Union,
                     get_args, get_origin, overload)
@@ -51,7 +51,7 @@ def _convert_and_validate_parameter(value: str, target_type, field_name: str) ->
     """
     return validate_parameter(value, target_type, field_name)
 
-
+@lru_cache
 def _extract_param_info(param_name: str, annotation, path: str) -> tuple[str, str, any]:
     """
     Extract parameter information from type annotation.
@@ -110,7 +110,7 @@ def _extract_param_info(param_name: str, annotation, path: str) -> tuple[str, st
         return 'query', param_name, param_type
     raise ValueError(f"Parameter '{param_name}' must be explicitly annotated with Query(), Header(), Path(), or be a BaseModel")
 
-
+@lru_cache
 def _extract_parameters(func: Callable, path: str) -> dict:
     """
     Extract parameter information from function signature.

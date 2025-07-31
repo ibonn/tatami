@@ -8,6 +8,7 @@ This module handles all OpenAPI-related functionality including:
 - Parameter schema extraction
 """
 
+from functools import lru_cache
 import inspect
 from typing import TYPE_CHECKING
 
@@ -82,7 +83,7 @@ def add_schema_to_spec(model: type[BaseModel], schemas: dict) -> str:
         schemas[name] = schema
     return name
 
-
+@lru_cache
 def generate_openapi_spec(router_instance: 'BaseRouter') -> dict:
     """
     Generate OpenAPI 3.0 specification for a router and its endpoints.
