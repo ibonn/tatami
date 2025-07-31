@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Migrating from Django 🎸➡️🎋 - Tatami documentation</title><link rel="shortcut icon" href="../_static/favicon.ico"/><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Advanced Topics 🚀" href="../advanced/index.html" /><link rel="prev" title="Migrating from FastAPI ⚡➡️🎋" href="from_fastapi.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=397bb51e" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=76b6f612" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Migrating from Django 🎸➡️🎋"/>
+<meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      <img class="light-logo" src="../_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
+      <img class="dark-logo" src="../_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
+      <strong>Tatami</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2 -translate-x-2"></span>
+          <span class="hamburger_3 -translate-x-1"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn Tatami Step by Step</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/your_first_api.html">Your First API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/project_structure.html">Project Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/routing_guide.html">Routing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/working_with_data.html">Working with Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/dependency_injection.html">Dependency Injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/middleware_and_services.html">Middleware and Services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/testing_your_api.html">Testing Your API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/deployment.html">Deployment</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">CLI &amp; Tools</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/commands.html">CLI Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/docker_deployment.html">Docker Deployment</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Migration Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="from_flask.html">From Flask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="from_fastapi.html">From FastAPI</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">From Django</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/index.html">Advanced Topics Index</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#why-consider-tatami">Why Consider Tatami?</a></li>
+<li><a class="reference internal" href="#key-concept-mapping">Key Concept Mapping</a></li>
+<li><a class="reference internal" href="#basic-django-to-tatami-translation">Basic Django to Tatami Translation</a><ul>
+<li><a class="reference internal" href="#django-views-tatami-routers">Django Views &#8594; Tatami Routers</a></li>
+<li><a class="reference internal" href="#django-urls-tatami-routing">Django URLs &#8594; Tatami Routing</a></li>
+<li><a class="reference internal" href="#django-models-pydantic-models-services">Django Models &#8594; Pydantic Models + Services</a></li>
+<li><a class="reference internal" href="#django-forms-serializers-pydantic-validation">Django Forms/Serializers &#8594; Pydantic Validation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#migration-strategies">Migration Strategies</a><ul>
+<li><a class="reference internal" href="#api-first-migration-recommended">1. API-First Migration (Recommended)</a></li>
+<li><a class="reference internal" href="#gradual-router-migration">2. Gradual Router Migration</a></li>
+<li><a class="reference internal" href="#microservice-split">3. Microservice Split</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#common-migration-patterns">Common Migration Patterns</a><ul>
+<li><a class="reference internal" href="#django-admin-custom-admin-interface">Django Admin &#8594; Custom Admin Interface</a></li>
+<li><a class="reference internal" href="#django-authentication-jwt-custom-auth">Django Authentication &#8594; JWT/Custom Auth</a></li>
+<li><a class="reference internal" href="#django-signals-event-services">Django Signals &#8594; Event Services</a></li>
+<li><a class="reference internal" href="#django-middleware-tatami-middleware">Django Middleware &#8594; Tatami Middleware</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#configuration-migration">Configuration Migration</a><ul>
+<li><a class="reference internal" href="#django-settings-tatami-config">Django Settings &#8594; Tatami Config</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#database-migration">Database Migration</a><ul>
+<li><a class="reference internal" href="#django-orm-sqlalchemy-recommended">Django ORM &#8594; SQLAlchemy (Recommended)</a></li>
+<li><a class="reference internal" href="#repository-pattern">Repository Pattern</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing-migration">Testing Migration</a><ul>
+<li><a class="reference internal" href="#django-tests-tatami-tests">Django Tests &#8594; Tatami Tests</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#project-structure-comparison">Project Structure Comparison</a><ul>
+<li><a class="reference internal" href="#django-project-structure">Django Project Structure</a></li>
+<li><a class="reference internal" href="#tatami-project-structure">Tatami Project Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#migration-advantages">Migration Advantages</a><ul>
+<li><a class="reference internal" href="#performance">Performance</a></li>
+<li><a class="reference internal" href="#development-speed">Development Speed</a></li>
+<li><a class="reference internal" href="#type-safety">Type Safety</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#migration-gotchas">Migration Gotchas</a><ul>
+<li><a class="reference internal" href="#no-built-in-admin">1. No Built-in Admin</a></li>
+<li><a class="reference internal" href="#different-database-patterns">2. Different Database Patterns</a></li>
+<li><a class="reference internal" href="#authentication-differences">3. Authentication Differences</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#migration-checklist">Migration Checklist</a><ul>
+<li><a class="reference internal" href="#planning-phase">Planning Phase</a></li>
+<li><a class="reference internal" href="#implementation-phase">Implementation Phase</a></li>
+<li><a class="reference internal" href="#testing-phase">Testing Phase</a></li>
+<li><a class="reference internal" href="#deployment-phase">Deployment Phase</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#why-migrate-from-django">Why Migrate from Django?</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">Tatami</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Migrating from Django 🎸➡️🎋</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="migrating-from-django">
+<h1>Migrating from Django 🎸➡️🎋<a class="headerlink" href="#migrating-from-django" title="Link to this heading">¶</a></h1>
+<p>This guide helps Django developers transition to Tatami, showing how Django’s MTV pattern translates to Tatami’s modern API architecture.</p>
+<section id="why-consider-tatami">
+<h2>Why Consider Tatami?<a class="headerlink" href="#why-consider-tatami" title="Link to this heading">¶</a></h2>
+<p>As a Django developer, you’ll find Tatami offers:</p>
+<ul class="simple">
+<li><p>✅ <strong>API-first design</strong> - Built specifically for modern web APIs</p></li>
+<li><p>✅ <strong>Simpler deployment</strong> - No complex WSGI/ASGI configuration</p></li>
+<li><p>✅ <strong>Auto-discovery</strong> - Automatic component registration like Django apps</p></li>
+<li><p>✅ <strong>Type safety</strong> - Full type hint support throughout</p></li>
+<li><p>✅ <strong>Modern async</strong> - Built on ASGI from the ground up</p></li>
+<li><p>✅ <strong>Less boilerplate</strong> - Convention over configuration</p></li>
+</ul>
+</section>
+<section id="key-concept-mapping">
+<h2>Key Concept Mapping<a class="headerlink" href="#key-concept-mapping" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper docutils container" id="id1">
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Django to Tatami Translation</span><a class="headerlink" href="#id1" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Django Concept</p></th>
+<th class="head"><p>Tatami Equivalent</p></th>
+<th class="head"><p>Purpose</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Views (Class-based)</strong></p></td>
+<td><p>Class-based Routers</p></td>
+<td><p>Handle HTTP requests</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>URL patterns</strong></p></td>
+<td><p>Router decorators</p></td>
+<td><p>Define endpoints</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Models</strong></p></td>
+<td><p>Pydantic models</p></td>
+<td><p>Data validation/serialization</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Services/Managers</strong></p></td>
+<td><p>Service classes</p></td>
+<td><p>Business logic</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Middleware</strong></p></td>
+<td><p>Middleware classes</p></td>
+<td><p>Request/response processing</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Apps</strong></p></td>
+<td><p>Router modules</p></td>
+<td><p>Organize functionality</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Settings</strong></p></td>
+<td><p>YAML configuration</p></td>
+<td><p>App configuration</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="basic-django-to-tatami-translation">
+<h2>Basic Django to Tatami Translation<a class="headerlink" href="#basic-django-to-tatami-translation" title="Link to this heading">¶</a></h2>
+<section id="django-views-tatami-routers">
+<h3>Django Views → Tatami Routers<a class="headerlink" href="#django-views-tatami-routers" title="Link to this heading">¶</a></h3>
+<p><strong>Django Class-Based Views:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Django views.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">django.http</span><span class="w"> </span><span class="kn">import</span> <span class="n">JsonResponse</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">django.views</span><span class="w"> </span><span class="kn">import</span> <span class="n">View</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">django.utils.decorators</span><span class="w"> </span><span class="kn">import</span> <span class="n">method_decorator</span>
+</span><span data-line="5"><span class="kn">from</span><span class="w"> </span><span class="nn">django.views.decorators.csrf</span><span class="w"> </span><span class="kn">import</span> <span class="n">csrf_exempt</span>
+</span><span data-line="6"><span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Post</span>
+</span><span data-line="7"><span class="kn">from</span><span class="w"> </span><span class="nn">.serializers</span><span class="w"> </span><span class="kn">import</span> <span class="n">PostSerializer</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="nd">@method_decorator</span><span class="p">(</span><span class="n">csrf_exempt</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;dispatch&#39;</span><span class="p">)</span>
+</span><span data-line="10"><span class="k">class</span><span class="w"> </span><span class="nc">PostView</span><span class="p">(</span><span class="n">View</span><span class="p">):</span>
+</span><span data-line="11">    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">post_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span><span data-line="12">        <span class="k">if</span> <span class="n">post_id</span><span class="p">:</span>
+</span><span data-line="13">            <span class="k">try</span><span class="p">:</span>
+</span><span data-line="14">                <span class="n">post</span> <span class="o">=</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">post_id</span><span class="p">)</span>
+</span><span data-line="15">                <span class="k">return</span> <span class="n">JsonResponse</span><span class="p">(</span><span class="n">PostSerializer</span><span class="p">(</span><span class="n">post</span><span class="p">)</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+</span><span data-line="16">            <span class="k">except</span> <span class="n">Post</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+</span><span data-line="17">                <span class="k">return</span> <span class="n">JsonResponse</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;Post not found&#39;</span><span class="p">},</span> <span class="n">status</span><span class="o">=</span><span class="mi">404</span><span class="p">)</span>
+</span><span data-line="18">        <span class="k">else</span><span class="p">:</span>
+</span><span data-line="19">            <span class="n">posts</span> <span class="o">=</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</span><span data-line="20">            <span class="k">return</span> <span class="n">JsonResponse</span><span class="p">([</span><span class="n">PostSerializer</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">data</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">posts</span><span class="p">],</span> <span class="n">safe</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span data-line="21">
+</span><span data-line="22">    <span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+</span><span data-line="23">        <span class="n">serializer</span> <span class="o">=</span> <span class="n">PostSerializer</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+</span><span data-line="24">        <span class="k">if</span> <span class="n">serializer</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+</span><span data-line="25">            <span class="n">post</span> <span class="o">=</span> <span class="n">serializer</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</span><span data-line="26">            <span class="k">return</span> <span class="n">JsonResponse</span><span class="p">(</span><span class="n">PostSerializer</span><span class="p">(</span><span class="n">post</span><span class="p">)</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="mi">201</span><span class="p">)</span>
+</span><span data-line="27">        <span class="k">return</span> <span class="n">JsonResponse</span><span class="p">(</span><span class="n">serializer</span><span class="o">.</span><span class="n">errors</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<p><strong>Equivalent Tatami Router:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># routers/posts.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami</span><span class="w"> </span><span class="kn">import</span> <span class="n">router</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">post</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="k">class</span><span class="w"> </span><span class="nc">Post</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="7">    <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="8">    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="9">    <span class="n">content</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="10">    <span class="n">author</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="11">
+</span><span data-line="12"><span class="k">class</span><span class="w"> </span><span class="nc">PostCreate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="13">    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="14">    <span class="n">content</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="15">    <span class="n">author</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="16">
+</span><span data-line="17"><span class="k">class</span><span class="w"> </span><span class="nc">Posts</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/posts&#39;</span><span class="p">)):</span>
+</span><span data-line="18"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Post management endpoints&quot;&quot;&quot;</span>
+</span><span data-line="19">
+</span><span data-line="20">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">post_service</span><span class="p">:</span> <span class="n">PostService</span><span class="p">):</span>
+</span><span data-line="21">        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+</span><span data-line="22">        <span class="bp">self</span><span class="o">.</span><span class="n">post_service</span> <span class="o">=</span> <span class="n">post_service</span>
+</span><span data-line="23">
+</span><span data-line="24">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="25">    <span class="k">def</span><span class="w"> </span><span class="nf">list_posts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Post</span><span class="p">]:</span>
+</span><span data-line="26"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get all posts&quot;&quot;&quot;</span>
+</span><span data-line="27">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">post_service</span><span class="o">.</span><span class="n">get_all</span><span class="p">()</span>
+</span><span data-line="28">
+</span><span data-line="29">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/</span><span class="si">{post_id}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span data-line="30">    <span class="k">def</span><span class="w"> </span><span class="nf">get_post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">post_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Post</span><span class="p">:</span>
+</span><span data-line="31"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get post by ID&quot;&quot;&quot;</span>
+</span><span data-line="32">        <span class="n">post</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">post_service</span><span class="o">.</span><span class="n">get_by_id</span><span class="p">(</span><span class="n">post_id</span><span class="p">)</span>
+</span><span data-line="33">        <span class="k">if</span> <span class="ow">not</span> <span class="n">post</span><span class="p">:</span>
+</span><span data-line="34">            <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;Post not found&#39;</span><span class="p">},</span> <span class="mi">404</span>
+</span><span data-line="35">        <span class="k">return</span> <span class="n">post</span>
+</span><span data-line="36">
+</span><span data-line="37">    <span class="nd">@post</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="38">    <span class="k">def</span><span class="w"> </span><span class="nf">create_post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">post_data</span><span class="p">:</span> <span class="n">PostCreate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Post</span><span class="p">:</span>
+</span><span data-line="39"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new post&quot;&quot;&quot;</span>
+</span><span data-line="40">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">post_service</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">post_data</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="django-urls-tatami-routing">
+<h3>Django URLs → Tatami Routing<a class="headerlink" href="#django-urls-tatami-routing" title="Link to this heading">¶</a></h3>
+<p><strong>Django URL Configuration:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># urls.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">django.urls</span><span class="w"> </span><span class="kn">import</span> <span class="n">path</span><span class="p">,</span> <span class="n">include</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">views</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="n">app_name</span> <span class="o">=</span> <span class="s1">&#39;blog&#39;</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+</span><span data-line="8">    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;posts/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">PostView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;post-list&#39;</span><span class="p">),</span>
+</span><span data-line="9">    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;posts/&lt;int:post_id&gt;/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">PostView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;post-detail&#39;</span><span class="p">),</span>
+</span><span data-line="10">    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;users/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s1">&#39;users.urls&#39;</span><span class="p">)),</span>
+</span><span data-line="11">    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;comments/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s1">&#39;comments.urls&#39;</span><span class="p">)),</span>
+</span><span data-line="12"><span class="p">]</span>
+</span><span data-line="13">
+</span><span data-line="14"><span class="c1"># Main urls.py</span>
+</span><span data-line="15"><span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib</span><span class="w"> </span><span class="kn">import</span> <span class="n">admin</span>
+</span><span data-line="16"><span class="kn">from</span><span class="w"> </span><span class="nn">django.urls</span><span class="w"> </span><span class="kn">import</span> <span class="n">path</span><span class="p">,</span> <span class="n">include</span>
+</span><span data-line="17">
+</span><span data-line="18"><span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+</span><span data-line="19">    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;admin/&#39;</span><span class="p">,</span> <span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">),</span>
+</span><span data-line="20">    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;api/v1/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s1">&#39;blog.urls&#39;</span><span class="p">)),</span>
+</span><span data-line="21"><span class="p">]</span>
+</span></pre></div>
+</div>
+<p><strong>Tatami Auto-Discovery:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># routers/posts.py - automatically discovered</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">Posts</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/api/v1/posts&#39;</span><span class="p">)):</span>
+</span><span data-line="3">    <span class="c1"># Routes automatically registered</span>
+</span><span data-line="4">    <span class="k">pass</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="c1"># routers/users.py - automatically discovered</span>
+</span><span data-line="7"><span class="k">class</span><span class="w"> </span><span class="nc">Users</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/api/v1/users&#39;</span><span class="p">)):</span>
+</span><span data-line="8">    <span class="c1"># Routes automatically registered</span>
+</span><span data-line="9">    <span class="k">pass</span>
+</span><span data-line="10">
+</span><span data-line="11"><span class="c1"># routers/comments.py - automatically discovered</span>
+</span><span data-line="12"><span class="k">class</span><span class="w"> </span><span class="nc">Comments</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/api/v1/comments&#39;</span><span class="p">)):</span>
+</span><span data-line="13">    <span class="c1"># Routes automatically registered</span>
+</span><span data-line="14">    <span class="k">pass</span>
+</span></pre></div>
+</div>
+</section>
+<section id="django-models-pydantic-models-services">
+<h3>Django Models → Pydantic Models + Services<a class="headerlink" href="#django-models-pydantic-models-services" title="Link to this heading">¶</a></h3>
+<p><strong>Django Models:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># models.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">django.db</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib.auth.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">User</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="k">class</span><span class="w"> </span><span class="nc">Post</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+</span><span data-line="6">    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+</span><span data-line="7">    <span class="n">content</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+</span><span data-line="8">    <span class="n">author</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+</span><span data-line="9">    <span class="n">created_at</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="10">    <span class="n">updated_at</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="11">
+</span><span data-line="12">    <span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">:</span>
+</span><span data-line="13">        <span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;-created_at&#39;</span><span class="p">]</span>
+</span><span data-line="14">
+</span><span data-line="15">    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="16">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
+</span><span data-line="17">
+</span><span data-line="18">    <span class="nd">@classmethod</span>
+</span><span data-line="19">    <span class="k">def</span><span class="w"> </span><span class="nf">get_by_author</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">author</span><span class="p">):</span>
+</span><span data-line="20">        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">author</span><span class="o">=</span><span class="n">author</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<p><strong>Tatami Pydantic Models + Service:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># models.py (Pydantic models for API)</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="k">class</span><span class="w"> </span><span class="nc">Post</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="7">    <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="8">    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="9">    <span class="n">content</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="10">    <span class="n">author_id</span><span class="p">:</span> <span class="nb">int</span>
+</span><span data-line="11">    <span class="n">created_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="12">    <span class="n">updated_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="13">
+</span><span data-line="14"><span class="k">class</span><span class="w"> </span><span class="nc">PostCreate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="15">    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="16">    <span class="n">content</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="17">    <span class="n">author_id</span><span class="p">:</span> <span class="nb">int</span>
+</span><span data-line="18">
+</span><span data-line="19"><span class="c1"># services/post_service.py (Business logic)</span>
+</span><span data-line="20"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+</span><span data-line="21">
+</span><span data-line="22"><span class="k">class</span><span class="w"> </span><span class="nc">PostService</span><span class="p">:</span>
+</span><span data-line="23">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">post_repository</span><span class="p">:</span> <span class="n">PostRepository</span><span class="p">):</span>
+</span><span data-line="24">        <span class="bp">self</span><span class="o">.</span><span class="n">post_repository</span> <span class="o">=</span> <span class="n">post_repository</span>
+</span><span data-line="25">
+</span><span data-line="26">    <span class="k">def</span><span class="w"> </span><span class="nf">get_all</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Post</span><span class="p">]:</span>
+</span><span data-line="27">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">post_repository</span><span class="o">.</span><span class="n">find_all</span><span class="p">()</span>
+</span><span data-line="28">
+</span><span data-line="29">    <span class="k">def</span><span class="w"> </span><span class="nf">get_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">post_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Post</span><span class="p">]:</span>
+</span><span data-line="30">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">post_repository</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="n">post_id</span><span class="p">)</span>
+</span><span data-line="31">
+</span><span data-line="32">    <span class="k">def</span><span class="w"> </span><span class="nf">get_by_author</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">author_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Post</span><span class="p">]:</span>
+</span><span data-line="33">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">post_repository</span><span class="o">.</span><span class="n">find_by_author</span><span class="p">(</span><span class="n">author_id</span><span class="p">)</span>
+</span><span data-line="34">
+</span><span data-line="35">    <span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">post_data</span><span class="p">:</span> <span class="n">PostCreate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Post</span><span class="p">:</span>
+</span><span data-line="36">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">post_repository</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">post_data</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="django-forms-serializers-pydantic-validation">
+<h3>Django Forms/Serializers → Pydantic Validation<a class="headerlink" href="#django-forms-serializers-pydantic-validation" title="Link to this heading">¶</a></h3>
+<p><strong>Django Forms/Serializers:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># forms.py or serializers.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">django</span><span class="w"> </span><span class="kn">import</span> <span class="n">forms</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">rest_framework</span><span class="w"> </span><span class="kn">import</span> <span class="n">serializers</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Post</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="k">class</span><span class="w"> </span><span class="nc">PostForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">ModelForm</span><span class="p">):</span>
+</span><span data-line="7">    <span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">:</span>
+</span><span data-line="8">        <span class="n">model</span> <span class="o">=</span> <span class="n">Post</span>
+</span><span data-line="9">        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">]</span>
+</span><span data-line="10">
+</span><span data-line="11">    <span class="k">def</span><span class="w"> </span><span class="nf">clean_title</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="12">        <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span>
+</span><span data-line="13">        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">title</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+</span><span data-line="14">            <span class="k">raise</span> <span class="n">forms</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="s2">&quot;Title must be at least 5 characters&quot;</span><span class="p">)</span>
+</span><span data-line="15">        <span class="k">return</span> <span class="n">title</span>
+</span><span data-line="16">
+</span><span data-line="17"><span class="c1"># Or with DRF</span>
+</span><span data-line="18"><span class="k">class</span><span class="w"> </span><span class="nc">PostSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
+</span><span data-line="19">    <span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">:</span>
+</span><span data-line="20">        <span class="n">model</span> <span class="o">=</span> <span class="n">Post</span>
+</span><span data-line="21">        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">,</span> <span class="s1">&#39;author&#39;</span><span class="p">,</span> <span class="s1">&#39;created_at&#39;</span><span class="p">]</span>
+</span><span data-line="22">
+</span><span data-line="23">    <span class="k">def</span><span class="w"> </span><span class="nf">validate_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+</span><span data-line="24">        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+</span><span data-line="25">            <span class="k">raise</span> <span class="n">serializers</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="s2">&quot;Title must be at least 5 characters&quot;</span><span class="p">)</span>
+</span><span data-line="26">        <span class="k">return</span> <span class="n">value</span>
+</span></pre></div>
+</div>
+<p><strong>Tatami Pydantic Validation:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># models.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">validator</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="k">class</span><span class="w"> </span><span class="nc">PostCreate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="6">    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="7">    <span class="n">content</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="8">    <span class="n">author_id</span><span class="p">:</span> <span class="nb">int</span>
+</span><span data-line="9">
+</span><span data-line="10">    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">)</span>
+</span><span data-line="11">    <span class="k">def</span><span class="w"> </span><span class="nf">title_must_be_long_enough</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+</span><span data-line="12">        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+</span><span data-line="13">            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Title must be at least 5 characters&#39;</span><span class="p">)</span>
+</span><span data-line="14">        <span class="k">return</span> <span class="n">v</span>
+</span><span data-line="15">
+</span><span data-line="16">    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;content&#39;</span><span class="p">)</span>
+</span><span data-line="17">    <span class="k">def</span><span class="w"> </span><span class="nf">content_not_empty</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+</span><span data-line="18">        <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+</span><span data-line="19">            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Content cannot be empty&#39;</span><span class="p">)</span>
+</span><span data-line="20">        <span class="k">return</span> <span class="n">v</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="migration-strategies">
+<h2>Migration Strategies<a class="headerlink" href="#migration-strategies" title="Link to this heading">¶</a></h2>
+<section id="api-first-migration-recommended">
+<h3>1. API-First Migration (Recommended)<a class="headerlink" href="#api-first-migration-recommended" title="Link to this heading">¶</a></h3>
+<p>Extract Django API functionality into Tatami:</p>
+<p><strong>Step 1: Identify API endpoints</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Django - mixed web + API</span>
+</span><span data-line="2"><span class="c1"># views.py</span>
+</span><span data-line="3"><span class="k">def</span><span class="w"> </span><span class="nf">post_list_html</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>  <span class="c1"># Web view</span>
+</span><span data-line="4">    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;posts.html&#39;</span><span class="p">)</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="k">def</span><span class="w"> </span><span class="nf">post_list_api</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>   <span class="c1"># API view</span>
+</span><span data-line="7">    <span class="n">posts</span> <span class="o">=</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</span><span data-line="8">    <span class="k">return</span> <span class="n">JsonResponse</span><span class="p">([</span><span class="n">serialize</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">posts</span><span class="p">])</span>
+</span></pre></div>
+</div>
+<p><strong>Step 2: Extract to Tatami API</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami - pure API</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">Posts</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/api/posts&#39;</span><span class="p">)):</span>
+</span><span data-line="3">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="4">    <span class="k">def</span><span class="w"> </span><span class="nf">list_posts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Post</span><span class="p">]:</span>
+</span><span data-line="5">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">post_service</span><span class="o">.</span><span class="n">get_all</span><span class="p">()</span>
+</span></pre></div>
+</div>
+<p><strong>Step 3: Update Django to use Tatami API</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Django - consume Tatami API</span>
+</span><span data-line="2"><span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">def</span><span class="w"> </span><span class="nf">post_list_html</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+</span><span data-line="5">    <span class="n">response</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;http://api.example.com/api/posts&#39;</span><span class="p">)</span>
+</span><span data-line="6">    <span class="n">posts</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</span><span data-line="7">    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;posts.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;posts&#39;</span><span class="p">:</span> <span class="n">posts</span><span class="p">})</span>
+</span></pre></div>
+</div>
+</section>
+<section id="gradual-router-migration">
+<h3>2. Gradual Router Migration<a class="headerlink" href="#gradual-router-migration" title="Link to this heading">¶</a></h3>
+<p>Migrate Django apps one by one:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"># Django app structure
+</span><span data-line="2">myproject/
+</span><span data-line="3">├── blog/           # Migrate first
+</span><span data-line="4">├── users/          # Migrate second
+</span><span data-line="5">├── comments/       # Migrate third
+</span><span data-line="6">└── notifications/  # Migrate last
+</span></pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"># Tatami equivalent
+</span><span data-line="2">tatami-api/
+</span><span data-line="3">├── routers/
+</span><span data-line="4">│   ├── blog.py     # Migrated from blog app
+</span><span data-line="5">│   ├── users.py    # Migrated from users app
+</span><span data-line="6">│   └── comments.py # Migrated from comments app
+</span><span data-line="7">└── services/       # Business logic extracted
+</span></pre></div>
+</div>
+</section>
+<section id="microservice-split">
+<h3>3. Microservice Split<a class="headerlink" href="#microservice-split" title="Link to this heading">¶</a></h3>
+<p>Use Tatami for new microservices:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"># Keep Django for web frontend
+</span><span data-line="2">django-web/
+</span><span data-line="3">├── templates/
+</span><span data-line="4">├── static/
+</span><span data-line="5">└── views.py  # Renders HTML, calls APIs
+</span><span data-line="6">
+</span><span data-line="7"># New Tatami API services
+</span><span data-line="8">tatami-api/
+</span><span data-line="9">├── user-service/    # User management
+</span><span data-line="10">├── post-service/    # Content management
+</span><span data-line="11">└── auth-service/    # Authentication
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="common-migration-patterns">
+<h2>Common Migration Patterns<a class="headerlink" href="#common-migration-patterns" title="Link to this heading">¶</a></h2>
+<section id="django-admin-custom-admin-interface">
+<h3>Django Admin → Custom Admin Interface<a class="headerlink" href="#django-admin-custom-admin-interface" title="Link to this heading">¶</a></h3>
+<p><strong>Django Admin:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># admin.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib</span><span class="w"> </span><span class="kn">import</span> <span class="n">admin</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Post</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="nd">@admin</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Post</span><span class="p">)</span>
+</span><span data-line="6"><span class="k">class</span><span class="w"> </span><span class="nc">PostAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+</span><span data-line="7">    <span class="n">list_display</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;author&#39;</span><span class="p">,</span> <span class="s1">&#39;created_at&#39;</span><span class="p">]</span>
+</span><span data-line="8">    <span class="n">list_filter</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;author&#39;</span><span class="p">,</span> <span class="s1">&#39;created_at&#39;</span><span class="p">]</span>
+</span><span data-line="9">    <span class="n">search_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">]</span>
+</span></pre></div>
+</div>
+<p><strong>Tatami Admin API:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># routers/admin.py</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">Admin</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/admin&#39;</span><span class="p">)):</span>
+</span><span data-line="3">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">post_service</span><span class="p">:</span> <span class="n">PostService</span><span class="p">):</span>
+</span><span data-line="4">        <span class="bp">self</span><span class="o">.</span><span class="n">post_service</span> <span class="o">=</span> <span class="n">post_service</span>
+</span><span data-line="5">
+</span><span data-line="6">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/posts&#39;</span><span class="p">)</span>
+</span><span data-line="7">    <span class="k">def</span><span class="w"> </span><span class="nf">list_posts</span><span class="p">(</span>
+</span><span data-line="8">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="9">        <span class="n">author</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span data-line="10">        <span class="n">search</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="11">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Post</span><span class="p">]:</span>
+</span><span data-line="12">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">post_service</span><span class="o">.</span><span class="n">admin_list</span><span class="p">(</span><span class="n">author</span><span class="p">,</span> <span class="n">search</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="django-authentication-jwt-custom-auth">
+<h3>Django Authentication → JWT/Custom Auth<a class="headerlink" href="#django-authentication-jwt-custom-auth" title="Link to this heading">¶</a></h3>
+<p><strong>Django Authentication:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Django views</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib.auth.decorators</span><span class="w"> </span><span class="kn">import</span> <span class="n">login_required</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="nd">@login_required</span>
+</span><span data-line="5"><span class="k">def</span><span class="w"> </span><span class="nf">protected_view</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+</span><span data-line="6">    <span class="k">return</span> <span class="n">JsonResponse</span><span class="p">({</span><span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="p">})</span>
+</span></pre></div>
+</div>
+<p><strong>Tatami Authentication:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># middleware/auth_middleware.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">starlette.middleware.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseHTTPMiddleware</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">class</span><span class="w"> </span><span class="nc">AuthMiddleware</span><span class="p">(</span><span class="n">BaseHTTPMiddleware</span><span class="p">):</span>
+</span><span data-line="5">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">call_next</span><span class="p">):</span>
+</span><span data-line="6">        <span class="c1"># JWT validation logic</span>
+</span><span data-line="7">        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">call_next</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</span><span data-line="8">        <span class="k">return</span> <span class="n">response</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># routers/protected.py</span>
+</span><span data-line="11"><span class="k">class</span><span class="w"> </span><span class="nc">Protected</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/protected&#39;</span><span class="p">)):</span>
+</span><span data-line="12">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">auth_service</span><span class="p">:</span> <span class="n">AuthService</span><span class="p">):</span>
+</span><span data-line="13">        <span class="bp">self</span><span class="o">.</span><span class="n">auth_service</span> <span class="o">=</span> <span class="n">auth_service</span>
+</span><span data-line="14">
+</span><span data-line="15">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="16">    <span class="k">def</span><span class="w"> </span><span class="nf">protected_endpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span data-line="17">        <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth_service</span><span class="o">.</span><span class="n">get_current_user</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</span><span data-line="18">        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="django-signals-event-services">
+<h3>Django Signals → Event Services<a class="headerlink" href="#django-signals-event-services" title="Link to this heading">¶</a></h3>
+<p><strong>Django Signals:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># signals.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">django.db.models.signals</span><span class="w"> </span><span class="kn">import</span> <span class="n">post_save</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">django.dispatch</span><span class="w"> </span><span class="kn">import</span> <span class="n">receiver</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Post</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="nd">@receiver</span><span class="p">(</span><span class="n">post_save</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">Post</span><span class="p">)</span>
+</span><span data-line="7"><span class="k">def</span><span class="w"> </span><span class="nf">post_created</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">created</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span data-line="8">    <span class="k">if</span> <span class="n">created</span><span class="p">:</span>
+</span><span data-line="9">        <span class="n">send_notification</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">author</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Post &#39;</span><span class="si">{</span><span class="n">instance</span><span class="o">.</span><span class="n">title</span><span class="si">}</span><span class="s2">&#39; created&quot;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<p><strong>Tatami Event Services:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># services/post_service.py</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">PostService</span><span class="p">:</span>
+</span><span data-line="3">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">notification_service</span><span class="p">:</span> <span class="n">NotificationService</span><span class="p">):</span>
+</span><span data-line="4">        <span class="bp">self</span><span class="o">.</span><span class="n">notification_service</span> <span class="o">=</span> <span class="n">notification_service</span>
+</span><span data-line="5">
+</span><span data-line="6">    <span class="k">def</span><span class="w"> </span><span class="nf">create_post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">post_data</span><span class="p">:</span> <span class="n">PostCreate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Post</span><span class="p">:</span>
+</span><span data-line="7">        <span class="n">post</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">post_repository</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">post_data</span><span class="p">)</span>
+</span><span data-line="8">        <span class="c1"># Explicit event handling</span>
+</span><span data-line="9">        <span class="bp">self</span><span class="o">.</span><span class="n">notification_service</span><span class="o">.</span><span class="n">send_post_created</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
+</span><span data-line="10">        <span class="k">return</span> <span class="n">post</span>
+</span></pre></div>
+</div>
+</section>
+<section id="django-middleware-tatami-middleware">
+<h3>Django Middleware → Tatami Middleware<a class="headerlink" href="#django-middleware-tatami-middleware" title="Link to this heading">¶</a></h3>
+<p><strong>Django Middleware:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># middleware.py</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">CustomMiddleware</span><span class="p">:</span>
+</span><span data-line="3">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">get_response</span><span class="p">):</span>
+</span><span data-line="4">        <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span> <span class="o">=</span> <span class="n">get_response</span>
+</span><span data-line="5">
+</span><span data-line="6">    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+</span><span data-line="7">        <span class="c1"># Process request</span>
+</span><span data-line="8">        <span class="n">request</span><span class="o">.</span><span class="n">custom_header</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">META</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;HTTP_X_CUSTOM&#39;</span><span class="p">)</span>
+</span><span data-line="9">        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</span><span data-line="10">        <span class="c1"># Process response</span>
+</span><span data-line="11">        <span class="n">response</span><span class="p">[</span><span class="s1">&#39;X-Custom-Response&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;processed&#39;</span>
+</span><span data-line="12">        <span class="k">return</span> <span class="n">response</span>
+</span></pre></div>
+</div>
+<p><strong>Tatami Middleware:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># middleware/custom_middleware.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">starlette.middleware.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseHTTPMiddleware</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">class</span><span class="w"> </span><span class="nc">CustomMiddleware</span><span class="p">(</span><span class="n">BaseHTTPMiddleware</span><span class="p">):</span>
+</span><span data-line="5">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">call_next</span><span class="p">):</span>
+</span><span data-line="6">        <span class="c1"># Process request</span>
+</span><span data-line="7">        <span class="n">custom_header</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;x-custom&#39;</span><span class="p">)</span>
+</span><span data-line="8">        <span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">custom_data</span> <span class="o">=</span> <span class="n">custom_header</span>
+</span><span data-line="9">
+</span><span data-line="10">        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">call_next</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</span><span data-line="11">
+</span><span data-line="12">        <span class="c1"># Process response</span>
+</span><span data-line="13">        <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;x-custom-response&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;processed&#39;</span>
+</span><span data-line="14">        <span class="k">return</span> <span class="n">response</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="configuration-migration">
+<h2>Configuration Migration<a class="headerlink" href="#configuration-migration" title="Link to this heading">¶</a></h2>
+<section id="django-settings-tatami-config">
+<h3>Django Settings → Tatami Config<a class="headerlink" href="#django-settings-tatami-config" title="Link to this heading">¶</a></h3>
+<p><strong>Django settings.py:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># settings.py</span>
+</span><span data-line="2"><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SECRET_KEY&#39;</span><span class="p">)</span>
+</span><span data-line="8"><span class="n">DEBUG</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;DEBUG&#39;</span><span class="p">,</span> <span class="s1">&#39;False&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;true&#39;</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
+</span><span data-line="11">    <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span>
+</span><span data-line="12">        <span class="s1">&#39;ENGINE&#39;</span><span class="p">:</span> <span class="s1">&#39;django.db.backends.postgresql&#39;</span><span class="p">,</span>
+</span><span data-line="13">        <span class="s1">&#39;NAME&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;DB_NAME&#39;</span><span class="p">),</span>
+</span><span data-line="14">        <span class="s1">&#39;USER&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;DB_USER&#39;</span><span class="p">),</span>
+</span><span data-line="15">        <span class="s1">&#39;PASSWORD&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;DB_PASSWORD&#39;</span><span class="p">),</span>
+</span><span data-line="16">        <span class="s1">&#39;HOST&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;DB_HOST&#39;</span><span class="p">,</span> <span class="s1">&#39;localhost&#39;</span><span class="p">),</span>
+</span><span data-line="17">        <span class="s1">&#39;PORT&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;DB_PORT&#39;</span><span class="p">,</span> <span class="s1">&#39;5432&#39;</span><span class="p">),</span>
+</span><span data-line="18">    <span class="p">}</span>
+</span><span data-line="19"><span class="p">}</span>
+</span><span data-line="20">
+</span><span data-line="21"><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
+</span><span data-line="22">    <span class="s1">&#39;django.contrib.admin&#39;</span><span class="p">,</span>
+</span><span data-line="23">    <span class="s1">&#39;django.contrib.auth&#39;</span><span class="p">,</span>
+</span><span data-line="24">    <span class="s1">&#39;rest_framework&#39;</span><span class="p">,</span>
+</span><span data-line="25">    <span class="s1">&#39;blog&#39;</span><span class="p">,</span>
+</span><span data-line="26">    <span class="s1">&#39;users&#39;</span><span class="p">,</span>
+</span><span data-line="27"><span class="p">]</span>
+</span></pre></div>
+</div>
+<p><strong>Tatami config.yaml:</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># config.yaml</span>
+</span><span data-line="2"><span class="nt">app</span><span class="p">:</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;My</span><span class="nv"> </span><span class="s">API&quot;</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">secret_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${SECRET_KEY}&quot;</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">debug</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="nt">database</span><span class="p">:</span>
+</span><span data-line="8"><span class="w">  </span><span class="nt">engine</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;postgresql&quot;</span>
+</span><span data-line="9"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${DB_NAME}&quot;</span>
+</span><span data-line="10"><span class="w">  </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${DB_USER}&quot;</span>
+</span><span data-line="11"><span class="w">  </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${DB_PASSWORD}&quot;</span>
+</span><span data-line="12"><span class="w">  </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${DB_HOST:localhost}&quot;</span>
+</span><span data-line="13"><span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${DB_PORT:5432}&quot;</span>
+</span></pre></div>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># config-dev.yaml</span>
+</span><span data-line="2"><span class="nt">app</span><span class="p">:</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">debug</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="nt">database</span><span class="p">:</span>
+</span><span data-line="6"><span class="w">  </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span>
+</span><span data-line="7"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dev_db&quot;</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="database-migration">
+<h2>Database Migration<a class="headerlink" href="#database-migration" title="Link to this heading">¶</a></h2>
+<section id="django-orm-sqlalchemy-recommended">
+<h3>Django ORM → SQLAlchemy (Recommended)<a class="headerlink" href="#django-orm-sqlalchemy-recommended" title="Link to this heading">¶</a></h3>
+<p><strong>Django Models:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># models.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">django.db</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">class</span><span class="w"> </span><span class="nc">Post</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+</span><span data-line="5">    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+</span><span data-line="6">    <span class="n">content</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+</span><span data-line="7">    <span class="n">author</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;auth.User&#39;</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+</span><span data-line="8">    <span class="n">tags</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="s1">&#39;Tag&#39;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="9">    <span class="n">created_at</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<p><strong>SQLAlchemy Models:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># repositories/models.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Column</span><span class="p">,</span> <span class="n">Integer</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">Text</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">,</span> <span class="n">ForeignKey</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.ext.declarative</span><span class="w"> </span><span class="kn">import</span> <span class="n">declarative_base</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">relationship</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="n">Base</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="k">class</span><span class="w"> </span><span class="nc">PostModel</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+</span><span data-line="9">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;posts&#39;</span>
+</span><span data-line="10">
+</span><span data-line="11">    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="12">    <span class="n">title</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">200</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span data-line="13">    <span class="n">content</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Text</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span data-line="14">    <span class="n">author_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;users.id&#39;</span><span class="p">))</span>
+</span><span data-line="15">    <span class="n">created_at</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">DateTime</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span data-line="16">
+</span><span data-line="17">    <span class="n">author</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&quot;UserModel&quot;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;posts&quot;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="repository-pattern">
+<h3>Repository Pattern<a class="headerlink" href="#repository-pattern" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># repositories/post_repository.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">PostModel</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="k">class</span><span class="w"> </span><span class="nc">PostRepository</span><span class="p">:</span>
+</span><span data-line="6">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_session</span><span class="p">):</span>
+</span><span data-line="7">        <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">db_session</span>
+</span><span data-line="8">
+</span><span data-line="9">    <span class="k">def</span><span class="w"> </span><span class="nf">find_all</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Post</span><span class="p">]:</span>
+</span><span data-line="10">        <span class="n">models</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">PostModel</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</span><span data-line="11">        <span class="k">return</span> <span class="p">[</span><span class="n">Post</span><span class="o">.</span><span class="n">from_orm</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">models</span><span class="p">]</span>
+</span><span data-line="12">
+</span><span data-line="13">    <span class="k">def</span><span class="w"> </span><span class="nf">find_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">post_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Post</span><span class="p">]:</span>
+</span><span data-line="14">        <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">PostModel</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">post_id</span><span class="p">)</span>
+</span><span data-line="15">        <span class="k">return</span> <span class="n">Post</span><span class="o">.</span><span class="n">from_orm</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="k">if</span> <span class="n">model</span> <span class="k">else</span> <span class="kc">None</span>
+</span><span data-line="16">
+</span><span data-line="17">    <span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">post_data</span><span class="p">:</span> <span class="n">PostCreate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Post</span><span class="p">:</span>
+</span><span data-line="18">        <span class="n">model</span> <span class="o">=</span> <span class="n">PostModel</span><span class="p">(</span><span class="o">**</span><span class="n">post_data</span><span class="o">.</span><span class="n">dict</span><span class="p">())</span>
+</span><span data-line="19">        <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</span><span data-line="20">        <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</span><span data-line="21">        <span class="k">return</span> <span class="n">Post</span><span class="o">.</span><span class="n">from_orm</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="testing-migration">
+<h2>Testing Migration<a class="headerlink" href="#testing-migration" title="Link to this heading">¶</a></h2>
+<section id="django-tests-tatami-tests">
+<h3>Django Tests → Tatami Tests<a class="headerlink" href="#django-tests-tatami-tests" title="Link to this heading">¶</a></h3>
+<p><strong>Django Tests:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># tests.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">django.test</span><span class="w"> </span><span class="kn">import</span> <span class="n">TestCase</span><span class="p">,</span> <span class="n">Client</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib.auth.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">User</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Post</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="k">class</span><span class="w"> </span><span class="nc">PostTestCase</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+</span><span data-line="7">    <span class="k">def</span><span class="w"> </span><span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="8">        <span class="bp">self</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span><span class="s1">&#39;testuser&#39;</span><span class="p">,</span> <span class="s1">&#39;test@example.com&#39;</span><span class="p">)</span>
+</span><span data-line="9">        <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
+</span><span data-line="10">
+</span><span data-line="11">    <span class="k">def</span><span class="w"> </span><span class="nf">test_create_post</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="12">        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/api/posts/&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span data-line="13">            <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Test Post&#39;</span><span class="p">,</span>
+</span><span data-line="14">            <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="s1">&#39;Test content&#39;</span><span class="p">,</span>
+</span><span data-line="15">            <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span>
+</span><span data-line="16">        <span class="p">})</span>
+</span><span data-line="17">        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">201</span><span class="p">)</span>
+</span><span data-line="18">        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span> <span class="mi">1</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<p><strong>Tatami Tests:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># tests/test_posts.py</span>
+</span><span data-line="2"><span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+</span><span data-line="3"><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseRouter</span>
+</span><span data-line="5"><span class="kn">from</span><span class="w"> </span><span class="nn">routers.posts</span><span class="w"> </span><span class="kn">import</span> <span class="n">Posts</span>
+</span><span data-line="6"><span class="kn">from</span><span class="w"> </span><span class="nn">services.post_service</span><span class="w"> </span><span class="kn">import</span> <span class="n">PostService</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="k">def</span><span class="w"> </span><span class="nf">test_create_post</span><span class="p">():</span>
+</span><span data-line="9">    <span class="c1"># Mock dependencies</span>
+</span><span data-line="10">    <span class="n">mock_service</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">PostService</span><span class="p">)</span>
+</span><span data-line="11">    <span class="n">mock_service</span><span class="o">.</span><span class="n">create</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">Post</span><span class="p">(</span>
+</span><span data-line="12">        <span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Test Post&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="s2">&quot;Test content&quot;</span>
+</span><span data-line="13">    <span class="p">)</span>
+</span><span data-line="14">
+</span><span data-line="15">    <span class="c1"># Setup app</span>
+</span><span data-line="16">    <span class="n">app</span> <span class="o">=</span> <span class="n">BaseRouter</span><span class="p">()</span>
+</span><span data-line="17">    <span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">Posts</span><span class="p">(</span><span class="n">mock_service</span><span class="p">))</span>
+</span><span data-line="18">
+</span><span data-line="19">    <span class="c1"># Test request</span>
+</span><span data-line="20">    <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="n">app</span><span class="o">=</span><span class="n">app</span><span class="p">,</span> <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://test&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+</span><span data-line="21">        <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/posts/&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+</span><span data-line="22">            <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Test Post&#39;</span><span class="p">,</span>
+</span><span data-line="23">            <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="s1">&#39;Test content&#39;</span><span class="p">,</span>
+</span><span data-line="24">            <span class="s1">&#39;author_id&#39;</span><span class="p">:</span> <span class="mi">1</span>
+</span><span data-line="25">        <span class="p">})</span>
+</span><span data-line="26">
+</span><span data-line="27">        <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">201</span>
+</span><span data-line="28">        <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Test Post&#39;</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="project-structure-comparison">
+<h2>Project Structure Comparison<a class="headerlink" href="#project-structure-comparison" title="Link to this heading">¶</a></h2>
+<section id="django-project-structure">
+<h3>Django Project Structure<a class="headerlink" href="#django-project-structure" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">django-project/
+</span><span data-line="2">├── manage.py
+</span><span data-line="3">├── requirements.txt
+</span><span data-line="4">├── myproject/
+</span><span data-line="5">│   ├── __init__.py
+</span><span data-line="6">│   ├── settings.py
+</span><span data-line="7">│   ├── urls.py
+</span><span data-line="8">│   └── wsgi.py
+</span><span data-line="9">├── blog/                    # Django app
+</span><span data-line="10">│   ├── __init__.py
+</span><span data-line="11">│   ├── admin.py
+</span><span data-line="12">│   ├── apps.py
+</span><span data-line="13">│   ├── models.py
+</span><span data-line="14">│   ├── views.py
+</span><span data-line="15">│   ├── urls.py
+</span><span data-line="16">│   ├── serializers.py
+</span><span data-line="17">│   └── migrations/
+</span><span data-line="18">├── users/                   # Django app
+</span><span data-line="19">│   ├── models.py
+</span><span data-line="20">│   ├── views.py
+</span><span data-line="21">│   └── urls.py
+</span><span data-line="22">├── static/
+</span><span data-line="23">└── templates/
+</span></pre></div>
+</div>
+</section>
+<section id="tatami-project-structure">
+<h3>Tatami Project Structure<a class="headerlink" href="#tatami-project-structure" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">tatami-project/
+</span><span data-line="2">├── config.yaml              # Configuration
+</span><span data-line="3">├── routers/                 # API endpoints (auto-discovered)
+</span><span data-line="4">│   ├── posts.py            # Blog functionality
+</span><span data-line="5">│   ├── users.py            # User management
+</span><span data-line="6">│   └── auth.py             # Authentication
+</span><span data-line="7">├── services/               # Business logic (auto-discovered)
+</span><span data-line="8">│   ├── post_service.py     # Post operations
+</span><span data-line="9">│   ├── user_service.py     # User operations
+</span><span data-line="10">│   └── auth_service.py     # Authentication logic
+</span><span data-line="11">├── repositories/           # Data access (auto-discovered)
+</span><span data-line="12">│   ├── post_repository.py  # Post data access
+</span><span data-line="13">│   └── user_repository.py  # User data access
+</span><span data-line="14">├── middleware/             # Middleware (auto-discovered)
+</span><span data-line="15">│   ├── auth_middleware.py  # Authentication
+</span><span data-line="16">│   └── cors_middleware.py  # CORS handling
+</span><span data-line="17">├── models/                 # Pydantic models
+</span><span data-line="18">│   ├── post.py
+</span><span data-line="19">│   └── user.py
+</span><span data-line="20">└── static/                 # Static files (auto-served)
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="migration-advantages">
+<h2>Migration Advantages<a class="headerlink" href="#migration-advantages" title="Link to this heading">¶</a></h2>
+<section id="performance">
+<h3>Performance<a class="headerlink" href="#performance" title="Link to this heading">¶</a></h3>
+<p><strong>Django:</strong>
+- Synchronous by default
+- Complex async configuration
+- ORM can generate inefficient queries</p>
+<p><strong>Tatami:</strong>
+- Async-first architecture
+- Built on Starlette/ASGI
+- Direct control over database queries</p>
+</section>
+<section id="development-speed">
+<h3>Development Speed<a class="headerlink" href="#development-speed" title="Link to this heading">¶</a></h3>
+<p><strong>Django:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Multiple files for simple CRUD</span>
+</span><span data-line="2"><span class="c1"># models.py</span>
+</span><span data-line="3"><span class="k">class</span><span class="w"> </span><span class="nc">Post</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span> <span class="k">pass</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># serializers.py</span>
+</span><span data-line="6"><span class="k">class</span><span class="w"> </span><span class="nc">PostSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span> <span class="k">pass</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="c1"># views.py</span>
+</span><span data-line="9"><span class="k">class</span><span class="w"> </span><span class="nc">PostViewSet</span><span class="p">(</span><span class="n">viewsets</span><span class="o">.</span><span class="n">ModelViewSet</span><span class="p">):</span> <span class="k">pass</span>
+</span><span data-line="10">
+</span><span data-line="11"><span class="c1"># urls.py</span>
+</span><span data-line="12"><span class="n">router</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;posts&#39;</span><span class="p">,</span> <span class="n">PostViewSet</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<p><strong>Tatami:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Single file for simple CRUD</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">Posts</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/posts&#39;</span><span class="p">)):</span>
+</span><span data-line="3">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="4">    <span class="k">def</span><span class="w"> </span><span class="nf">list_posts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Post</span><span class="p">]:</span> <span class="k">pass</span>
+</span><span data-line="5">
+</span><span data-line="6">    <span class="nd">@post</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="7">    <span class="k">def</span><span class="w"> </span><span class="nf">create_post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">post</span><span class="p">:</span> <span class="n">PostCreate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Post</span><span class="p">:</span> <span class="k">pass</span>
+</span></pre></div>
+</div>
+</section>
+<section id="type-safety">
+<h3>Type Safety<a class="headerlink" href="#type-safety" title="Link to this heading">¶</a></h3>
+<p><strong>Django:</strong> Limited type hints, runtime errors</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">def</span><span class="w"> </span><span class="nf">get_posts</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+</span><span data-line="2">    <span class="c1"># No type hints for request/response</span>
+</span><span data-line="3">    <span class="n">posts</span> <span class="o">=</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</span><span data-line="4">    <span class="c1"># Serialization can fail at runtime</span>
+</span><span data-line="5">    <span class="k">return</span> <span class="n">JsonResponse</span><span class="p">([</span><span class="n">serialize</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">posts</span><span class="p">])</span>
+</span></pre></div>
+</div>
+<p><strong>Tatami:</strong> Full type safety throughout</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="2"><span class="k">def</span><span class="w"> </span><span class="nf">list_posts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Post</span><span class="p">]:</span>  <span class="c1"># Return type enforced</span>
+</span><span data-line="3">    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">post_service</span><span class="o">.</span><span class="n">get_all</span><span class="p">()</span>  <span class="c1"># Validated automatically</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="migration-gotchas">
+<h2>Migration Gotchas<a class="headerlink" href="#migration-gotchas" title="Link to this heading">¶</a></h2>
+<section id="no-built-in-admin">
+<h3>1. No Built-in Admin<a class="headerlink" href="#no-built-in-admin" title="Link to this heading">¶</a></h3>
+<p>Django Admin doesn’t translate directly. Consider:</p>
+<ul class="simple">
+<li><p>Build custom admin interface</p></li>
+<li><p>Use existing admin tools (Django Admin + API calls)</p></li>
+<li><p>Third-party admin solutions</p></li>
+</ul>
+</section>
+<section id="different-database-patterns">
+<h3>2. Different Database Patterns<a class="headerlink" href="#different-database-patterns" title="Link to this heading">¶</a></h3>
+<p>Django uses Active Record pattern, Tatami uses Repository pattern:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Django Active Record</span>
+</span><span data-line="2"><span class="n">post</span> <span class="o">=</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span data-line="3"><span class="n">post</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Updated&quot;</span>
+</span><span data-line="4"><span class="n">post</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami Repository Pattern</span>
+</span><span data-line="2"><span class="n">post</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">post_repository</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span data-line="3"><span class="n">updated_post</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Updated&#39;</span><span class="p">})</span>
+</span><span data-line="4"><span class="bp">self</span><span class="o">.</span><span class="n">post_repository</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">updated_post</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="authentication-differences">
+<h3>3. Authentication Differences<a class="headerlink" href="#authentication-differences" title="Link to this heading">¶</a></h3>
+<p>Django has built-in user model and session auth. Tatami typically uses JWT:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Django - built-in sessions</span>
+</span><span data-line="2"><span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">:</span>
+</span><span data-line="3">    <span class="k">pass</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami - JWT/custom auth</span>
+</span><span data-line="2"><span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth_service</span><span class="o">.</span><span class="n">verify_token</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;authorization&#39;</span><span class="p">))</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="migration-checklist">
+<h2>Migration Checklist<a class="headerlink" href="#migration-checklist" title="Link to this heading">¶</a></h2>
+<section id="planning-phase">
+<h3>Planning Phase<a class="headerlink" href="#planning-phase" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>[ ] <strong>Audit Django project</strong> - Identify API vs web functionality</p></li>
+<li><p>[ ] <strong>Map Django apps</strong> - Plan Tatami router organization</p></li>
+<li><p>[ ] <strong>Review models</strong> - Plan Pydantic model structure</p></li>
+<li><p>[ ] <strong>Identify dependencies</strong> - What services need injection?</p></li>
+<li><p>[ ] <strong>Plan database migration</strong> - ORM to Repository pattern</p></li>
+</ul>
+</section>
+<section id="implementation-phase">
+<h3>Implementation Phase<a class="headerlink" href="#implementation-phase" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>[ ] <strong>Create Tatami project</strong> - <cite>tatami create new-api</cite></p></li>
+<li><p>[ ] <strong>Convert models</strong> - Django models to Pydantic + SQLAlchemy</p></li>
+<li><p>[ ] <strong>Migrate views</strong> - Django views to Tatami routers</p></li>
+<li><p>[ ] <strong>Extract services</strong> - Business logic to service classes</p></li>
+<li><p>[ ] <strong>Setup repositories</strong> - Data access layer</p></li>
+<li><p>[ ] <strong>Convert middleware</strong> - Django to Starlette middleware</p></li>
+</ul>
+</section>
+<section id="testing-phase">
+<h3>Testing Phase<a class="headerlink" href="#testing-phase" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>[ ] <strong>Port tests</strong> - Django tests to Tatami tests</p></li>
+<li><p>[ ] <strong>Test endpoints</strong> - Verify API functionality</p></li>
+<li><p>[ ] <strong>Performance testing</strong> - Compare response times</p></li>
+<li><p>[ ] <strong>Integration testing</strong> - Test with existing Django frontend</p></li>
+</ul>
+</section>
+<section id="deployment-phase">
+<h3>Deployment Phase<a class="headerlink" href="#deployment-phase" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>[ ] <strong>Update CI/CD</strong> - Use <cite>tatami run</cite> for deployment</p></li>
+<li><p>[ ] <strong>Configure load balancer</strong> - Route to Tatami API</p></li>
+<li><p>[ ] <strong>Monitor performance</strong> - Track API metrics</p></li>
+<li><p>[ ] <strong>Plan rollback</strong> - Keep Django API as backup</p></li>
+</ul>
+</section>
+</section>
+<section id="why-migrate-from-django">
+<h2>Why Migrate from Django?<a class="headerlink" href="#why-migrate-from-django" title="Link to this heading">¶</a></h2>
+<p>For <strong>API-focused projects</strong>, Tatami offers:</p>
+<ul class="simple">
+<li><p>🚀 <strong>Better Performance</strong> - Async-first architecture</p></li>
+<li><p>🧹 <strong>Cleaner Code</strong> - Less boilerplate, better organization</p></li>
+<li><p>⚡ <strong>Faster Development</strong> - Convention over configuration</p></li>
+<li><p>🔒 <strong>Type Safety</strong> - Catch errors at development time</p></li>
+<li><p>📦 <strong>Modern Patterns</strong> - Built for current Python practices</p></li>
+<li><p>🛠️ <strong>Better Testing</strong> - Clear dependencies, easy mocking</p></li>
+</ul>
+<p>The migration effort creates a more maintainable, performant API! 🎋</p>
+<p><em>Note: Keep Django for admin interfaces and complex web apps. Use Tatami for clean, fast APIs.</em></p>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="from_fastapi.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">Migrating from FastAPI ⚡➡️🎋</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="../advanced/index.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Advanced Topics 🚀</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Ibon</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/shibuya.js?v=c477d091"></script></body>
+</html>

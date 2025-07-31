@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Working with Data 🗄️ - Tatami documentation</title><link rel="shortcut icon" href="../_static/favicon.ico"/><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Dependency Injection 💉" href="dependency_injection.html" /><link rel="prev" title="Routing Guide 🗺️" href="routing_guide.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=397bb51e" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=76b6f612" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Working with Data 🗄️"/>
+<meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      <img class="light-logo" src="../_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
+      <img class="dark-logo" src="../_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
+      <strong>Tatami</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2 -translate-x-2"></span>
+          <span class="hamburger_3 -translate-x-1"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn Tatami Step by Step</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="your_first_api.html">Your First API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project_structure.html">Project Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="routing_guide.html">Routing Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Working with Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dependency_injection.html">Dependency Injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="middleware_and_services.html">Middleware and Services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing_your_api.html">Testing Your API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment.html">Deployment</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">CLI &amp; Tools</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/commands.html">CLI Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/docker_deployment.html">Docker Deployment</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Migration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../migration/from_flask.html">From Flask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migration/from_fastapi.html">From FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migration/from_django.html">From Django</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/index.html">Advanced Topics Index</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#data-layer-architecture">Data Layer Architecture</a></li>
+<li><a class="reference internal" href="#setting-up-data-models">Setting Up Data Models</a><ul>
+<li><a class="reference internal" href="#pydantic-models-for-api">Pydantic Models for API</a></li>
+<li><a class="reference internal" href="#database-models-with-sqlalchemy">Database Models with SQLAlchemy</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#in-memory-data-storage">In-Memory Data Storage</a></li>
+<li><a class="reference internal" href="#database-integration">Database Integration</a><ul>
+<li><a class="reference internal" href="#setting-up-sqlalchemy">Setting Up SQLAlchemy</a></li>
+<li><a class="reference internal" href="#repository-pattern">Repository Pattern</a></li>
+<li><a class="reference internal" href="#service-layer-with-database">Service Layer with Database</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#router-with-database-integration">Router with Database Integration</a></li>
+<li><a class="reference internal" href="#data-validation-serialization">Data Validation &amp; Serialization</a><ul>
+<li><a class="reference internal" href="#custom-validators">Custom Validators</a></li>
+<li><a class="reference internal" href="#response-serialization">Response Serialization</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#advanced-database-operations">Advanced Database Operations</a><ul>
+<li><a class="reference internal" href="#relationships-and-joins">Relationships and Joins</a></li>
+<li><a class="reference internal" href="#query-operations">Query Operations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#database-migrations">Database Migrations</a></li>
+<li><a class="reference internal" href="#testing-data-layer">Testing Data Layer</a></li>
+<li><a class="reference internal" href="#best-practices">Best Practices</a><ul>
+<li><a class="reference internal" href="#security">&#128272; Security</a></li>
+<li><a class="reference internal" href="#performance">&#128202; Performance</a></li>
+<li><a class="reference internal" href="#testing">&#129514; Testing</a></li>
+<li><a class="reference internal" href="#architecture">&#127959;&#65039; Architecture</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#what-s-next">What&#8217;s Next?</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">Tatami</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Working with Data 🗄️</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="working-with-data">
+<h1>Working with Data 🗄️<a class="headerlink" href="#working-with-data" title="Link to this heading">¶</a></h1>
+<p>This tutorial covers data handling in Tatami applications - from simple in-memory storage to full database integration with SQLAlchemy, plus validation, serialization, and best practices.</p>
+<section id="data-layer-architecture">
+<h2>Data Layer Architecture<a class="headerlink" href="#data-layer-architecture" title="Link to this heading">¶</a></h2>
+<p>Tatami promotes a clean separation of concerns:</p>
+<p><strong>🎯 Routers</strong>: Handle HTTP requests/responses
+<strong>🧠 Services</strong>: Business logic and validation
+<strong>🗄️ Repositories</strong>: Data access and persistence
+<strong>📋 Models</strong>: Data structures and validation</p>
+<p>This pattern keeps your code organized and testable.</p>
+</section>
+<section id="setting-up-data-models">
+<h2>Setting Up Data Models<a class="headerlink" href="#setting-up-data-models" title="Link to this heading">¶</a></h2>
+<section id="pydantic-models-for-api">
+<h3>Pydantic Models for API<a class="headerlink" href="#pydantic-models-for-api" title="Link to this heading">¶</a></h3>
+<p>Use Pydantic models for request/response validation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># models/user_models.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span><span class="p">,</span> <span class="n">EmailStr</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="k">class</span><span class="w"> </span><span class="nc">UserBase</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="7">    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">min_length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</span><span data-line="8">    <span class="n">email</span><span class="p">:</span> <span class="n">EmailStr</span>
+</span><span data-line="9">    <span class="n">age</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
+</span><span data-line="10">
+</span><span data-line="11"><span class="k">class</span><span class="w"> </span><span class="nc">UserCreate</span><span class="p">(</span><span class="n">UserBase</span><span class="p">):</span>
+</span><span data-line="12">    <span class="n">password</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">min_length</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+</span><span data-line="13">
+</span><span data-line="14"><span class="k">class</span><span class="w"> </span><span class="nc">UserUpdate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="15">    <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</span><span data-line="16">    <span class="n">email</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EmailStr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="17">    <span class="n">age</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
+</span><span data-line="18">
+</span><span data-line="19"><span class="k">class</span><span class="w"> </span><span class="nc">UserResponse</span><span class="p">(</span><span class="n">UserBase</span><span class="p">):</span>
+</span><span data-line="20">    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+</span><span data-line="21">    <span class="n">created_at</span><span class="p">:</span> <span class="n">datetime</span>
+</span><span data-line="22">    <span class="n">updated_at</span><span class="p">:</span> <span class="n">datetime</span>
+</span><span data-line="23">    <span class="n">is_active</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span data-line="24">
+</span><span data-line="25"><span class="k">class</span><span class="w"> </span><span class="nc">UserList</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="26">    <span class="n">users</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">UserResponse</span><span class="p">]</span>
+</span><span data-line="27">    <span class="n">total</span><span class="p">:</span> <span class="nb">int</span>
+</span><span data-line="28">    <span class="n">page</span><span class="p">:</span> <span class="nb">int</span>
+</span><span data-line="29">    <span class="n">page_size</span><span class="p">:</span> <span class="nb">int</span>
+</span></pre></div>
+</div>
+</section>
+<section id="database-models-with-sqlalchemy">
+<h3>Database Models with SQLAlchemy<a class="headerlink" href="#database-models-with-sqlalchemy" title="Link to this heading">¶</a></h3>
+<p>For database persistence, use SQLAlchemy:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># models/database.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Column</span><span class="p">,</span> <span class="n">Integer</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">,</span> <span class="n">Boolean</span><span class="p">,</span> <span class="n">Text</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.ext.declarative</span><span class="w"> </span><span class="kn">import</span> <span class="n">declarative_base</span>
+</span><span data-line="5"><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">relationship</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="n">Base</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+</span><span data-line="10">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;users&quot;</span>
+</span><span data-line="11">
+</span><span data-line="12">    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="13">    <span class="n">name</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span data-line="14">    <span class="n">email</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">255</span><span class="p">),</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span data-line="15">    <span class="n">password_hash</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">255</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span data-line="16">    <span class="n">age</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="17">    <span class="n">is_active</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Boolean</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="18">    <span class="n">created_at</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">DateTime</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">)</span>
+</span><span data-line="19">    <span class="n">updated_at</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">DateTime</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">,</span> <span class="n">onupdate</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="in-memory-data-storage">
+<h2>In-Memory Data Storage<a class="headerlink" href="#in-memory-data-storage" title="Link to this heading">¶</a></h2>
+<p>For simple applications or prototyping, start with in-memory storage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># services/user_service.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami.di</span><span class="w"> </span><span class="kn">import</span> <span class="n">injectable</span>
+</span><span data-line="5"><span class="kn">from</span><span class="w"> </span><span class="nn">models.user_models</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserCreate</span><span class="p">,</span> <span class="n">UserUpdate</span><span class="p">,</span> <span class="n">UserResponse</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="nd">@injectable</span>
+</span><span data-line="8"><span class="k">class</span><span class="w"> </span><span class="nc">InMemoryUserService</span><span class="p">:</span>
+</span><span data-line="9">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="10">        <span class="bp">self</span><span class="o">.</span><span class="n">users</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span data-line="11">        <span class="bp">self</span><span class="o">.</span><span class="n">next_id</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span data-line="12">
+</span><span data-line="13">    <span class="k">def</span><span class="w"> </span><span class="nf">create_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_data</span><span class="p">:</span> <span class="n">UserCreate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UserResponse</span><span class="p">:</span>
+</span><span data-line="14">        <span class="c1"># Check if email already exists</span>
+</span><span data-line="15">        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="s2">&quot;email&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">user_data</span><span class="o">.</span><span class="n">email</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+</span><span data-line="16">            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Email already registered&quot;</span><span class="p">)</span>
+</span><span data-line="17">
+</span><span data-line="18">        <span class="c1"># Create user</span>
+</span><span data-line="19">        <span class="n">user</span> <span class="o">=</span> <span class="p">{</span>
+</span><span data-line="20">            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_id</span><span class="p">,</span>
+</span><span data-line="21">            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">user_data</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+</span><span data-line="22">            <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="n">user_data</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+</span><span data-line="23">            <span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="n">user_data</span><span class="o">.</span><span class="n">age</span><span class="p">,</span>
+</span><span data-line="24">            <span class="s2">&quot;is_active&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+</span><span data-line="25">            <span class="s2">&quot;created_at&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">(),</span>
+</span><span data-line="26">            <span class="s2">&quot;updated_at&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">(),</span>
+</span><span data-line="27">        <span class="p">}</span>
+</span><span data-line="28">
+</span><span data-line="29">        <span class="bp">self</span><span class="o">.</span><span class="n">users</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">next_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">user</span>
+</span><span data-line="30">        <span class="bp">self</span><span class="o">.</span><span class="n">next_id</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span data-line="31">
+</span><span data-line="32">        <span class="k">return</span> <span class="n">UserResponse</span><span class="p">(</span><span class="o">**</span><span class="n">user</span><span class="p">)</span>
+</span><span data-line="33">
+</span><span data-line="34">    <span class="k">def</span><span class="w"> </span><span class="nf">get_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UserResponse</span><span class="p">]:</span>
+</span><span data-line="35">        <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</span><span data-line="36">        <span class="k">return</span> <span class="n">UserResponse</span><span class="p">(</span><span class="o">**</span><span class="n">user</span><span class="p">)</span> <span class="k">if</span> <span class="n">user</span> <span class="k">else</span> <span class="kc">None</span>
+</span><span data-line="37">
+</span><span data-line="38">    <span class="k">def</span><span class="w"> </span><span class="nf">get_users</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skip</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">UserResponse</span><span class="p">]:</span>
+</span><span data-line="39">        <span class="n">users</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="n">skip</span><span class="p">:</span><span class="n">skip</span> <span class="o">+</span> <span class="n">limit</span><span class="p">]</span>
+</span><span data-line="40">        <span class="k">return</span> <span class="p">[</span><span class="n">UserResponse</span><span class="p">(</span><span class="o">**</span><span class="n">user</span><span class="p">)</span> <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">users</span><span class="p">]</span>
+</span><span data-line="41">
+</span><span data-line="42">    <span class="k">def</span><span class="w"> </span><span class="nf">update_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">updates</span><span class="p">:</span> <span class="n">UserUpdate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UserResponse</span><span class="p">]:</span>
+</span><span data-line="43">        <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</span><span data-line="44">        <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+</span><span data-line="45">            <span class="k">return</span> <span class="kc">None</span>
+</span><span data-line="46">
+</span><span data-line="47">        <span class="c1"># Update only provided fields</span>
+</span><span data-line="48">        <span class="n">update_data</span> <span class="o">=</span> <span class="n">updates</span><span class="o">.</span><span class="n">dict</span><span class="p">(</span><span class="n">exclude_unset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="49">        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">update_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span data-line="50">            <span class="n">user</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+</span><span data-line="51">
+</span><span data-line="52">        <span class="n">user</span><span class="p">[</span><span class="s2">&quot;updated_at&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+</span><span data-line="53">        <span class="k">return</span> <span class="n">UserResponse</span><span class="p">(</span><span class="o">**</span><span class="n">user</span><span class="p">)</span>
+</span><span data-line="54">
+</span><span data-line="55">    <span class="k">def</span><span class="w"> </span><span class="nf">delete_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span data-line="56">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+</span></pre></div>
+</div>
+</section>
+<section id="database-integration">
+<h2>Database Integration<a class="headerlink" href="#database-integration" title="Link to this heading">¶</a></h2>
+<section id="setting-up-sqlalchemy">
+<h3>Setting Up SQLAlchemy<a class="headerlink" href="#setting-up-sqlalchemy" title="Link to this heading">¶</a></h3>
+<p>First, install the required packages:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">pip<span class="w"> </span>install<span class="w"> </span>sqlalchemy<span class="w"> </span>databases<span class="o">[</span>sqlite<span class="o">]</span><span class="w"> </span>alembic
+</span></pre></div>
+</div>
+<p>Create database configuration:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># config/database.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_engine</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">sessionmaker</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">models.database</span><span class="w"> </span><span class="kn">import</span> <span class="n">Base</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="c1"># Database URL (SQLite for development)</span>
+</span><span data-line="7"><span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="s2">&quot;sqlite:///./app.db&quot;</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="c1"># Create engine</span>
+</span><span data-line="10"><span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">connect_args</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;check_same_thread&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+</span><span data-line="11">
+</span><span data-line="12"><span class="c1"># Create session factory</span>
+</span><span data-line="13"><span class="n">SessionLocal</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">autocommit</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">autoflush</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bind</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+</span><span data-line="14">
+</span><span data-line="15"><span class="c1"># Create tables</span>
+</span><span data-line="16"><span class="k">def</span><span class="w"> </span><span class="nf">create_tables</span><span class="p">():</span>
+</span><span data-line="17">    <span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+</span><span data-line="18">
+</span><span data-line="19"><span class="c1"># Dependency to get database session</span>
+</span><span data-line="20"><span class="k">def</span><span class="w"> </span><span class="nf">get_db</span><span class="p">():</span>
+</span><span data-line="21">    <span class="n">db</span> <span class="o">=</span> <span class="n">SessionLocal</span><span class="p">()</span>
+</span><span data-line="22">    <span class="k">try</span><span class="p">:</span>
+</span><span data-line="23">        <span class="k">yield</span> <span class="n">db</span>
+</span><span data-line="24">    <span class="k">finally</span><span class="p">:</span>
+</span><span data-line="25">        <span class="n">db</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span></pre></div>
+</div>
+</section>
+<section id="repository-pattern">
+<h3>Repository Pattern<a class="headerlink" href="#repository-pattern" title="Link to this heading">¶</a></h3>
+<p>Create a repository for data access:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># repositories/user_repository.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Session</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">models.database</span><span class="w"> </span><span class="kn">import</span> <span class="n">User</span>
+</span><span data-line="5"><span class="kn">from</span><span class="w"> </span><span class="nn">models.user_models</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserCreate</span><span class="p">,</span> <span class="n">UserUpdate</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="k">class</span><span class="w"> </span><span class="nc">UserRepository</span><span class="p">:</span>
+</span><span data-line="8">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">Session</span><span class="p">):</span>
+</span><span data-line="9">        <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">db</span>
+</span><span data-line="10">
+</span><span data-line="11">    <span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_data</span><span class="p">:</span> <span class="n">UserCreate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">User</span><span class="p">:</span>
+</span><span data-line="12">        <span class="c1"># Hash password (use bcrypt in real applications)</span>
+</span><span data-line="13">        <span class="n">password_hash</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hash_password</span><span class="p">(</span><span class="n">user_data</span><span class="o">.</span><span class="n">password</span><span class="p">)</span>
+</span><span data-line="14">
+</span><span data-line="15">        <span class="n">db_user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span>
+</span><span data-line="16">            <span class="n">name</span><span class="o">=</span><span class="n">user_data</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+</span><span data-line="17">            <span class="n">email</span><span class="o">=</span><span class="n">user_data</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+</span><span data-line="18">            <span class="n">age</span><span class="o">=</span><span class="n">user_data</span><span class="o">.</span><span class="n">age</span><span class="p">,</span>
+</span><span data-line="19">            <span class="n">password_hash</span><span class="o">=</span><span class="n">password_hash</span>
+</span><span data-line="20">        <span class="p">)</span>
+</span><span data-line="21">
+</span><span data-line="22">        <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">db_user</span><span class="p">)</span>
+</span><span data-line="23">        <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</span><span data-line="24">        <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">db_user</span><span class="p">)</span>
+</span><span data-line="25">        <span class="k">return</span> <span class="n">db_user</span>
+</span><span data-line="26">
+</span><span data-line="27">    <span class="k">def</span><span class="w"> </span><span class="nf">get_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">User</span><span class="p">]:</span>
+</span><span data-line="28">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">User</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+</span><span data-line="29">
+</span><span data-line="30">    <span class="k">def</span><span class="w"> </span><span class="nf">get_by_email</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">User</span><span class="p">]:</span>
+</span><span data-line="31">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">User</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">email</span> <span class="o">==</span> <span class="n">email</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+</span><span data-line="32">
+</span><span data-line="33">    <span class="k">def</span><span class="w"> </span><span class="nf">get_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skip</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">User</span><span class="p">]:</span>
+</span><span data-line="34">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">User</span><span class="p">)</span><span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="n">skip</span><span class="p">)</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">limit</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</span><span data-line="35">
+</span><span data-line="36">    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">updates</span><span class="p">:</span> <span class="n">UserUpdate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">User</span><span class="p">]:</span>
+</span><span data-line="37">        <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</span><span data-line="38">        <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+</span><span data-line="39">            <span class="k">return</span> <span class="kc">None</span>
+</span><span data-line="40">
+</span><span data-line="41">        <span class="n">update_data</span> <span class="o">=</span> <span class="n">updates</span><span class="o">.</span><span class="n">dict</span><span class="p">(</span><span class="n">exclude_unset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="42">        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">update_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span data-line="43">            <span class="nb">setattr</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</span><span data-line="44">
+</span><span data-line="45">        <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</span><span data-line="46">        <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span data-line="47">        <span class="k">return</span> <span class="n">user</span>
+</span><span data-line="48">
+</span><span data-line="49">    <span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span data-line="50">        <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</span><span data-line="51">        <span class="k">if</span> <span class="n">user</span><span class="p">:</span>
+</span><span data-line="52">            <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span data-line="53">            <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</span><span data-line="54">            <span class="k">return</span> <span class="kc">True</span>
+</span><span data-line="55">        <span class="k">return</span> <span class="kc">False</span>
+</span><span data-line="56">
+</span><span data-line="57">    <span class="k">def</span><span class="w"> </span><span class="nf">_hash_password</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span data-line="58">        <span class="c1"># In real applications, use bcrypt or similar</span>
+</span><span data-line="59">        <span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+</span><span data-line="60">        <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">password</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+</span></pre></div>
+</div>
+</section>
+<section id="service-layer-with-database">
+<h3>Service Layer with Database<a class="headerlink" href="#service-layer-with-database" title="Link to this heading">¶</a></h3>
+<p>Update your service to use the repository:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># services/user_service.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Session</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami.di</span><span class="w"> </span><span class="kn">import</span> <span class="n">injectable</span>
+</span><span data-line="5"><span class="kn">from</span><span class="w"> </span><span class="nn">repositories.user_repository</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserRepository</span>
+</span><span data-line="6"><span class="kn">from</span><span class="w"> </span><span class="nn">models.user_models</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserCreate</span><span class="p">,</span> <span class="n">UserUpdate</span><span class="p">,</span> <span class="n">UserResponse</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="nd">@injectable</span>
+</span><span data-line="9"><span class="k">class</span><span class="w"> </span><span class="nc">UserService</span><span class="p">:</span>
+</span><span data-line="10">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">Session</span><span class="p">):</span>
+</span><span data-line="11">        <span class="bp">self</span><span class="o">.</span><span class="n">user_repo</span> <span class="o">=</span> <span class="n">UserRepository</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+</span><span data-line="12">
+</span><span data-line="13">    <span class="k">def</span><span class="w"> </span><span class="nf">create_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_data</span><span class="p">:</span> <span class="n">UserCreate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UserResponse</span><span class="p">:</span>
+</span><span data-line="14">        <span class="c1"># Check if email exists</span>
+</span><span data-line="15">        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_repo</span><span class="o">.</span><span class="n">get_by_email</span><span class="p">(</span><span class="n">user_data</span><span class="o">.</span><span class="n">email</span><span class="p">):</span>
+</span><span data-line="16">            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Email already registered&quot;</span><span class="p">)</span>
+</span><span data-line="17">
+</span><span data-line="18">        <span class="c1"># Create user</span>
+</span><span data-line="19">        <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_repo</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">user_data</span><span class="p">)</span>
+</span><span data-line="20">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_response_model</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span data-line="21">
+</span><span data-line="22">    <span class="k">def</span><span class="w"> </span><span class="nf">get_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UserResponse</span><span class="p">]:</span>
+</span><span data-line="23">        <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_repo</span><span class="o">.</span><span class="n">get_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</span><span data-line="24">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_response_model</span><span class="p">(</span><span class="n">user</span><span class="p">)</span> <span class="k">if</span> <span class="n">user</span> <span class="k">else</span> <span class="kc">None</span>
+</span><span data-line="25">
+</span><span data-line="26">    <span class="k">def</span><span class="w"> </span><span class="nf">get_users</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skip</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">UserResponse</span><span class="p">]:</span>
+</span><span data-line="27">        <span class="n">users</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_repo</span><span class="o">.</span><span class="n">get_all</span><span class="p">(</span><span class="n">skip</span><span class="o">=</span><span class="n">skip</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">)</span>
+</span><span data-line="28">        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_response_model</span><span class="p">(</span><span class="n">user</span><span class="p">)</span> <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">users</span><span class="p">]</span>
+</span><span data-line="29">
+</span><span data-line="30">    <span class="k">def</span><span class="w"> </span><span class="nf">update_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">updates</span><span class="p">:</span> <span class="n">UserUpdate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">UserResponse</span><span class="p">]:</span>
+</span><span data-line="31">        <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_repo</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">updates</span><span class="p">)</span>
+</span><span data-line="32">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_response_model</span><span class="p">(</span><span class="n">user</span><span class="p">)</span> <span class="k">if</span> <span class="n">user</span> <span class="k">else</span> <span class="kc">None</span>
+</span><span data-line="33">
+</span><span data-line="34">    <span class="k">def</span><span class="w"> </span><span class="nf">delete_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span data-line="35">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_repo</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</span><span data-line="36">
+</span><span data-line="37">    <span class="k">def</span><span class="w"> </span><span class="nf">_to_response_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UserResponse</span><span class="p">:</span>
+</span><span data-line="38">        <span class="k">return</span> <span class="n">UserResponse</span><span class="p">(</span>
+</span><span data-line="39">            <span class="nb">id</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+</span><span data-line="40">            <span class="n">name</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+</span><span data-line="41">            <span class="n">email</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+</span><span data-line="42">            <span class="n">age</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">age</span><span class="p">,</span>
+</span><span data-line="43">            <span class="n">is_active</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">is_active</span><span class="p">,</span>
+</span><span data-line="44">            <span class="n">created_at</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">created_at</span><span class="p">,</span>
+</span><span data-line="45">            <span class="n">updated_at</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">updated_at</span>
+</span><span data-line="46">        <span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="router-with-database-integration">
+<h2>Router with Database Integration<a class="headerlink" href="#router-with-database-integration" title="Link to this heading">¶</a></h2>
+<p>Create a router that uses the database-backed service:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># routers/users.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami</span><span class="w"> </span><span class="kn">import</span> <span class="n">router</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">post</span><span class="p">,</span> <span class="n">put</span><span class="p">,</span> <span class="n">delete</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami.param</span><span class="w"> </span><span class="kn">import</span> <span class="n">Query</span>
+</span><span data-line="5"><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Session</span>
+</span><span data-line="6"><span class="kn">from</span><span class="w"> </span><span class="nn">config.database</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_db</span>
+</span><span data-line="7"><span class="kn">from</span><span class="w"> </span><span class="nn">services.user_service</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserService</span>
+</span><span data-line="8"><span class="kn">from</span><span class="w"> </span><span class="nn">models.user_models</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserCreate</span><span class="p">,</span> <span class="n">UserUpdate</span><span class="p">,</span> <span class="n">UserResponse</span><span class="p">,</span> <span class="n">UserList</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="k">class</span><span class="w"> </span><span class="nc">Users</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)):</span>
+</span><span data-line="11"><span class="w">    </span><span class="sd">&quot;&quot;&quot;User management with database backend&quot;&quot;&quot;</span>
+</span><span data-line="12">
+</span><span data-line="13">    <span class="nd">@get</span>
+</span><span data-line="14">    <span class="k">def</span><span class="w"> </span><span class="nf">list_users</span><span class="p">(</span>
+</span><span data-line="15">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="16">        <span class="n">skip</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+</span><span data-line="17">        <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1000</span><span class="p">),</span>
+</span><span data-line="18">        <span class="n">db</span><span class="p">:</span> <span class="n">Session</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)</span>
+</span><span data-line="19">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UserList</span><span class="p">:</span>
+</span><span data-line="20"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get paginated list of users&quot;&quot;&quot;</span>
+</span><span data-line="21">        <span class="n">user_service</span> <span class="o">=</span> <span class="n">UserService</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+</span><span data-line="22">        <span class="n">users</span> <span class="o">=</span> <span class="n">user_service</span><span class="o">.</span><span class="n">get_users</span><span class="p">(</span><span class="n">skip</span><span class="o">=</span><span class="n">skip</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">)</span>
+</span><span data-line="23">
+</span><span data-line="24">        <span class="c1"># Get total count for pagination</span>
+</span><span data-line="25">        <span class="n">total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">user_service</span><span class="o">.</span><span class="n">get_users</span><span class="p">(</span><span class="n">skip</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1000</span><span class="p">))</span>  <span class="c1"># Simple approach</span>
+</span><span data-line="26">
+</span><span data-line="27">        <span class="k">return</span> <span class="n">UserList</span><span class="p">(</span>
+</span><span data-line="28">            <span class="n">users</span><span class="o">=</span><span class="n">users</span><span class="p">,</span>
+</span><span data-line="29">            <span class="n">total</span><span class="o">=</span><span class="n">total</span><span class="p">,</span>
+</span><span data-line="30">            <span class="n">page</span><span class="o">=</span><span class="n">skip</span> <span class="o">//</span> <span class="n">limit</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+</span><span data-line="31">            <span class="n">page_size</span><span class="o">=</span><span class="n">limit</span>
+</span><span data-line="32">        <span class="p">)</span>
+</span><span data-line="33">
+</span><span data-line="34">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/</span><span class="si">{user_id}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span data-line="35">    <span class="k">def</span><span class="w"> </span><span class="nf">get_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">Session</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="n">UserResponse</span><span class="p">:</span>
+</span><span data-line="36"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get user by ID&quot;&quot;&quot;</span>
+</span><span data-line="37">        <span class="n">user_service</span> <span class="o">=</span> <span class="n">UserService</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+</span><span data-line="38">        <span class="n">user</span> <span class="o">=</span> <span class="n">user_service</span><span class="o">.</span><span class="n">get_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</span><span data-line="39">
+</span><span data-line="40">        <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+</span><span data-line="41">            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;User not found&quot;</span><span class="p">},</span> <span class="mi">404</span>
+</span><span data-line="42">
+</span><span data-line="43">        <span class="k">return</span> <span class="n">user</span>
+</span><span data-line="44">
+</span><span data-line="45">    <span class="nd">@post</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="46">    <span class="k">def</span><span class="w"> </span><span class="nf">create_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">UserCreate</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">Session</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="n">UserResponse</span><span class="p">:</span>
+</span><span data-line="47"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new user&quot;&quot;&quot;</span>
+</span><span data-line="48">        <span class="n">user_service</span> <span class="o">=</span> <span class="n">UserService</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+</span><span data-line="49">
+</span><span data-line="50">        <span class="k">try</span><span class="p">:</span>
+</span><span data-line="51">            <span class="k">return</span> <span class="n">user_service</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span data-line="52">        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span data-line="53">            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)},</span> <span class="mi">400</span>
+</span><span data-line="54">
+</span><span data-line="55">    <span class="nd">@put</span><span class="p">(</span><span class="s1">&#39;/</span><span class="si">{user_id}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span data-line="56">    <span class="k">def</span><span class="w"> </span><span class="nf">update_user</span><span class="p">(</span>
+</span><span data-line="57">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="58">        <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+</span><span data-line="59">        <span class="n">updates</span><span class="p">:</span> <span class="n">UserUpdate</span><span class="p">,</span>
+</span><span data-line="60">        <span class="n">db</span><span class="p">:</span> <span class="n">Session</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)</span>
+</span><span data-line="61">    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UserResponse</span><span class="p">:</span>
+</span><span data-line="62"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Update an existing user&quot;&quot;&quot;</span>
+</span><span data-line="63">        <span class="n">user_service</span> <span class="o">=</span> <span class="n">UserService</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+</span><span data-line="64">        <span class="n">user</span> <span class="o">=</span> <span class="n">user_service</span><span class="o">.</span><span class="n">update_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">updates</span><span class="p">)</span>
+</span><span data-line="65">
+</span><span data-line="66">        <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+</span><span data-line="67">            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;User not found&quot;</span><span class="p">},</span> <span class="mi">404</span>
+</span><span data-line="68">
+</span><span data-line="69">        <span class="k">return</span> <span class="n">user</span>
+</span><span data-line="70">
+</span><span data-line="71">    <span class="nd">@delete</span><span class="p">(</span><span class="s1">&#39;/</span><span class="si">{user_id}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span data-line="72">    <span class="k">def</span><span class="w"> </span><span class="nf">delete_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">Session</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span data-line="73"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Delete a user&quot;&quot;&quot;</span>
+</span><span data-line="74">        <span class="n">user_service</span> <span class="o">=</span> <span class="n">UserService</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+</span><span data-line="75">
+</span><span data-line="76">        <span class="k">if</span> <span class="n">user_service</span><span class="o">.</span><span class="n">delete_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
+</span><span data-line="77">            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;User deleted successfully&quot;</span><span class="p">}</span>
+</span><span data-line="78">
+</span><span data-line="79">        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;User not found&quot;</span><span class="p">},</span> <span class="mi">404</span>
+</span></pre></div>
+</div>
+</section>
+<section id="data-validation-serialization">
+<h2>Data Validation &amp; Serialization<a class="headerlink" href="#data-validation-serialization" title="Link to this heading">¶</a></h2>
+<section id="custom-validators">
+<h3>Custom Validators<a class="headerlink" href="#custom-validators" title="Link to this heading">¶</a></h3>
+<p>Create custom validation functions:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># validators/user_validators.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">validator</span>
+</span><span data-line="3"><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="k">class</span><span class="w"> </span><span class="nc">UserCreate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="6">    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="7">    <span class="n">email</span><span class="p">:</span> <span class="n">EmailStr</span>
+</span><span data-line="8">    <span class="n">password</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="9">
+</span><span data-line="10">    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span>
+</span><span data-line="11">    <span class="k">def</span><span class="w"> </span><span class="nf">validate_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+</span><span data-line="12">        <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+</span><span data-line="13">            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Name cannot be empty&#39;</span><span class="p">)</span>
+</span><span data-line="14">        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+</span><span data-line="15">            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Name must be at least 2 characters&#39;</span><span class="p">)</span>
+</span><span data-line="16">        <span class="k">return</span> <span class="n">v</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>  <span class="c1"># Capitalize</span>
+</span><span data-line="17">
+</span><span data-line="18">    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;password&#39;</span><span class="p">)</span>
+</span><span data-line="19">    <span class="k">def</span><span class="w"> </span><span class="nf">validate_password</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+</span><span data-line="20">        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">:</span>
+</span><span data-line="21">            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Password must be at least 8 characters&#39;</span><span class="p">)</span>
+</span><span data-line="22">        <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[A-Z]&#39;</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+</span><span data-line="23">            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Password must contain uppercase letter&#39;</span><span class="p">)</span>
+</span><span data-line="24">        <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[a-z]&#39;</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+</span><span data-line="25">            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Password must contain lowercase letter&#39;</span><span class="p">)</span>
+</span><span data-line="26">        <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d&#39;</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+</span><span data-line="27">            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Password must contain a number&#39;</span><span class="p">)</span>
+</span><span data-line="28">        <span class="k">return</span> <span class="n">v</span>
+</span></pre></div>
+</div>
+</section>
+<section id="response-serialization">
+<h3>Response Serialization<a class="headerlink" href="#response-serialization" title="Link to this heading">¶</a></h3>
+<p>Control what data is returned:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">UserResponse</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="2">    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+</span><span data-line="3">    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="4">    <span class="n">email</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="5">    <span class="n">age</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</span><span data-line="6">    <span class="n">is_active</span><span class="p">:</span> <span class="nb">bool</span>
+</span><span data-line="7">    <span class="n">created_at</span><span class="p">:</span> <span class="n">datetime</span>
+</span><span data-line="8">
+</span><span data-line="9">    <span class="k">class</span><span class="w"> </span><span class="nc">Config</span><span class="p">:</span>
+</span><span data-line="10">        <span class="c1"># Automatically convert SQLAlchemy models</span>
+</span><span data-line="11">        <span class="n">from_attributes</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span data-line="12">        <span class="c1"># Don&#39;t include password hash</span>
+</span><span data-line="13">        <span class="n">exclude</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;password_hash&#39;</span><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="advanced-database-operations">
+<h2>Advanced Database Operations<a class="headerlink" href="#advanced-database-operations" title="Link to this heading">¶</a></h2>
+<section id="relationships-and-joins">
+<h3>Relationships and Joins<a class="headerlink" href="#relationships-and-joins" title="Link to this heading">¶</a></h3>
+<p>Define relationships between models:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># models/database.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ForeignKey</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">relationship</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+</span><span data-line="6">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;users&quot;</span>
+</span><span data-line="7">
+</span><span data-line="8">    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="9">    <span class="n">name</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span data-line="10">    <span class="n">email</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">255</span><span class="p">),</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span data-line="11">
+</span><span data-line="12">    <span class="c1"># Relationship to posts</span>
+</span><span data-line="13">    <span class="n">posts</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&quot;Post&quot;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;author&quot;</span><span class="p">)</span>
+</span><span data-line="14">
+</span><span data-line="15"><span class="k">class</span><span class="w"> </span><span class="nc">Post</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+</span><span data-line="16">    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;posts&quot;</span>
+</span><span data-line="17">
+</span><span data-line="18">    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="19">    <span class="n">title</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">200</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span data-line="20">    <span class="n">content</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Text</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span data-line="21">    <span class="n">author_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;users.id&quot;</span><span class="p">))</span>
+</span><span data-line="22">
+</span><span data-line="23">    <span class="c1"># Relationship to user</span>
+</span><span data-line="24">    <span class="n">author</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&quot;User&quot;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;posts&quot;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="query-operations">
+<h3>Query Operations<a class="headerlink" href="#query-operations" title="Link to this heading">¶</a></h3>
+<p>Implement complex queries:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># repositories/post_repository.py</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">PostRepository</span><span class="p">:</span>
+</span><span data-line="3">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">Session</span><span class="p">):</span>
+</span><span data-line="4">        <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">db</span>
+</span><span data-line="5">
+</span><span data-line="6">    <span class="k">def</span><span class="w"> </span><span class="nf">get_posts_by_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Post</span><span class="p">]:</span>
+</span><span data-line="7">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Post</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Post</span><span class="o">.</span><span class="n">author_id</span> <span class="o">==</span> <span class="n">user_id</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</span><span data-line="8">
+</span><span data-line="9">    <span class="k">def</span><span class="w"> </span><span class="nf">search_posts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Post</span><span class="p">]:</span>
+</span><span data-line="10">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Post</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+</span><span data-line="11">            <span class="n">Post</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">ilike</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;%</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span> <span class="o">|</span>
+</span><span data-line="12">            <span class="n">Post</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">ilike</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;%</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+</span><span data-line="13">        <span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</span><span data-line="14">
+</span><span data-line="15">    <span class="k">def</span><span class="w"> </span><span class="nf">get_popular_posts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Post</span><span class="p">]:</span>
+</span><span data-line="16">        <span class="c1"># Complex query with joins and aggregations</span>
+</span><span data-line="17">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Post</span><span class="p">)</span>\
+</span><span data-line="18">            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>\
+</span><span data-line="19">            <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">Post</span><span class="o">.</span><span class="n">created_at</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>\
+</span><span data-line="20">            <span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">limit</span><span class="p">)</span>\
+</span><span data-line="21">            <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="database-migrations">
+<h2>Database Migrations<a class="headerlink" href="#database-migrations" title="Link to this heading">¶</a></h2>
+<p>Use Alembic for database schema management:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Initialize Alembic</span>
+</span><span data-line="2">alembic<span class="w"> </span>init<span class="w"> </span>alembic
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Create migration</span>
+</span><span data-line="5">alembic<span class="w"> </span>revision<span class="w"> </span>--autogenerate<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Create users table&quot;</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Apply migration</span>
+</span><span data-line="8">alembic<span class="w"> </span>upgrade<span class="w"> </span>head
+</span></pre></div>
+</div>
+<p>Example migration file:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># alembic/versions/001_create_users.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">alembic</span><span class="w"> </span><span class="kn">import</span> <span class="n">op</span>
+</span><span data-line="3"><span class="kn">import</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sa</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="k">def</span><span class="w"> </span><span class="nf">upgrade</span><span class="p">():</span>
+</span><span data-line="6">    <span class="n">op</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span><span class="s1">&#39;users&#39;</span><span class="p">,</span>
+</span><span data-line="7">        <span class="n">sa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">sa</span><span class="o">.</span><span class="n">Integer</span><span class="p">(),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+</span><span data-line="8">        <span class="n">sa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">sa</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+</span><span data-line="9">        <span class="n">sa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">,</span> <span class="n">sa</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">255</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+</span><span data-line="10">        <span class="n">sa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;created_at&#39;</span><span class="p">,</span> <span class="n">sa</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+</span><span data-line="11">    <span class="p">)</span>
+</span><span data-line="12">    <span class="n">op</span><span class="o">.</span><span class="n">create_index</span><span class="p">(</span><span class="s1">&#39;ix_users_email&#39;</span><span class="p">,</span> <span class="s1">&#39;users&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;email&#39;</span><span class="p">],</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="13">
+</span><span data-line="14"><span class="k">def</span><span class="w"> </span><span class="nf">downgrade</span><span class="p">():</span>
+</span><span data-line="15">    <span class="n">op</span><span class="o">.</span><span class="n">drop_index</span><span class="p">(</span><span class="s1">&#39;ix_users_email&#39;</span><span class="p">,</span> <span class="n">table_name</span><span class="o">=</span><span class="s1">&#39;users&#39;</span><span class="p">)</span>
+</span><span data-line="16">    <span class="n">op</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="s1">&#39;users&#39;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="testing-data-layer">
+<h2>Testing Data Layer<a class="headerlink" href="#testing-data-layer" title="Link to this heading">¶</a></h2>
+<p>Test your data operations:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># tests/test_user_service.py</span>
+</span><span data-line="2"><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_engine</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">sessionmaker</span>
+</span><span data-line="5"><span class="kn">from</span><span class="w"> </span><span class="nn">models.database</span><span class="w"> </span><span class="kn">import</span> <span class="n">Base</span>
+</span><span data-line="6"><span class="kn">from</span><span class="w"> </span><span class="nn">services.user_service</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserService</span>
+</span><span data-line="7"><span class="kn">from</span><span class="w"> </span><span class="nn">models.user_models</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserCreate</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+</span><span data-line="10"><span class="k">def</span><span class="w"> </span><span class="nf">test_db</span><span class="p">():</span>
+</span><span data-line="11">    <span class="c1"># Create in-memory SQLite database for testing</span>
+</span><span data-line="12">    <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s2">&quot;sqlite:///:memory:&quot;</span><span class="p">)</span>
+</span><span data-line="13">    <span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+</span><span data-line="14">    <span class="n">SessionLocal</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+</span><span data-line="15">    <span class="k">return</span> <span class="n">SessionLocal</span><span class="p">()</span>
+</span><span data-line="16">
+</span><span data-line="17"><span class="k">def</span><span class="w"> </span><span class="nf">test_create_user</span><span class="p">(</span><span class="n">test_db</span><span class="p">):</span>
+</span><span data-line="18">    <span class="n">user_service</span> <span class="o">=</span> <span class="n">UserService</span><span class="p">(</span><span class="n">test_db</span><span class="p">)</span>
+</span><span data-line="19">    <span class="n">user_data</span> <span class="o">=</span> <span class="n">UserCreate</span><span class="p">(</span>
+</span><span data-line="20">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Test User&quot;</span><span class="p">,</span>
+</span><span data-line="21">        <span class="n">email</span><span class="o">=</span><span class="s2">&quot;test@example.com&quot;</span><span class="p">,</span>
+</span><span data-line="22">        <span class="n">password</span><span class="o">=</span><span class="s2">&quot;testpass123&quot;</span>
+</span><span data-line="23">    <span class="p">)</span>
+</span><span data-line="24">
+</span><span data-line="25">    <span class="n">user</span> <span class="o">=</span> <span class="n">user_service</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span><span class="n">user_data</span><span class="p">)</span>
+</span><span data-line="26">
+</span><span data-line="27">    <span class="k">assert</span> <span class="n">user</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;Test User&quot;</span>
+</span><span data-line="28">    <span class="k">assert</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="o">==</span> <span class="s2">&quot;test@example.com&quot;</span>
+</span><span data-line="29">    <span class="k">assert</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+</span></pre></div>
+</div>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">¶</a></h2>
+<section id="security">
+<h3>🔐 Security<a class="headerlink" href="#security" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Never store plain text passwords</p></li>
+<li><p>Use parameterized queries to prevent SQL injection</p></li>
+<li><p>Validate and sanitize all input data</p></li>
+<li><p>Implement proper access controls</p></li>
+</ul>
+</section>
+<section id="performance">
+<h3>📊 Performance<a class="headerlink" href="#performance" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Use database indexes on frequently queried columns</p></li>
+<li><p>Implement pagination for large datasets</p></li>
+<li><p>Use lazy loading for relationships</p></li>
+<li><p>Consider caching for read-heavy operations</p></li>
+</ul>
+</section>
+<section id="testing">
+<h3>🧪 Testing<a class="headerlink" href="#testing" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Use separate test databases</p></li>
+<li><p>Mock external dependencies</p></li>
+<li><p>Test edge cases and error conditions</p></li>
+<li><p>Use factories for test data generation</p></li>
+</ul>
+</section>
+<section id="architecture">
+<h3>🏗️ Architecture<a class="headerlink" href="#architecture" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Keep business logic in services</p></li>
+<li><p>Use repositories for data access</p></li>
+<li><p>Separate read and write models if needed</p></li>
+<li><p>Consider CQRS for complex domains</p></li>
+</ul>
+</section>
+</section>
+<section id="what-s-next">
+<h2>What’s Next?<a class="headerlink" href="#what-s-next" title="Link to this heading">¶</a></h2>
+<p>You now know how to handle data in Tatami! Next topics:</p>
+<ul class="simple">
+<li><p>Dependency injection for better service management</p></li>
+<li><p>Middleware for request processing</p></li>
+<li><p>Testing strategies for data operations</p></li>
+<li><p>Advanced patterns like CQRS and event sourcing</p></li>
+</ul>
+<p>Keep building great data-driven APIs! 📊</p>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="routing_guide.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">Routing Guide 🗺️</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="dependency_injection.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Dependency Injection 💉</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Ibon</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/shibuya.js?v=c477d091"></script></body>
+</html>

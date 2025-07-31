@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Docker Deployment 🐳 - Tatami documentation</title><link rel="shortcut icon" href="../_static/favicon.ico"/><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Migrating from Flask 🍶➡️🎋" href="../migration/from_flask.html" /><link rel="prev" title="CLI Commands 🎛️" href="commands.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=397bb51e" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=76b6f612" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Docker Deployment 🐳"/>
+<meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      <img class="light-logo" src="../_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
+      <img class="dark-logo" src="../_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
+      <strong>Tatami</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2 -translate-x-2"></span>
+          <span class="hamburger_3 -translate-x-1"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn Tatami Step by Step</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/your_first_api.html">Your First API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/project_structure.html">Project Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/routing_guide.html">Routing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/working_with_data.html">Working with Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/dependency_injection.html">Dependency Injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/middleware_and_services.html">Middleware and Services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/testing_your_api.html">Testing Your API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/deployment.html">Deployment</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">CLI &amp; Tools</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">CLI Commands</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Docker Deployment</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Migration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../migration/from_flask.html">From Flask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migration/from_fastapi.html">From FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migration/from_django.html">From Django</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/index.html">Advanced Topics Index</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#why-docker">Why Docker?</a></li>
+<li><a class="reference internal" href="#creating-a-dockerfile">Creating a Dockerfile</a></li>
+<li><a class="reference internal" href="#building-and-running">Building and Running</a></li>
+<li><a class="reference internal" href="#docker-compose-for-development">Docker Compose for Development</a></li>
+<li><a class="reference internal" href="#production-deployment">Production Deployment</a></li>
+<li><a class="reference internal" href="#multi-stage-builds">Multi-Stage Builds</a></li>
+<li><a class="reference internal" href="#environment-variables">Environment Variables</a></li>
+<li><a class="reference internal" href="#health-checks">Health Checks</a></li>
+<li><a class="reference internal" href="#cloud-deployment-examples">Cloud Deployment Examples</a><ul>
+<li><a class="reference internal" href="#deploy-to-aws-ecs">Deploy to AWS ECS</a></li>
+<li><a class="reference internal" href="#deploy-to-google-cloud-run">Deploy to Google Cloud Run</a></li>
+<li><a class="reference internal" href="#deploy-to-azure-container-instances">Deploy to Azure Container Instances</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#best-practices">Best Practices</a><ul>
+<li><a class="reference internal" href="#performance">&#128640; <strong>Performance</strong></a></li>
+<li><a class="reference internal" href="#security">&#128274; <strong>Security</strong></a></li>
+<li><a class="reference internal" href="#monitoring">&#128202; <strong>Monitoring</strong></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#example-dockerignore">Example .dockerignore</a></li>
+<li><a class="reference internal" href="#what-s-next">What&#8217;s Next?</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">Tatami</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Docker Deployment 🐳</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="docker-deployment">
+<h1>Docker Deployment 🐳<a class="headerlink" href="#docker-deployment" title="Link to this heading">¶</a></h1>
+<p>Learn how to containerize and deploy your Tatami applications using Docker.</p>
+<section id="why-docker">
+<h2>Why Docker?<a class="headerlink" href="#why-docker" title="Link to this heading">¶</a></h2>
+<p>Docker provides:</p>
+<ul class="simple">
+<li><p>✅ <strong>Consistent environments</strong> across development and production</p></li>
+<li><p>✅ <strong>Easy deployment</strong> to any platform that supports containers</p></li>
+<li><p>✅ <strong>Isolation</strong> from host system dependencies</p></li>
+<li><p>✅ <strong>Scalability</strong> with orchestration tools</p></li>
+</ul>
+</section>
+<section id="creating-a-dockerfile">
+<h2>Creating a Dockerfile<a class="headerlink" href="#creating-a-dockerfile" title="Link to this heading">¶</a></h2>
+<p>Create a <cite>Dockerfile</cite> in your project root:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c"># Use Python 3.11 slim image</span>
+</span><span data-line="2"><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.11-slim</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c"># Set working directory</span>
+</span><span data-line="5"><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c"># Install system dependencies</span>
+</span><span data-line="8"><span class="k">RUN</span><span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span><span class="se">\</span>
+</span><span data-line="9"><span class="w">    </span>gcc<span class="w"> </span><span class="se">\</span>
+</span><span data-line="10"><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span>/var/lib/apt/lists/*
+</span><span data-line="11">
+</span><span data-line="12"><span class="c"># Copy requirements first for better caching</span>
+</span><span data-line="13"><span class="k">COPY</span><span class="w"> </span>requirements.txt<span class="w"> </span>.
+</span><span data-line="14"><span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-cache-dir<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</span><span data-line="15">
+</span><span data-line="16"><span class="c"># Copy application code</span>
+</span><span data-line="17"><span class="k">COPY</span><span class="w"> </span>.<span class="w"> </span>.
+</span><span data-line="18">
+</span><span data-line="19"><span class="c"># Expose port</span>
+</span><span data-line="20"><span class="k">EXPOSE</span><span class="w"> </span><span class="s">8000</span>
+</span><span data-line="21">
+</span><span data-line="22"><span class="c"># Run the application</span>
+</span><span data-line="23"><span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tatami&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;run&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;.&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--host&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;0.0.0.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--port&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;8000&quot;</span><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="building-and-running">
+<h2>Building and Running<a class="headerlink" href="#building-and-running" title="Link to this heading">¶</a></h2>
+<p>Build your Docker image:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>my-tatami-app<span class="w"> </span>.
+</span></pre></div>
+</div>
+<p>Run the container:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </span><span class="m">8000</span>:8000<span class="w"> </span>my-tatami-app
+</span></pre></div>
+</div>
+<p>Your API will be available at <a class="reference external" href="http://localhost:8000">http://localhost:8000</a></p>
+</section>
+<section id="docker-compose-for-development">
+<h2>Docker Compose for Development<a class="headerlink" href="#docker-compose-for-development" title="Link to this heading">¶</a></h2>
+<p>Create <cite>docker-compose.yml</cite> for development with database:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3.8&#39;</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="nt">services</span><span class="p">:</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">app</span><span class="p">:</span>
+</span><span data-line="5"><span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.</span>
+</span><span data-line="6"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span data-line="7"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;8000:8000&quot;</span>
+</span><span data-line="8"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span data-line="9"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DATABASE_URL=postgresql://user:password@db:5432/myapp</span>
+</span><span data-line="10"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TATAMI_MODE=dev</span>
+</span><span data-line="11"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span data-line="12"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.:/app</span><span class="w">  </span><span class="c1"># Mount source for development</span>
+</span><span data-line="13"><span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+</span><span data-line="14"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db</span>
+</span><span data-line="15"><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tatami run . --mode dev --host 0.0.0.0</span>
+</span><span data-line="16">
+</span><span data-line="17"><span class="w">  </span><span class="nt">db</span><span class="p">:</span>
+</span><span data-line="18"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres:13</span>
+</span><span data-line="19"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span data-line="20"><span class="w">      </span><span class="nt">POSTGRES_DB</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myapp</span>
+</span><span data-line="21"><span class="w">      </span><span class="nt">POSTGRES_USER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user</span>
+</span><span data-line="22"><span class="w">      </span><span class="nt">POSTGRES_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span>
+</span><span data-line="23"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span data-line="24"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres_data:/var/lib/postgresql/data</span>
+</span><span data-line="25"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span data-line="26"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;5432:5432&quot;</span>
+</span><span data-line="27">
+</span><span data-line="28"><span class="nt">volumes</span><span class="p">:</span>
+</span><span data-line="29"><span class="w">  </span><span class="nt">postgres_data</span><span class="p">:</span>
+</span></pre></div>
+</div>
+<p>Run with Docker Compose:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">docker-compose<span class="w"> </span>up
+</span></pre></div>
+</div>
+</section>
+<section id="production-deployment">
+<h2>Production Deployment<a class="headerlink" href="#production-deployment" title="Link to this heading">¶</a></h2>
+<p>For production, create a separate <cite>docker-compose.prod.yml</cite>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3.8&#39;</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="nt">services</span><span class="p">:</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">app</span><span class="p">:</span>
+</span><span data-line="5"><span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.</span>
+</span><span data-line="6"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span data-line="7"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;80:8000&quot;</span>
+</span><span data-line="8"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span data-line="9"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DATABASE_URL=postgresql://user:password@db:5432/myapp</span>
+</span><span data-line="10"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TATAMI_MODE=prod</span>
+</span><span data-line="11"><span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+</span><span data-line="12"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db</span>
+</span><span data-line="13"><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+</span><span data-line="14">
+</span><span data-line="15"><span class="w">  </span><span class="nt">db</span><span class="p">:</span>
+</span><span data-line="16"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres:13</span>
+</span><span data-line="17"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span data-line="18"><span class="w">      </span><span class="nt">POSTGRES_DB</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myapp</span>
+</span><span data-line="19"><span class="w">      </span><span class="nt">POSTGRES_USER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user</span>
+</span><span data-line="20"><span class="w">      </span><span class="nt">POSTGRES_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span>
+</span><span data-line="21"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span data-line="22"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres_data:/var/lib/postgresql/data</span>
+</span><span data-line="23"><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+</span><span data-line="24">
+</span><span data-line="25"><span class="nt">volumes</span><span class="p">:</span>
+</span><span data-line="26"><span class="w">  </span><span class="nt">postgres_data</span><span class="p">:</span>
+</span></pre></div>
+</div>
+<p>Deploy to production:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">docker-compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.prod.yml<span class="w"> </span>up<span class="w"> </span>-d
+</span></pre></div>
+</div>
+</section>
+<section id="multi-stage-builds">
+<h2>Multi-Stage Builds<a class="headerlink" href="#multi-stage-builds" title="Link to this heading">¶</a></h2>
+<p>Optimize your Docker image with multi-stage builds:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c"># Build stage</span>
+</span><span data-line="2"><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.11-slim</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="s">builder</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+</span><span data-line="5"><span class="k">COPY</span><span class="w"> </span>requirements.txt<span class="w"> </span>.
+</span><span data-line="6"><span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--no-cache-dir<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</span><span data-line="7">
+</span><span data-line="8"><span class="c"># Production stage</span>
+</span><span data-line="9"><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.11-slim</span>
+</span><span data-line="10">
+</span><span data-line="11"><span class="c"># Copy Python packages from builder</span>
+</span><span data-line="12"><span class="k">COPY</span><span class="w"> </span>--from<span class="o">=</span>builder<span class="w"> </span>/root/.local<span class="w"> </span>/root/.local
+</span><span data-line="13">
+</span><span data-line="14"><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+</span><span data-line="15"><span class="k">COPY</span><span class="w"> </span>.<span class="w"> </span>.
+</span><span data-line="16">
+</span><span data-line="17"><span class="c"># Make sure scripts in .local are usable</span>
+</span><span data-line="18"><span class="k">ENV</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/root/.local/bin:<span class="nv">$PATH</span>
+</span><span data-line="19">
+</span><span data-line="20"><span class="k">EXPOSE</span><span class="w"> </span><span class="s">8000</span>
+</span><span data-line="21"><span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tatami&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;run&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;.&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--host&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;0.0.0.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--port&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;8000&quot;</span><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="environment-variables">
+<h2>Environment Variables<a class="headerlink" href="#environment-variables" title="Link to this heading">¶</a></h2>
+<p>Configure your application using environment variables:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c"># In Dockerfile</span>
+</span><span data-line="2"><span class="k">ENV</span><span class="w"> </span><span class="nv">TATAMI_MODE</span><span class="o">=</span>prod
+</span><span data-line="3"><span class="k">ENV</span><span class="w"> </span><span class="nv">DATABASE_URL</span><span class="o">=</span>sqlite:///./app.db
+</span></pre></div>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># In docker-compose.yml</span>
+</span><span data-line="2"><span class="nt">services</span><span class="p">:</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">app</span><span class="p">:</span>
+</span><span data-line="4"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span data-line="5"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TATAMI_MODE=${ENVIRONMENT:-dev}</span>
+</span><span data-line="6"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DATABASE_URL=${DATABASE_URL}</span>
+</span><span data-line="7"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SECRET_KEY=${SECRET_KEY}</span>
+</span></pre></div>
+</div>
+<p>Create a <cite>.env</cite> file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">ENVIRONMENT</span><span class="o">=</span><span class="n">dev</span>
+</span><span data-line="2"><span class="n">DATABASE_URL</span><span class="o">=</span><span class="n">postgresql</span><span class="p">:</span><span class="o">//</span><span class="n">user</span><span class="p">:</span><span class="k">pass</span><span class="nd">@localhost</span><span class="p">:</span><span class="mi">5432</span><span class="o">/</span><span class="n">myapp</span>
+</span><span data-line="3"><span class="n">SECRET_KEY</span><span class="o">=</span><span class="n">your</span><span class="o">-</span><span class="n">secret</span><span class="o">-</span><span class="n">key</span><span class="o">-</span><span class="n">here</span>
+</span></pre></div>
+</div>
+</section>
+<section id="health-checks">
+<h2>Health Checks<a class="headerlink" href="#health-checks" title="Link to this heading">¶</a></h2>
+<p>Add health checks to your Docker containers:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c"># In Dockerfile</span>
+</span><span data-line="2"><span class="k">HEALTHCHECK</span><span class="w"> </span>--interval<span class="o">=</span>30s<span class="w"> </span>--timeout<span class="o">=</span>3s<span class="w"> </span>--start-period<span class="o">=</span>5s<span class="w"> </span>--retries<span class="o">=</span><span class="m">3</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="3"><span class="w">  </span>CMD<span class="w"> </span>curl<span class="w"> </span>-f<span class="w"> </span>http://localhost:8000/health<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+</span></pre></div>
+</div>
+<p>Create a health endpoint in your router:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># routers/health.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami</span><span class="w"> </span><span class="kn">import</span> <span class="n">router</span><span class="p">,</span> <span class="n">get</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">class</span><span class="w"> </span><span class="nc">Health</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/health&#39;</span><span class="p">)):</span>
+</span><span data-line="5">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="6">    <span class="k">def</span><span class="w"> </span><span class="nf">health_check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="7">        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;healthy&quot;</span><span class="p">,</span> <span class="s2">&quot;service&quot;</span><span class="p">:</span> <span class="s2">&quot;tatami-api&quot;</span><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="cloud-deployment-examples">
+<h2>Cloud Deployment Examples<a class="headerlink" href="#cloud-deployment-examples" title="Link to this heading">¶</a></h2>
+<section id="deploy-to-aws-ecs">
+<h3>Deploy to AWS ECS<a class="headerlink" href="#deploy-to-aws-ecs" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Build and push to ECR</span>
+</span><span data-line="2">aws<span class="w"> </span>ecr<span class="w"> </span>get-login-password<span class="w"> </span>--region<span class="w"> </span>us-east-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>docker<span class="w"> </span>login<span class="w"> </span>--username<span class="w"> </span>AWS<span class="w"> </span>--password-stdin<span class="w"> </span><span class="m">123456789</span>.dkr.ecr.us-east-1.amazonaws.com
+</span><span data-line="3">docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>my-tatami-app<span class="w"> </span>.
+</span><span data-line="4">docker<span class="w"> </span>tag<span class="w"> </span>my-tatami-app:latest<span class="w"> </span><span class="m">123456789</span>.dkr.ecr.us-east-1.amazonaws.com/my-tatami-app:latest
+</span><span data-line="5">docker<span class="w"> </span>push<span class="w"> </span><span class="m">123456789</span>.dkr.ecr.us-east-1.amazonaws.com/my-tatami-app:latest
+</span></pre></div>
+</div>
+</section>
+<section id="deploy-to-google-cloud-run">
+<h3>Deploy to Google Cloud Run<a class="headerlink" href="#deploy-to-google-cloud-run" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Build and deploy</span>
+</span><span data-line="2">gcloud<span class="w"> </span>builds<span class="w"> </span>submit<span class="w"> </span>--tag<span class="w"> </span>gcr.io/PROJECT-ID/my-tatami-app
+</span><span data-line="3">gcloud<span class="w"> </span>run<span class="w"> </span>deploy<span class="w"> </span>--image<span class="w"> </span>gcr.io/PROJECT-ID/my-tatami-app<span class="w"> </span>--platform<span class="w"> </span>managed
+</span></pre></div>
+</div>
+</section>
+<section id="deploy-to-azure-container-instances">
+<h3>Deploy to Azure Container Instances<a class="headerlink" href="#deploy-to-azure-container-instances" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Create container group</span>
+</span><span data-line="2">az<span class="w"> </span>container<span class="w"> </span>create<span class="w"> </span>--resource-group<span class="w"> </span>myResourceGroup<span class="w"> </span>--name<span class="w"> </span>my-tatami-app<span class="w"> </span>--image<span class="w"> </span>my-tatami-app:latest<span class="w"> </span>--ports<span class="w"> </span><span class="m">8000</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">¶</a></h2>
+<section id="performance">
+<h3>🚀 <strong>Performance</strong><a class="headerlink" href="#performance" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Use slim base images to reduce size</p></li>
+<li><p>Leverage multi-stage builds for production</p></li>
+<li><p>Use .dockerignore to exclude unnecessary files</p></li>
+</ul>
+</section>
+<section id="security">
+<h3>🔒 <strong>Security</strong><a class="headerlink" href="#security" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Run as non-root user in production</p></li>
+<li><p>Use specific image tags, not <cite>latest</cite></p></li>
+<li><p>Scan images for vulnerabilities</p></li>
+</ul>
+</section>
+<section id="monitoring">
+<h3>📊 <strong>Monitoring</strong><a class="headerlink" href="#monitoring" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Include health checks</p></li>
+<li><p>Use proper logging configuration</p></li>
+<li><p>Monitor container metrics</p></li>
+</ul>
+</section>
+</section>
+<section id="example-dockerignore">
+<h2>Example .dockerignore<a class="headerlink" href="#example-dockerignore" title="Link to this heading">¶</a></h2>
+<p>Create a <cite>.dockerignore</cite> file to exclude unnecessary files:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="o">.</span><span class="n">git</span>
+</span><span data-line="2"><span class="o">.</span><span class="n">gitignore</span>
+</span><span data-line="3"><span class="n">README</span><span class="o">.</span><span class="n">md</span>
+</span><span data-line="4"><span class="n">Dockerfile</span>
+</span><span data-line="5"><span class="o">.</span><span class="n">dockerignore</span>
+</span><span data-line="6"><span class="o">.</span><span class="n">pytest_cache</span>
+</span><span data-line="7"><span class="n">__pycache__</span>
+</span><span data-line="8"><span class="o">*.</span><span class="n">pyc</span>
+</span><span data-line="9"><span class="o">*.</span><span class="n">pyo</span>
+</span><span data-line="10"><span class="o">*.</span><span class="n">pyd</span>
+</span><span data-line="11"><span class="o">.</span><span class="n">env</span>
+</span><span data-line="12"><span class="o">.</span><span class="n">venv</span>
+</span><span data-line="13"><span class="n">tests</span><span class="o">/</span>
+</span><span data-line="14"><span class="n">docs</span><span class="o">/</span>
+</span></pre></div>
+</div>
+</section>
+<section id="what-s-next">
+<h2>What’s Next?<a class="headerlink" href="#what-s-next" title="Link to this heading">¶</a></h2>
+<p>Learn about migration guides from other frameworks and advanced deployment strategies.</p>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="commands.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">CLI Commands 🎛️</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="../migration/from_flask.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Migrating from Flask 🍶➡️🎋</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Ibon</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/shibuya.js?v=c477d091"></script></body>
+</html>

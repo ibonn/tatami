@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Migrating from Flask 🍶➡️🎋 - Tatami documentation</title><link rel="shortcut icon" href="../_static/favicon.ico"/><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Migrating from FastAPI ⚡➡️🎋" href="from_fastapi.html" /><link rel="prev" title="Docker Deployment 🐳" href="../cli/docker_deployment.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=397bb51e" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=76b6f612" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Migrating from Flask 🍶➡️🎋"/>
+<meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      <img class="light-logo" src="../_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
+      <img class="dark-logo" src="../_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
+      <strong>Tatami</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2 -translate-x-2"></span>
+          <span class="hamburger_3 -translate-x-1"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn Tatami Step by Step</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/your_first_api.html">Your First API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/project_structure.html">Project Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/routing_guide.html">Routing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/working_with_data.html">Working with Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/dependency_injection.html">Dependency Injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/middleware_and_services.html">Middleware and Services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/testing_your_api.html">Testing Your API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/deployment.html">Deployment</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">CLI &amp; Tools</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/commands.html">CLI Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/docker_deployment.html">Docker Deployment</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Migration Guides</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">From Flask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="from_fastapi.html">From FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="from_django.html">From Django</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/index.html">Advanced Topics Index</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#why-migrate-to-tatami">Why Migrate to Tatami?</a></li>
+<li><a class="reference internal" href="#key-differences">Key Differences</a></li>
+<li><a class="reference internal" href="#basic-flask-to-tatami-translation">Basic Flask to Tatami Translation</a><ul>
+<li><a class="reference internal" href="#flask-app-structure">Flask App Structure</a></li>
+<li><a class="reference internal" href="#equivalent-tatami-code">Equivalent Tatami Code</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#migration-strategies">Migration Strategies</a><ul>
+<li><a class="reference internal" href="#gradual-migration-recommended">1. Gradual Migration (Recommended)</a></li>
+<li><a class="reference internal" href="#complete-rewrite">2. Complete Rewrite</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#common-migration-patterns">Common Migration Patterns</a><ul>
+<li><a class="reference internal" href="#flask-request-handling-tatami-parameters">Flask Request Handling &#8594; Tatami Parameters</a></li>
+<li><a class="reference internal" href="#flask-error-handling-tatami-error-responses">Flask Error Handling &#8594; Tatami Error Responses</a></li>
+<li><a class="reference internal" href="#flask-blueprints-tatami-routers">Flask Blueprints &#8594; Tatami Routers</a></li>
+<li><a class="reference internal" href="#flask-sqlalchemy-tatami-with-sqlalchemy">Flask-SQLAlchemy &#8594; Tatami with SQLAlchemy</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#handling-flask-extensions">Handling Flask Extensions</a><ul>
+<li><a class="reference internal" href="#flask-login-custom-auth-middleware">Flask-Login &#8594; Custom Auth Middleware</a></li>
+<li><a class="reference internal" href="#flask-cors-asgi-cors-middleware">Flask-CORS &#8594; ASGI CORS Middleware</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#development-workflow-changes">Development Workflow Changes</a><ul>
+<li><a class="reference internal" href="#flask-development">Flask Development</a></li>
+<li><a class="reference internal" href="#tatami-development">Tatami Development</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#configuration-migration">Configuration Migration</a><ul>
+<li><a class="reference internal" href="#flask-config">Flask Config</a></li>
+<li><a class="reference internal" href="#tatami-config">Tatami Config</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing-migration">Testing Migration</a><ul>
+<li><a class="reference internal" href="#flask-testing">Flask Testing</a></li>
+<li><a class="reference internal" href="#tatami-testing">Tatami Testing</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#migration-checklist">Migration Checklist</a><ul>
+<li><a class="reference internal" href="#before-migration">Before Migration</a></li>
+<li><a class="reference internal" href="#during-migration">During Migration</a></li>
+<li><a class="reference internal" href="#after-migration">After Migration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#common-gotchas">Common Gotchas</a><ul>
+<li><a class="reference internal" href="#request-context">1. Request Context</a></li>
+<li><a class="reference internal" href="#global-state">2. Global State</a></li>
+<li><a class="reference internal" href="#template-rendering">3. Template Rendering</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#benefits-after-migration">Benefits After Migration</a></li>
+<li><a class="reference internal" href="#need-help">Need Help?</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">Tatami</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Migrating from Flask 🍶➡️🎋</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="migrating-from-flask">
+<h1>Migrating from Flask 🍶➡️🎋<a class="headerlink" href="#migrating-from-flask" title="Link to this heading">¶</a></h1>
+<p>This guide helps Flask developers transition to Tatami, highlighting similarities and differences.</p>
+<section id="why-migrate-to-tatami">
+<h2>Why Migrate to Tatami?<a class="headerlink" href="#why-migrate-to-tatami" title="Link to this heading">¶</a></h2>
+<p>Coming from Flask, you’ll love Tatami’s:</p>
+<ul class="simple">
+<li><p>✅ <strong>Familiar Python patterns</strong> - No magic, just clean code</p></li>
+<li><p>✅ <strong>Better organization</strong> - Class-based routers keep related endpoints together</p></li>
+<li><p>✅ <strong>Built-in OpenAPI</strong> - Automatic API documentation</p></li>
+<li><p>✅ <strong>Type safety</strong> - Full type hints with Pydantic validation</p></li>
+<li><p>✅ <strong>Modern async support</strong> - ASGI-based for better performance</p></li>
+<li><p>✅ <strong>Convention over configuration</strong> - Smart defaults, less boilerplate</p></li>
+</ul>
+</section>
+<section id="key-differences">
+<h2>Key Differences<a class="headerlink" href="#key-differences" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper docutils container" id="id1">
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Flask vs Tatami Comparison</span><a class="headerlink" href="#id1" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Feature</p></th>
+<th class="head"><p>Flask</p></th>
+<th class="head"><p>Tatami</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Routing</strong></p></td>
+<td><p>Function decorators</p></td>
+<td><p>Class-based routers</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Validation</strong></p></td>
+<td><p>Manual/Flask-WTF</p></td>
+<td><p>Automatic with Pydantic</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Documentation</strong></p></td>
+<td><p>Manual/Swagger setup</p></td>
+<td><p>Built-in OpenAPI</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Project Structure</strong></p></td>
+<td><p>Flexible (too flexible)</p></td>
+<td><p>Convention-based</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Async Support</strong></p></td>
+<td><p>Limited (WSGI)</p></td>
+<td><p>Native (ASGI)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Type Hints</strong></p></td>
+<td><p>Optional</p></td>
+<td><p>Encouraged throughout</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="basic-flask-to-tatami-translation">
+<h2>Basic Flask to Tatami Translation<a class="headerlink" href="#basic-flask-to-tatami-translation" title="Link to this heading">¶</a></h2>
+<section id="flask-app-structure">
+<h3>Flask App Structure<a class="headerlink" href="#flask-app-structure" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Flask app.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">jsonify</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="nd">@dataclass</span>
+</span><span data-line="8"><span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">:</span>
+</span><span data-line="9">    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="10">    <span class="n">email</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="11">
+</span><span data-line="12"><span class="n">users</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span data-line="13">
+</span><span data-line="14"><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+</span><span data-line="15"><span class="k">def</span><span class="w"> </span><span class="nf">get_users</span><span class="p">():</span>
+</span><span data-line="16">    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">users</span><span class="p">)</span>
+</span><span data-line="17">
+</span><span data-line="18"><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+</span><span data-line="19"><span class="k">def</span><span class="w"> </span><span class="nf">create_user</span><span class="p">():</span>
+</span><span data-line="20">    <span class="n">data</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">()</span>
+</span><span data-line="21">    <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">email</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;email&#39;</span><span class="p">])</span>
+</span><span data-line="22">    <span class="n">users</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span data-line="23">    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s1">&#39;User created&#39;</span><span class="p">})</span>
+</span><span data-line="24">
+</span><span data-line="25"><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/users/&lt;int:user_id&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+</span><span data-line="26"><span class="k">def</span><span class="w"> </span><span class="nf">get_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
+</span><span data-line="27">    <span class="k">if</span> <span class="n">user_id</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">users</span><span class="p">):</span>
+</span><span data-line="28">        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;User not found&#39;</span><span class="p">}),</span> <span class="mi">404</span>
+</span><span data-line="29">        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">users</span><span class="p">[</span><span class="n">user_id</span><span class="p">])</span>
+</span><span data-line="30">
+</span><span data-line="31"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+</span><span data-line="32">    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="equivalent-tatami-code">
+<h3>Equivalent Tatami Code<a class="headerlink" href="#equivalent-tatami-code" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># routers/users.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami</span><span class="w"> </span><span class="kn">import</span> <span class="n">router</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">post</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="7">    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="8">    <span class="n">email</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="k">class</span><span class="w"> </span><span class="nc">Users</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)):</span>
+</span><span data-line="11"><span class="w">    </span><span class="sd">&quot;&quot;&quot;User management endpoints&quot;&quot;&quot;</span>
+</span><span data-line="12">
+</span><span data-line="13">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="14">        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+</span><span data-line="15">        <span class="bp">self</span><span class="o">.</span><span class="n">users</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span data-line="16">
+</span><span data-line="17">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="18">    <span class="k">def</span><span class="w"> </span><span class="nf">get_users</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">User</span><span class="p">]:</span>
+</span><span data-line="19"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get all users&quot;&quot;&quot;</span>
+</span><span data-line="20">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">users</span>
+</span><span data-line="21">
+</span><span data-line="22">    <span class="nd">@post</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="23">    <span class="k">def</span><span class="w"> </span><span class="nf">create_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span data-line="24"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new user&quot;&quot;&quot;</span>
+</span><span data-line="25">        <span class="bp">self</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span data-line="26">        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s1">&#39;User created&#39;</span><span class="p">}</span>
+</span><span data-line="27">
+</span><span data-line="28">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/</span><span class="si">{user_id}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span data-line="29">    <span class="k">def</span><span class="w"> </span><span class="nf">get_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">User</span><span class="p">:</span>
+</span><span data-line="30"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get user by ID&quot;&quot;&quot;</span>
+</span><span data-line="31">        <span class="k">if</span> <span class="n">user_id</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">users</span><span class="p">):</span>
+</span><span data-line="32">            <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;User not found&#39;</span><span class="p">},</span> <span class="mi">404</span>
+</span><span data-line="33">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">users</span><span class="p">[</span><span class="n">user_id</span><span class="p">]</span>
+</span></pre></div>
+</div>
+<p><strong>Key improvements:</strong>
+- ✅ Automatic request validation with Pydantic
+- ✅ Built-in OpenAPI documentation
+- ✅ Type hints for better IDE support
+- ✅ Organized code structure</p>
+</section>
+</section>
+<section id="migration-strategies">
+<h2>Migration Strategies<a class="headerlink" href="#migration-strategies" title="Link to this heading">¶</a></h2>
+<section id="gradual-migration-recommended">
+<h3>1. Gradual Migration (Recommended)<a class="headerlink" href="#gradual-migration-recommended" title="Link to this heading">¶</a></h3>
+<p>Start by migrating one Flask Blueprint at a time:</p>
+<p><strong>Step 1: Convert a Blueprint to a Tatami Router</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Flask Blueprint</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">Blueprint</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="n">users_bp</span> <span class="o">=</span> <span class="n">Blueprint</span><span class="p">(</span><span class="s1">&#39;users&#39;</span><span class="p">,</span> <span class="vm">__name__</span><span class="p">)</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="nd">@users_bp</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+</span><span data-line="7"><span class="k">def</span><span class="w"> </span><span class="nf">get_users</span><span class="p">():</span>
+</span><span data-line="8">    <span class="k">return</span> <span class="n">jsonify</span><span class="p">([])</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami Router</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami</span><span class="w"> </span><span class="kn">import</span> <span class="n">router</span><span class="p">,</span> <span class="n">get</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">class</span><span class="w"> </span><span class="nc">Users</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)):</span>
+</span><span data-line="5">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="6">    <span class="k">def</span><span class="w"> </span><span class="nf">get_users</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="7">        <span class="k">return</span> <span class="p">[]</span>
+</span></pre></div>
+</div>
+<p><strong>Step 2: Update Data Models</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Flask with manual validation</span>
+</span><span data-line="2"><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+</span><span data-line="3"><span class="k">def</span><span class="w"> </span><span class="nf">create_user</span><span class="p">():</span>
+</span><span data-line="4">    <span class="n">data</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">()</span>
+</span><span data-line="5">    <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">):</span>
+</span><span data-line="6">        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;Name required&#39;</span><span class="p">}),</span> <span class="mi">400</span>
+</span><span data-line="7">    <span class="k">if</span> <span class="s1">&#39;@&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+</span><span data-line="8">        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;Invalid email&#39;</span><span class="p">}),</span> <span class="mi">400</span>
+</span><span data-line="9">    <span class="c1"># ... create user</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami with automatic validation</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">EmailStr</span><span class="p">,</span> <span class="n">Field</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">class</span><span class="w"> </span><span class="nc">UserCreate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="5">    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">min_length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span data-line="6">    <span class="n">email</span><span class="p">:</span> <span class="n">EmailStr</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="k">class</span><span class="w"> </span><span class="nc">Users</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)):</span>
+</span><span data-line="9">    <span class="nd">@post</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="10">    <span class="k">def</span><span class="w"> </span><span class="nf">create_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">UserCreate</span><span class="p">):</span>
+</span><span data-line="11">        <span class="c1"># Validation happens automatically!</span>
+</span><span data-line="12">        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s1">&#39;User created&#39;</span><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="complete-rewrite">
+<h3>2. Complete Rewrite<a class="headerlink" href="#complete-rewrite" title="Link to this heading">¶</a></h3>
+<p>For smaller Flask apps, a complete rewrite might be faster:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Create new Tatami project</span>
+</span><span data-line="2">tatami<span class="w"> </span>create<span class="w"> </span>my-new-api
+</span><span data-line="3"><span class="nb">cd</span><span class="w"> </span>my-new-api
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># Copy and convert your Flask routes to Tatami routers</span>
+</span><span data-line="6"><span class="c1"># Update data models to use Pydantic</span>
+</span><span data-line="7"><span class="c1"># Test thoroughly</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="common-migration-patterns">
+<h2>Common Migration Patterns<a class="headerlink" href="#common-migration-patterns" title="Link to this heading">¶</a></h2>
+<section id="flask-request-handling-tatami-parameters">
+<h3>Flask Request Handling → Tatami Parameters<a class="headerlink" href="#flask-request-handling-tatami-parameters" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Flask</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">request</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/search&#39;</span><span class="p">)</span>
+</span><span data-line="5"><span class="k">def</span><span class="w"> </span><span class="nf">search</span><span class="p">():</span>
+</span><span data-line="6">    <span class="n">query</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;q&#39;</span><span class="p">)</span>
+</span><span data-line="7">    <span class="n">page</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</span><span data-line="8">    <span class="n">category</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami.param</span><span class="w"> </span><span class="kn">import</span> <span class="n">Query</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">class</span><span class="w"> </span><span class="nc">Search</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/search&#39;</span><span class="p">)):</span>
+</span><span data-line="5">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="6">    <span class="k">def</span><span class="w"> </span><span class="nf">search</span><span class="p">(</span>
+</span><span data-line="7">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="8">        <span class="n">q</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
+</span><span data-line="9">        <span class="n">page</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+</span><span data-line="10">        <span class="n">category</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+</span><span data-line="11">    <span class="p">):</span>
+</span><span data-line="12">        <span class="c1"># Parameters automatically extracted and validated</span>
+</span></pre></div>
+</div>
+</section>
+<section id="flask-error-handling-tatami-error-responses">
+<h3>Flask Error Handling → Tatami Error Responses<a class="headerlink" href="#flask-error-handling-tatami-error-responses" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Flask</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">jsonify</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/users/&lt;int:user_id&gt;&#39;</span><span class="p">)</span>
+</span><span data-line="5"><span class="k">def</span><span class="w"> </span><span class="nf">get_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
+</span><span data-line="6">    <span class="n">user</span> <span class="o">=</span> <span class="n">get_user_from_db</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</span><span data-line="7">    <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+</span><span data-line="8">        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;User not found&#39;</span><span class="p">}),</span> <span class="mi">404</span>
+</span><span data-line="9">    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">dict</span><span class="p">())</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">Users</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)):</span>
+</span><span data-line="3">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/</span><span class="si">{user_id}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span data-line="4">    <span class="k">def</span><span class="w"> </span><span class="nf">get_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+</span><span data-line="5">        <span class="n">user</span> <span class="o">=</span> <span class="n">get_user_from_db</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</span><span data-line="6">        <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+</span><span data-line="7">            <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;User not found&#39;</span><span class="p">},</span> <span class="mi">404</span>
+</span><span data-line="8">        <span class="k">return</span> <span class="n">user</span>
+</span></pre></div>
+</div>
+</section>
+<section id="flask-blueprints-tatami-routers">
+<h3>Flask Blueprints → Tatami Routers<a class="headerlink" href="#flask-blueprints-tatami-routers" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Flask</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">Blueprint</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="n">auth_bp</span> <span class="o">=</span> <span class="n">Blueprint</span><span class="p">(</span><span class="s1">&#39;auth&#39;</span><span class="p">,</span> <span class="vm">__name__</span><span class="p">,</span> <span class="n">url_prefix</span><span class="o">=</span><span class="s1">&#39;/auth&#39;</span><span class="p">)</span>
+</span><span data-line="5"><span class="n">users_bp</span> <span class="o">=</span> <span class="n">Blueprint</span><span class="p">(</span><span class="s1">&#39;users&#39;</span><span class="p">,</span> <span class="vm">__name__</span><span class="p">,</span> <span class="n">url_prefix</span><span class="o">=</span><span class="s1">&#39;/users&#39;</span><span class="p">)</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="nd">@auth_bp</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/login&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+</span><span data-line="8"><span class="k">def</span><span class="w"> </span><span class="nf">login</span><span class="p">():</span>
+</span><span data-line="9">    <span class="k">pass</span>
+</span><span data-line="10">
+</span><span data-line="11"><span class="nd">@users_bp</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+</span><span data-line="12"><span class="k">def</span><span class="w"> </span><span class="nf">get_users</span><span class="p">():</span>
+</span><span data-line="13">    <span class="k">pass</span>
+</span><span data-line="14">
+</span><span data-line="15"><span class="n">app</span><span class="o">.</span><span class="n">register_blueprint</span><span class="p">(</span><span class="n">auth_bp</span><span class="p">)</span>
+</span><span data-line="16"><span class="n">app</span><span class="o">.</span><span class="n">register_blueprint</span><span class="p">(</span><span class="n">users_bp</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">Auth</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/auth&#39;</span><span class="p">)):</span>
+</span><span data-line="3">    <span class="nd">@post</span><span class="p">(</span><span class="s1">&#39;/login&#39;</span><span class="p">)</span>
+</span><span data-line="4">    <span class="k">def</span><span class="w"> </span><span class="nf">login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">credentials</span><span class="p">:</span> <span class="n">LoginData</span><span class="p">):</span>
+</span><span data-line="5">        <span class="k">pass</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="k">class</span><span class="w"> </span><span class="nc">Users</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)):</span>
+</span><span data-line="8">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="9">    <span class="k">def</span><span class="w"> </span><span class="nf">get_users</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="10">        <span class="k">pass</span>
+</span><span data-line="11">
+</span><span data-line="12"><span class="c1"># Routers are auto-discovered when using `tatami run`</span>
+</span></pre></div>
+</div>
+</section>
+<section id="flask-sqlalchemy-tatami-with-sqlalchemy">
+<h3>Flask-SQLAlchemy → Tatami with SQLAlchemy<a class="headerlink" href="#flask-sqlalchemy-tatami-with-sqlalchemy" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Flask-SQLAlchemy</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">flask_sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">SQLAlchemy</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="n">db</span> <span class="o">=</span> <span class="n">SQLAlchemy</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+</span><span data-line="7">    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="8">    <span class="n">name</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)</span>
+</span><span data-line="11"><span class="k">def</span><span class="w"> </span><span class="nf">get_users</span><span class="p">():</span>
+</span><span data-line="12">    <span class="n">users</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</span><span data-line="13">    <span class="k">return</span> <span class="n">jsonify</span><span class="p">([{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">name</span><span class="p">}</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">users</span><span class="p">])</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami with SQLAlchemy</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Session</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">services.user_service</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserService</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="k">class</span><span class="w"> </span><span class="nc">Users</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)):</span>
+</span><span data-line="6">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_service</span><span class="p">:</span> <span class="n">UserService</span><span class="p">):</span>
+</span><span data-line="7">        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+</span><span data-line="8">        <span class="bp">self</span><span class="o">.</span><span class="n">user_service</span> <span class="o">=</span> <span class="n">user_service</span>
+</span><span data-line="9">
+</span><span data-line="10">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="11">    <span class="k">def</span><span class="w"> </span><span class="nf">get_users</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="12">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_service</span><span class="o">.</span><span class="n">get_all_users</span><span class="p">()</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="handling-flask-extensions">
+<h2>Handling Flask Extensions<a class="headerlink" href="#handling-flask-extensions" title="Link to this heading">¶</a></h2>
+<section id="flask-login-custom-auth-middleware">
+<h3>Flask-Login → Custom Auth Middleware<a class="headerlink" href="#flask-login-custom-auth-middleware" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Flask-Login</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">flask_login</span><span class="w"> </span><span class="kn">import</span> <span class="n">login_required</span><span class="p">,</span> <span class="n">current_user</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/profile&#39;</span><span class="p">)</span>
+</span><span data-line="5"><span class="nd">@login_required</span>
+</span><span data-line="6"><span class="k">def</span><span class="w"> </span><span class="nf">profile</span><span class="p">():</span>
+</span><span data-line="7">    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;user_id&#39;</span><span class="p">:</span> <span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">})</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami with middleware</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">middleware.auth_middleware</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthMiddleware</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">class</span><span class="w"> </span><span class="nc">Profile</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/profile&#39;</span><span class="p">)):</span>
+</span><span data-line="5">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="6">        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+</span><span data-line="7">        <span class="bp">self</span><span class="o">.</span><span class="n">add_middleware</span><span class="p">(</span><span class="n">AuthMiddleware</span><span class="p">)</span>
+</span><span data-line="8">
+</span><span data-line="9">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="10">    <span class="k">def</span><span class="w"> </span><span class="nf">profile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_user</span><span class="p">:</span> <span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_current_user</span><span class="p">)):</span>
+</span><span data-line="11">        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;user_id&#39;</span><span class="p">:</span> <span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="flask-cors-asgi-cors-middleware">
+<h3>Flask-CORS → ASGI CORS Middleware<a class="headerlink" href="#flask-cors-asgi-cors-middleware" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Flask-CORS</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">flask_cors</span><span class="w"> </span><span class="kn">import</span> <span class="n">CORS</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="n">CORS</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">origins</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;http://localhost:3000&#39;</span><span class="p">])</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami with CORS middleware</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">starlette.middleware.cors</span><span class="w"> </span><span class="kn">import</span> <span class="n">CORSMiddleware</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># In middleware/cors_middleware.py</span>
+</span><span data-line="5"><span class="n">cors_middleware</span> <span class="o">=</span> <span class="n">CORSMiddleware</span><span class="p">(</span>
+</span><span data-line="6">    <span class="n">allow_origins</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;http://localhost:3000&#39;</span><span class="p">],</span>
+</span><span data-line="7">    <span class="n">allow_credentials</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span data-line="8">    <span class="n">allow_methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;*&#39;</span><span class="p">],</span>
+</span><span data-line="9">    <span class="n">allow_headers</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;*&#39;</span><span class="p">],</span>
+</span><span data-line="10"><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="development-workflow-changes">
+<h2>Development Workflow Changes<a class="headerlink" href="#development-workflow-changes" title="Link to this heading">¶</a></h2>
+<section id="flask-development">
+<h3>Flask Development<a class="headerlink" href="#flask-development" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Flask</span>
+</span><span data-line="2"><span class="nb">export</span><span class="w"> </span><span class="nv">FLASK_APP</span><span class="o">=</span>app.py
+</span><span data-line="3"><span class="nb">export</span><span class="w"> </span><span class="nv">FLASK_ENV</span><span class="o">=</span>development
+</span><span data-line="4">flask<span class="w"> </span>run<span class="w"> </span>--debug
+</span></pre></div>
+</div>
+</section>
+<section id="tatami-development">
+<h3>Tatami Development<a class="headerlink" href="#tatami-development" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami</span>
+</span><span data-line="2">tatami<span class="w"> </span>run<span class="w"> </span>.<span class="w"> </span>--mode<span class="w"> </span>dev<span class="w"> </span>--verbose
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="configuration-migration">
+<h2>Configuration Migration<a class="headerlink" href="#configuration-migration" title="Link to this heading">¶</a></h2>
+<section id="flask-config">
+<h3>Flask Config<a class="headerlink" href="#flask-config" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Flask config.py</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">Config</span><span class="p">:</span>
+</span><span data-line="3">    <span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s1">&#39;dev-secret-key&#39;</span>
+</span><span data-line="4">    <span class="n">SQLALCHEMY_DATABASE_URI</span> <span class="o">=</span> <span class="s1">&#39;sqlite:///app.db&#39;</span>
+</span><span data-line="5">    <span class="n">DEBUG</span> <span class="o">=</span> <span class="kc">True</span>
+</span></pre></div>
+</div>
+</section>
+<section id="tatami-config">
+<h3>Tatami Config<a class="headerlink" href="#tatami-config" title="Link to this heading">¶</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># config-dev.yaml</span>
+</span><span data-line="2"><span class="nt">app</span><span class="p">:</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">secret_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dev-secret-key&quot;</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">debug</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="nt">database</span><span class="p">:</span>
+</span><span data-line="7"><span class="w">  </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sqlite:///app.db&quot;</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="testing-migration">
+<h2>Testing Migration<a class="headerlink" href="#testing-migration" title="Link to this heading">¶</a></h2>
+<section id="flask-testing">
+<h3>Flask Testing<a class="headerlink" href="#flask-testing" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Flask testing</span>
+</span><span data-line="2"><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">app</span><span class="w"> </span><span class="kn">import</span> <span class="n">app</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+</span><span data-line="6"><span class="k">def</span><span class="w"> </span><span class="nf">client</span><span class="p">():</span>
+</span><span data-line="7">    <span class="k">with</span> <span class="n">app</span><span class="o">.</span><span class="n">test_client</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+</span><span data-line="8">        <span class="k">yield</span> <span class="n">client</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="k">def</span><span class="w"> </span><span class="nf">test_get_users</span><span class="p">(</span><span class="n">client</span><span class="p">):</span>
+</span><span data-line="11">    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)</span>
+</span><span data-line="12">    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+</span></pre></div>
+</div>
+</section>
+<section id="tatami-testing">
+<h3>Tatami Testing<a class="headerlink" href="#tatami-testing" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami testing</span>
+</span><span data-line="2"><span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseRouter</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="k">def</span><span class="w"> </span><span class="nf">test_get_users</span><span class="p">():</span>
+</span><span data-line="6">    <span class="n">app</span> <span class="o">=</span> <span class="n">BaseRouter</span><span class="p">()</span>
+</span><span data-line="7">    <span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">Users</span><span class="p">())</span>
+</span><span data-line="8">
+</span><span data-line="9">    <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="n">app</span><span class="o">=</span><span class="n">app</span><span class="p">,</span> <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://test&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+</span><span data-line="10">        <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)</span>
+</span><span data-line="11">        <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="migration-checklist">
+<h2>Migration Checklist<a class="headerlink" href="#migration-checklist" title="Link to this heading">¶</a></h2>
+<section id="before-migration">
+<h3>Before Migration<a class="headerlink" href="#before-migration" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>[ ] <strong>Audit Flask app</strong> - List all routes, blueprints, and extensions</p></li>
+<li><p>[ ] <strong>Identify models</strong> - Catalog all data models and validation</p></li>
+<li><p>[ ] <strong>Review middleware</strong> - List Flask extensions and custom middleware</p></li>
+<li><p>[ ] <strong>Document APIs</strong> - Ensure you understand current functionality</p></li>
+</ul>
+</section>
+<section id="during-migration">
+<h3>During Migration<a class="headerlink" href="#during-migration" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>[ ] <strong>Create Tatami project</strong> - <cite>tatami create new-app</cite></p></li>
+<li><p>[ ] <strong>Convert models</strong> - Update to Pydantic models</p></li>
+<li><p>[ ] <strong>Migrate routes</strong> - Convert Flask routes to Tatami routers</p></li>
+<li><p>[ ] <strong>Update tests</strong> - Adapt test suite for Tatami</p></li>
+<li><p>[ ] <strong>Handle extensions</strong> - Replace Flask extensions with Tatami equivalents</p></li>
+</ul>
+</section>
+<section id="after-migration">
+<h3>After Migration<a class="headerlink" href="#after-migration" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>[ ] <strong>Test thoroughly</strong> - Ensure all functionality works</p></li>
+<li><p>[ ] <strong>Update documentation</strong> - API docs are auto-generated now!</p></li>
+<li><p>[ ] <strong>Performance test</strong> - ASGI should be faster than WSGI</p></li>
+<li><p>[ ] <strong>Deploy</strong> - Use Docker for consistent deployment</p></li>
+</ul>
+</section>
+</section>
+<section id="common-gotchas">
+<h2>Common Gotchas<a class="headerlink" href="#common-gotchas" title="Link to this heading">¶</a></h2>
+<section id="request-context">
+<h3>1. Request Context<a class="headerlink" href="#request-context" title="Link to this heading">¶</a></h3>
+<p>Flask’s request context doesn’t exist in Tatami. Pass data explicitly:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Flask - implicit request context</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">request</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">def</span><span class="w"> </span><span class="nf">some_function</span><span class="p">():</span>
+</span><span data-line="5">    <span class="n">user_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;User-ID&#39;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami - explicit parameters</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami.param</span><span class="w"> </span><span class="kn">import</span> <span class="n">Header</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">def</span><span class="w"> </span><span class="nf">some_function</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Header</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;User-ID&#39;</span><span class="p">)):</span>
+</span><span data-line="5">    <span class="c1"># user_id is explicitly passed</span>
+</span></pre></div>
+</div>
+</section>
+<section id="global-state">
+<h3>2. Global State<a class="headerlink" href="#global-state" title="Link to this heading">¶</a></h3>
+<p>Avoid global variables. Use dependency injection:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Flask - global state</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">flask_sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">SQLAlchemy</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="n">db</span> <span class="o">=</span> <span class="n">SQLAlchemy</span><span class="p">()</span>  <span class="c1"># Global</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami - dependency injection</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">UserService</span><span class="p">:</span>
+</span><span data-line="3">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">Session</span><span class="p">):</span>
+</span><span data-line="4">        <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">db</span>  <span class="c1"># Injected dependency</span>
+</span></pre></div>
+</div>
+</section>
+<section id="template-rendering">
+<h3>3. Template Rendering<a class="headerlink" href="#template-rendering" title="Link to this heading">¶</a></h3>
+<p>Tatami uses Jinja2 but templates are in the <cite>templates/</cite> directory:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Flask</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">render_template</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="5"><span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">():</span>
+</span><span data-line="6">    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;index.html&#39;</span><span class="p">,</span> <span class="n">users</span><span class="o">=</span><span class="n">users</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">starlette.templating</span><span class="w"> </span><span class="kn">import</span> <span class="n">Jinja2Templates</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="n">templates</span> <span class="o">=</span> <span class="n">Jinja2Templates</span><span class="p">(</span><span class="n">directory</span><span class="o">=</span><span class="s2">&quot;templates&quot;</span><span class="p">)</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="k">class</span><span class="w"> </span><span class="nc">Pages</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)):</span>
+</span><span data-line="7">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="8">    <span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+</span><span data-line="9">        <span class="k">return</span> <span class="n">templates</span><span class="o">.</span><span class="n">TemplateResponse</span><span class="p">(</span><span class="s2">&quot;index.html&quot;</span><span class="p">,</span> <span class="p">{</span>
+</span><span data-line="10">            <span class="s2">&quot;request&quot;</span><span class="p">:</span> <span class="n">request</span><span class="p">,</span>
+</span><span data-line="11">            <span class="s2">&quot;users&quot;</span><span class="p">:</span> <span class="n">users</span>
+</span><span data-line="12">        <span class="p">})</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="benefits-after-migration">
+<h2>Benefits After Migration<a class="headerlink" href="#benefits-after-migration" title="Link to this heading">¶</a></h2>
+<p>Once you’ve migrated, you’ll enjoy:</p>
+<ul class="simple">
+<li><p>🚀 <strong>Better Performance</strong> - ASGI is faster than WSGI</p></li>
+<li><p>📚 <strong>Auto Documentation</strong> - OpenAPI docs generated automatically</p></li>
+<li><p>🔧 <strong>Better Tooling</strong> - Enhanced IDE support with type hints</p></li>
+<li><p>🧪 <strong>Easier Testing</strong> - Dependency injection makes mocking simple</p></li>
+<li><p>🏗️ <strong>Cleaner Architecture</strong> - Separation of concerns built-in</p></li>
+<li><p>📈 <strong>Future-Proof</strong> - Modern async/await patterns</p></li>
+</ul>
+</section>
+<section id="need-help">
+<h2>Need Help?<a class="headerlink" href="#need-help" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>📖 <strong>Documentation</strong>: Read through the Tatami guides</p></li>
+<li><p>🎥 <strong>Examples</strong>: Check the examples in the repository</p></li>
+<li><p>💬 <strong>Community</strong>: Join discussions on GitHub</p></li>
+<li><p>🐛 <strong>Issues</strong>: Report problems or ask questions</p></li>
+</ul>
+<p>The migration might seem daunting, but the cleaner architecture and modern features make it worthwhile! 🎋</p>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="../cli/docker_deployment.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">Docker Deployment 🐳</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="from_fastapi.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Migrating from FastAPI ⚡➡️🎋</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Ibon</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/shibuya.js?v=c477d091"></script></body>
+</html>

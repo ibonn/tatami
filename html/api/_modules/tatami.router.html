@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>tatami.router 🛣️ - Tatami documentation</title><link rel="shortcut icon" href="../../_static/favicon.ico"/><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=397bb51e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/shibuya.css?v=76b6f612" />
+    <link media="print" rel="stylesheet" type="text/css" href="../../_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="tatami.router 🛣️"/>
+<meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../../index.html">
+      <img class="light-logo" src="../../_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
+      <img class="dark-logo" src="../../_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
+      <strong>Tatami</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2 -translate-x-2"></span>
+          <span class="hamburger_3 -translate-x-1"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn Tatami Step by Step</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/your_first_api.html">Your First API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/project_structure.html">Project Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/routing_guide.html">Routing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/working_with_data.html">Working with Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/dependency_injection.html">Dependency Injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/middleware_and_services.html">Middleware and Services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/testing_your_api.html">Testing Your API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/deployment.html">Deployment</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">CLI &amp; Tools</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/commands.html">CLI Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/docker_deployment.html">Docker Deployment</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Migration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../migration/from_flask.html">From Flask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../migration/from_fastapi.html">From FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../migration/from_django.html">From Django</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced/index.html">Advanced Topics Index</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#tatami.router.BaseRouter"><code class="docutils literal notranslate"><span class="pre">BaseRouter</span></code></a><ul>
+<li><a class="reference internal" href="#tatami.router.BaseRouter.__init__"><code class="docutils literal notranslate">__init__()</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.BaseRouter.add_middleware"><code class="docutils literal notranslate">add_middleware()</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.BaseRouter.add_route"><code class="docutils literal notranslate">add_route()</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.BaseRouter.get_openapi_spec"><code class="docutils literal notranslate">get_openapi_spec()</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.BaseRouter.include_router"><code class="docutils literal notranslate">include_router()</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.BaseRouter.mount"><code class="docutils literal notranslate">mount()</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.BaseRouter.routers"><code class="docutils literal notranslate">routers</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.BaseRouter.run"><code class="docutils literal notranslate">run()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tatami.router.ConventionRouter"><code class="docutils literal notranslate"><span class="pre">ConventionRouter</span></code></a><ul>
+<li><a class="reference internal" href="#tatami.router.ConventionRouter.__init__"><code class="docutils literal notranslate">__init__()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tatami.router.DecoratedRouter"><code class="docutils literal notranslate"><span class="pre">DecoratedRouter</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.ProjectIntrospection"><code class="docutils literal notranslate"><span class="pre">ProjectIntrospection</span></code></a><ul>
+<li><a class="reference internal" href="#tatami.router.ProjectIntrospection.config_file"><code class="docutils literal notranslate">config_file</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.ProjectIntrospection.favicon_path"><code class="docutils literal notranslate">favicon_path</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.ProjectIntrospection.middleware"><code class="docutils literal notranslate">middleware</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.ProjectIntrospection.middleware_count"><code class="docutils literal notranslate">middleware_count</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.ProjectIntrospection.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.ProjectIntrospection.model_count"><code class="docutils literal notranslate">model_count</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.ProjectIntrospection.models"><code class="docutils literal notranslate">models</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.ProjectIntrospection.models_source"><code class="docutils literal notranslate">models_source</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.ProjectIntrospection.mount_count"><code class="docutils literal notranslate">mount_count</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.ProjectIntrospection.mounts"><code class="docutils literal notranslate">mounts</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.ProjectIntrospection.router_count"><code class="docutils literal notranslate">router_count</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.ProjectIntrospection.routers"><code class="docutils literal notranslate">routers</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.ProjectIntrospection.services"><code class="docutils literal notranslate">services</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.ProjectIntrospection.static_path"><code class="docutils literal notranslate">static_path</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.ProjectIntrospection.templates_path"><code class="docutils literal notranslate">templates_path</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tatami.router.Summary"><code class="docutils literal notranslate"><span class="pre">Summary</span></code></a><ul>
+<li><a class="reference internal" href="#tatami.router.Summary.config_file"><code class="docutils literal notranslate">config_file</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.Summary.middleware"><code class="docutils literal notranslate">middleware</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.Summary.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.Summary.models"><code class="docutils literal notranslate">models</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.Summary.routers"><code class="docutils literal notranslate">routers</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.Summary.static"><code class="docutils literal notranslate">static</span></code></a></li>
+<li><a class="reference internal" href="#tatami.router.Summary.templates"><code class="docutils literal notranslate">templates</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tatami.router.router"><code class="docutils literal notranslate"><span class="pre">router()</span></code></a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../../index.html"><span itemprop="name">Tatami</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">tatami.router 🛣️</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="tatami-router">
+<h1>tatami.router 🛣️<a class="headerlink" href="#tatami-router" title="Link to this heading">¶</a></h1>
+<p>This module provides the base <cite>router()</cite> function used to define route classes in Tatami.
+Routers group related HTTP endpoints under a common path prefix and act as the entry point for request routing.</p>
+<dl class="py class" id="module-tatami.router">
+<dt class="sig sig-object py" id="tatami.router.BaseRouter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tatami.router.</span></span><span class="sig-name descname"><span class="pre">BaseRouter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'0.0.1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/router.html#BaseRouter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.router.BaseRouter" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="tatami.core.html#tatami.core.TatamiObject" title="tatami.core.TatamiObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">TatamiObject</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>title</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>description</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>summary</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>version</strong> (<em>str</em>)</p></li>
+<li><p><strong>path</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>tags</strong> (<em>list</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="tatami.router.BaseRouter.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'0.0.1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/router.html#BaseRouter.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.router.BaseRouter.__init__" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>title</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>description</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>summary</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>version</strong> (<em>str</em>)</p></li>
+<li><p><strong>path</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>tags</strong> (<em>list</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tatami.router.BaseRouter.add_middleware">
+<span class="sig-name descname"><span class="pre">add_middleware</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">middleware</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/router.html#BaseRouter.add_middleware"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.router.BaseRouter.add_middleware" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>Self</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tatami.router.BaseRouter.add_route">
+<span class="sig-name descname"><span class="pre">add_route</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">route</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/router.html#BaseRouter.add_route"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.router.BaseRouter.add_route" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>route</strong> (<em>Route</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Self</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tatami.router.BaseRouter.get_openapi_spec">
+<span class="sig-name descname"><span class="pre">get_openapi_spec</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/router.html#BaseRouter.get_openapi_spec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.router.BaseRouter.get_openapi_spec" title="Link to this definition">¶</a></dt>
+<dd><p>Get the OpenAPI specification for this router.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tatami.router.BaseRouter.include_router">
+<span class="sig-name descname"><span class="pre">include_router</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incl_router</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/router.html#BaseRouter.include_router"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.router.BaseRouter.include_router" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>incl_router</strong> (<a class="reference internal" href="../../reference/api.html#tatami.router.BaseRouter" title="tatami.router.BaseRouter"><em>BaseRouter</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Self</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tatami.router.BaseRouter.mount">
+<span class="sig-name descname"><span class="pre">mount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/router.html#BaseRouter.mount"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.router.BaseRouter.mount" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>)</p></li>
+<li><p><strong>app</strong> (<em>Any</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Self</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tatami.router.BaseRouter.routers">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">routers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../reference/api.html#tatami.router.BaseRouter" title="tatami.router.BaseRouter"><span class="pre">BaseRouter</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#tatami.router.BaseRouter.routers" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tatami.router.BaseRouter.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'localhost'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">openapi_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/openapi.json'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">swagger_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/docs/swagger'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">redoc_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/docs/redoc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rapidoc_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/docs/rapidoc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">docs_landing_page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/router.html#BaseRouter.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.router.BaseRouter.run" title="Link to this definition">¶</a></dt>
+<dd><p>Run the Tatami application using Uvicorn, and optionally serve OpenAPI and documentation UIs.</p>
+<p>This function:
+- Sets the app root path to ‘’.
+- Adds routes to serve the OpenAPI JSON spec and interactive API docs (Swagger UI, ReDoc, RapiDoc)
+at the specified URLs.
+- Starts the Uvicorn server on the specified host and port.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>app</strong> (<em>Tatami</em>) – The Tatami application instance to run.</p></li>
+<li><p><strong>host</strong> (<em>str</em>) – Hostname to bind the server to. Defaults to ‘localhost’.</p></li>
+<li><p><strong>port</strong> (<em>int</em>) – Port to bind the server to. Defaults to 8000.</p></li>
+<li><p><strong>openapi_url</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – URL path to serve OpenAPI JSON spec. Defaults to ‘/openapi.json’.
+Set to None to disable.</p></li>
+<li><p><strong>swagger_url</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – URL path to serve Swagger UI. Defaults to ‘/docs/swagger’.
+Set to None to disable.</p></li>
+<li><p><strong>redoc_url</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – URL path to serve ReDoc UI. Defaults to ‘/docs/redoc’.
+Set to None to disable.</p></li>
+<li><p><strong>rapidoc_url</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – URL path to serve RapiDoc UI. Defaults to ‘/docs/rapidoc’.
+Set to None to disable.</p></li>
+<li><p><strong>docs_landing_page</strong> (<em>bool</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>NoReturn</em></p>
+</dd>
+</dl>
+<p>Usage example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">app</span> <span class="o">=</span> <span class="n">Tatami</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;My API&quot;</span><span class="p">)</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="c1"># Run the app with default docs URLs</span>
+</span><span data-line="4"><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;0.0.0.0&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8080</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires <cite>uvicorn</cite> to be installed.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tatami.router.ConventionRouter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tatami.router.</span></span><span class="sig-name descname"><span class="pre">ConventionRouter</span></span><a class="reference internal" href="../../_modules/tatami/router.html#ConventionRouter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.router.ConventionRouter" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../reference/api.html#tatami.router.BaseRouter" title="tatami.router.BaseRouter"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseRouter</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tatami.router.ConventionRouter.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/router.html#ConventionRouter.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.router.ConventionRouter.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tatami.router.DecoratedRouter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tatami.router.</span></span><span class="sig-name descname"><span class="pre">DecoratedRouter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'0.0.1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/router.html#DecoratedRouter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.router.DecoratedRouter" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../reference/api.html#tatami.router.BaseRouter" title="tatami.router.BaseRouter"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseRouter</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>title</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>description</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>summary</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>version</strong> (<em>str</em>)</p></li>
+<li><p><strong>path</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>tags</strong> (<em>list</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tatami.router.ProjectIntrospection">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tatami.router.</span></span><span class="sig-name descname"><span class="pre">ProjectIntrospection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">routers=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">services=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models_source=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">middleware=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static_path=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">templates_path=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">favicon_path=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mounts=&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/router.html#ProjectIntrospection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.router.ProjectIntrospection" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>Comprehensive introspection data for a Tatami project.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config_file</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>routers</strong> (<em>list</em><em>[</em><em>dict</em><em>]</em>)</p></li>
+<li><p><strong>services</strong> (<em>list</em><em>[</em><em>dict</em><em>]</em>)</p></li>
+<li><p><strong>models</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>type</em><em>]</em>)</p></li>
+<li><p><strong>models_source</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>middleware</strong> (<em>list</em><em>[</em><em>dict</em><em>]</em>)</p></li>
+<li><p><strong>static_path</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>templates_path</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>favicon_path</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>mounts</strong> (<em>list</em><em>[</em><em>dict</em><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.router.ProjectIntrospection.config_file">
+<span class="sig-name descname"><span class="pre">config_file</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#tatami.router.ProjectIntrospection.config_file" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.router.ProjectIntrospection.favicon_path">
+<span class="sig-name descname"><span class="pre">favicon_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#tatami.router.ProjectIntrospection.favicon_path" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.router.ProjectIntrospection.middleware">
+<span class="sig-name descname"><span class="pre">middleware</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#tatami.router.ProjectIntrospection.middleware" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tatami.router.ProjectIntrospection.middleware_count">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">middleware_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#tatami.router.ProjectIntrospection.middleware_count" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.router.ProjectIntrospection.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#tatami.router.ProjectIntrospection.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tatami.router.ProjectIntrospection.model_count">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">model_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#tatami.router.ProjectIntrospection.model_count" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.router.ProjectIntrospection.models">
+<span class="sig-name descname"><span class="pre">models</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">type</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#tatami.router.ProjectIntrospection.models" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.router.ProjectIntrospection.models_source">
+<span class="sig-name descname"><span class="pre">models_source</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#tatami.router.ProjectIntrospection.models_source" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tatami.router.ProjectIntrospection.mount_count">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mount_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#tatami.router.ProjectIntrospection.mount_count" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.router.ProjectIntrospection.mounts">
+<span class="sig-name descname"><span class="pre">mounts</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#tatami.router.ProjectIntrospection.mounts" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tatami.router.ProjectIntrospection.router_count">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">router_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#tatami.router.ProjectIntrospection.router_count" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.router.ProjectIntrospection.routers">
+<span class="sig-name descname"><span class="pre">routers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#tatami.router.ProjectIntrospection.routers" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.router.ProjectIntrospection.services">
+<span class="sig-name descname"><span class="pre">services</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#tatami.router.ProjectIntrospection.services" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.router.ProjectIntrospection.static_path">
+<span class="sig-name descname"><span class="pre">static_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#tatami.router.ProjectIntrospection.static_path" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.router.ProjectIntrospection.templates_path">
+<span class="sig-name descname"><span class="pre">templates_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#tatami.router.ProjectIntrospection.templates_path" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tatami.router.Summary">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tatami.router.</span></span><span class="sig-name descname"><span class="pre">Summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">routers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">middleware</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">templates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/router.html#Summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.router.Summary" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config_file</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>routers</strong> (<em>int</em>)</p></li>
+<li><p><strong>middleware</strong> (<em>int</em>)</p></li>
+<li><p><strong>models</strong> (<em>int</em>)</p></li>
+<li><p><strong>static</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>templates</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.router.Summary.config_file">
+<span class="sig-name descname"><span class="pre">config_file</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#tatami.router.Summary.config_file" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.router.Summary.middleware">
+<span class="sig-name descname"><span class="pre">middleware</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#tatami.router.Summary.middleware" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.router.Summary.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#tatami.router.Summary.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.router.Summary.models">
+<span class="sig-name descname"><span class="pre">models</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#tatami.router.Summary.models" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.router.Summary.routers">
+<span class="sig-name descname"><span class="pre">routers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#tatami.router.Summary.routers" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.router.Summary.static">
+<span class="sig-name descname"><span class="pre">static</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#tatami.router.Summary.static" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.router.Summary.templates">
+<span class="sig-name descname"><span class="pre">templates</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#tatami.router.Summary.templates" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tatami.router.router">
+<span class="sig-prename descclassname"><span class="pre">tatami.router.</span></span><span class="sig-name descname"><span class="pre">router</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/router.html#router"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.router.router" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Type</em>[<a class="reference internal" href="../../reference/api.html#tatami.router.DecoratedRouter" title="tatami.router.DecoratedRouter"><em>DecoratedRouter</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Ibon</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/shibuya.js?v=c477d091"></script></body>
+</html>

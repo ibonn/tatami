@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Quickstart Guide 🚀 - Tatami documentation</title><link rel="shortcut icon" href="../_static/favicon.ico"/><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Your First API 📝" href="your_first_api.html" /><link rel="prev" title="Welcome to Tatami! 🎋" href="../index.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=397bb51e" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=76b6f612" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Quickstart Guide 🚀"/>
+<meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      <img class="light-logo" src="../_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
+      <img class="dark-logo" src="../_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
+      <strong>Tatami</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2 -translate-x-2"></span>
+          <span class="hamburger_3 -translate-x-1"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn Tatami Step by Step</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="your_first_api.html">Your First API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project_structure.html">Project Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="routing_guide.html">Routing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="working_with_data.html">Working with Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dependency_injection.html">Dependency Injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="middleware_and_services.html">Middleware and Services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing_your_api.html">Testing Your API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment.html">Deployment</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">CLI &amp; Tools</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/commands.html">CLI Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/docker_deployment.html">Docker Deployment</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Migration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../migration/from_flask.html">From Flask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migration/from_fastapi.html">From FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migration/from_django.html">From Django</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/index.html">Advanced Topics Index</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#what-you-ll-build">What You&#8217;ll Build</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#your-first-tatami-project">Your First Tatami Project</a></li>
+<li><a class="reference internal" href="#let-s-create-our-first-router">Let&#8217;s Create Our First Router</a></li>
+<li><a class="reference internal" href="#let-s-run-it">Let&#8217;s Run It!</a></li>
+<li><a class="reference internal" href="#explore-your-api">Explore Your API</a></li>
+<li><a class="reference internal" href="#test-your-api">Test Your API</a></li>
+<li><a class="reference internal" href="#what-just-happened">What Just Happened? &#10024;</a></li>
+<li><a class="reference internal" href="#key-concepts-learned">Key Concepts Learned</a></li>
+<li><a class="reference internal" href="#what-s-next">What&#8217;s Next?</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">Tatami</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Quickstart Guide 🚀</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="quickstart-guide">
+<h1>Quickstart Guide 🚀<a class="headerlink" href="#quickstart-guide" title="Link to this heading">¶</a></h1>
+<p>Welcome to Tatami! This guide will get you from zero to a working API in just a few minutes.</p>
+<section id="what-you-ll-build">
+<h2>What You’ll Build<a class="headerlink" href="#what-you-ll-build" title="Link to this heading">¶</a></h2>
+<p>By the end of this quickstart, you’ll have:</p>
+<ul class="simple">
+<li><p>A working Tatami API with multiple endpoints</p></li>
+<li><p>Automatic OpenAPI documentation</p></li>
+<li><p>A clean, organized project structure</p></li>
+<li><p>Knowledge of Tatami’s core concepts</p></li>
+</ul>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
+<p>First, let’s install Tatami:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">pip<span class="w"> </span>install<span class="w"> </span>tatami
+</span></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Requirements</strong>: Python 3.8+ is required. Tatami is built on Starlette and includes Uvicorn for serving.</p>
+</div>
+</section>
+<section id="your-first-tatami-project">
+<h2>Your First Tatami Project<a class="headerlink" href="#your-first-tatami-project" title="Link to this heading">¶</a></h2>
+<p>Let’s create a new project using the CLI:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">tatami<span class="w"> </span>create<span class="w"> </span>my-first-api
+</span><span data-line="2"><span class="nb">cd</span><span class="w"> </span>my-first-api
+</span></pre></div>
+</div>
+<p>This creates a project structure like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">my-first-api/
+</span><span data-line="2">├── config.yaml          # Configuration file
+</span><span data-line="3">├── README.md            # Project documentation
+</span><span data-line="4">├── favicon.ico          # Your API&#39;s favicon
+</span><span data-line="5">├── routers/             # API route definitions (this is where the magic happens!)
+</span><span data-line="6">├── services/            # Business logic and data access
+</span><span data-line="7">├── middleware/          # Request/response processing
+</span><span data-line="8">├── static/              # Static files (CSS, JS, images)
+</span><span data-line="9">└── templates/           # HTML templates
+</span></pre></div>
+</div>
+</section>
+<section id="let-s-create-our-first-router">
+<h2>Let’s Create Our First Router<a class="headerlink" href="#let-s-create-our-first-router" title="Link to this heading">¶</a></h2>
+<p>Create a new file <cite>routers/tasks.py</cite>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># routers/tasks.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami</span><span class="w"> </span><span class="kn">import</span> <span class="n">router</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">post</span><span class="p">,</span> <span class="n">put</span><span class="p">,</span> <span class="n">delete</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="k">class</span><span class="w"> </span><span class="nc">Task</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="7">    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="8">    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+</span><span data-line="9">    <span class="n">completed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span data-line="10">
+</span><span data-line="11"><span class="k">class</span><span class="w"> </span><span class="nc">Tasks</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/tasks&#39;</span><span class="p">)):</span>
+</span><span data-line="12"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Task management API&quot;&quot;&quot;</span>
+</span><span data-line="13">
+</span><span data-line="14">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="15">        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+</span><span data-line="16">        <span class="c1"># Simple in-memory storage for this example</span>
+</span><span data-line="17">        <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span>
+</span><span data-line="18">            <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Learn Tatami&quot;</span><span class="p">,</span> <span class="s2">&quot;completed&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+</span><span data-line="19">            <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Build awesome API&quot;</span><span class="p">,</span> <span class="s2">&quot;completed&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+</span><span data-line="20">        <span class="p">]</span>
+</span><span data-line="21">        <span class="bp">self</span><span class="o">.</span><span class="n">next_id</span> <span class="o">=</span> <span class="mi">3</span>
+</span><span data-line="22">
+</span><span data-line="23">    <span class="nd">@get</span>
+</span><span data-line="24">    <span class="k">def</span><span class="w"> </span><span class="nf">list_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+</span><span data-line="25"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get all tasks&quot;&quot;&quot;</span>
+</span><span data-line="26">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span>
+</span><span data-line="27">
+</span><span data-line="28">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/</span><span class="si">{task_id}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span data-line="29">    <span class="k">def</span><span class="w"> </span><span class="nf">get_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span data-line="30"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a specific task by ID&quot;&quot;&quot;</span>
+</span><span data-line="31">        <span class="n">task</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span> <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">task_id</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+</span><span data-line="32">        <span class="k">if</span> <span class="ow">not</span> <span class="n">task</span><span class="p">:</span>
+</span><span data-line="33">            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;Task not found&quot;</span><span class="p">},</span> <span class="mi">404</span>
+</span><span data-line="34">        <span class="k">return</span> <span class="n">task</span>
+</span><span data-line="35">
+</span><span data-line="36">    <span class="nd">@post</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="37">    <span class="k">def</span><span class="w"> </span><span class="nf">create_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span> <span class="n">Task</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span data-line="38"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new task&quot;&quot;&quot;</span>
+</span><span data-line="39">        <span class="n">new_task</span> <span class="o">=</span> <span class="p">{</span>
+</span><span data-line="40">            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_id</span><span class="p">,</span>
+</span><span data-line="41">            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">task</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+</span><span data-line="42">            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">task</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+</span><span data-line="43">            <span class="s2">&quot;completed&quot;</span><span class="p">:</span> <span class="n">task</span><span class="o">.</span><span class="n">completed</span>
+</span><span data-line="44">        <span class="p">}</span>
+</span><span data-line="45">        <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_task</span><span class="p">)</span>
+</span><span data-line="46">        <span class="bp">self</span><span class="o">.</span><span class="n">next_id</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span data-line="47">        <span class="k">return</span> <span class="n">new_task</span>
+</span><span data-line="48">
+</span><span data-line="49">    <span class="nd">@put</span><span class="p">(</span><span class="s1">&#39;/</span><span class="si">{task_id}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span data-line="50">    <span class="k">def</span><span class="w"> </span><span class="nf">update_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span> <span class="n">Task</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span data-line="51"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Update an existing task&quot;&quot;&quot;</span>
+</span><span data-line="52">        <span class="n">existing_task</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span> <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">task_id</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+</span><span data-line="53">        <span class="k">if</span> <span class="ow">not</span> <span class="n">existing_task</span><span class="p">:</span>
+</span><span data-line="54">            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;Task not found&quot;</span><span class="p">},</span> <span class="mi">404</span>
+</span><span data-line="55">
+</span><span data-line="56">        <span class="n">existing_task</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+</span><span data-line="57">            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">task</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+</span><span data-line="58">            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">task</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+</span><span data-line="59">            <span class="s2">&quot;completed&quot;</span><span class="p">:</span> <span class="n">task</span><span class="o">.</span><span class="n">completed</span>
+</span><span data-line="60">        <span class="p">})</span>
+</span><span data-line="61">        <span class="k">return</span> <span class="n">existing_task</span>
+</span><span data-line="62">
+</span><span data-line="63">    <span class="nd">@delete</span><span class="p">(</span><span class="s1">&#39;/</span><span class="si">{task_id}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span data-line="64">    <span class="k">def</span><span class="w"> </span><span class="nf">delete_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span data-line="65"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Delete a task&quot;&quot;&quot;</span>
+</span><span data-line="66">        <span class="n">task</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span> <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">task_id</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+</span><span data-line="67">        <span class="k">if</span> <span class="ow">not</span> <span class="n">task</span><span class="p">:</span>
+</span><span data-line="68">            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;Task not found&quot;</span><span class="p">},</span> <span class="mi">404</span>
+</span><span data-line="69">
+</span><span data-line="70">        <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+</span><span data-line="71">        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Task deleted successfully&quot;</span><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="let-s-run-it">
+<h2>Let’s Run It!<a class="headerlink" href="#let-s-run-it" title="Link to this heading">¶</a></h2>
+<p>Now run your API:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">tatami<span class="w"> </span>run<span class="w"> </span>.
+</span></pre></div>
+</div>
+<p>You should see output like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">🌱 Tatami 0.0.1-pre.1
+</span><span data-line="2">Running app . on http://localhost:8000
+</span><span data-line="3">     • Config: config.yaml
+</span><span data-line="4">     • Routers: 1 discovered
+</span><span data-line="5">     • Static files: static/
+</span><span data-line="6">     • Templates: templates/
+</span><span data-line="7">     • Middleware: 0 loaded
+</span><span data-line="8">Run tatami doctor &quot;.&quot; for a more detailed analysis 🩺
+</span></pre></div>
+</div>
+</section>
+<section id="explore-your-api">
+<h2>Explore Your API<a class="headerlink" href="#explore-your-api" title="Link to this heading">¶</a></h2>
+<p>Open your browser and visit:</p>
+<p>� <strong>Documentation Portal</strong>: <a class="reference external" href="http://localhost:8000/docs/">http://localhost:8000/docs/</a></p>
+<p>This landing page provides links to all available documentation formats.</p>
+<p>�📊 <strong>Interactive API Documentation</strong>: <a class="reference external" href="http://localhost:8000/docs/swagger">http://localhost:8000/docs/swagger</a></p>
+<p>You’ll see beautiful, interactive documentation for your API! Try out the endpoints:</p>
+<ul class="simple">
+<li><p><strong>GET</strong> <cite>/tasks</cite> - List all tasks</p></li>
+<li><p><strong>POST</strong> <cite>/tasks</cite> - Create a new task</p></li>
+<li><p><strong>GET</strong> <cite>/tasks/{task_id}</cite> - Get a specific task</p></li>
+<li><p><strong>PUT</strong> <cite>/tasks/{task_id}</cite> - Update a task</p></li>
+<li><p><strong>DELETE</strong> <cite>/tasks/{task_id}</cite> - Delete a task</p></li>
+</ul>
+</section>
+<section id="test-your-api">
+<h2>Test Your API<a class="headerlink" href="#test-your-api" title="Link to this heading">¶</a></h2>
+<p>Let’s test our API using curl or Python requests:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Get all tasks</span>
+</span><span data-line="2">curl<span class="w"> </span>http://localhost:8000/tasks
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Create a new task</span>
+</span><span data-line="5">curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8000/tasks<span class="w"> </span><span class="se">\</span>
+</span><span data-line="6"><span class="w">     </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="7"><span class="w">     </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;title&quot;: &quot;Test Tatami API&quot;, &quot;description&quot;: &quot;This is so easy!&quot;}&#39;</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="c1"># Get a specific task</span>
+</span><span data-line="10">curl<span class="w"> </span>http://localhost:8000/tasks/1
+</span></pre></div>
+</div>
+</section>
+<section id="what-just-happened">
+<h2>What Just Happened? ✨<a class="headerlink" href="#what-just-happened" title="Link to this heading">¶</a></h2>
+<p>In just a few minutes, you’ve:</p>
+<ol class="arabic simple">
+<li><p>✅ <strong>Created a project</strong> with <cite>tatami create</cite></p></li>
+<li><p>✅ <strong>Defined a router</strong> using class-based routing with <cite>router(‘/tasks’)</cite></p></li>
+<li><p>✅ <strong>Added endpoints</strong> using decorators like <cite>&#64;get</cite>, <cite>&#64;post</cite>, <cite>&#64;put</cite>, <cite>&#64;delete</cite></p></li>
+<li><p>✅ <strong>Used Pydantic models</strong> for request/response validation</p></li>
+<li><p>✅ <strong>Got automatic OpenAPI docs</strong> for free</p></li>
+<li><p>✅ <strong>Ran the API</strong> with <cite>tatami run</cite></p></li>
+</ol>
+</section>
+<section id="key-concepts-learned">
+<h2>Key Concepts Learned<a class="headerlink" href="#key-concepts-learned" title="Link to this heading">¶</a></h2>
+<p>🧱 <strong>Class-based Routers</strong>: Each router is a class that groups related endpoints</p>
+<p>🎯 <strong>Explicit Decorators</strong>: <cite>&#64;get</cite>, <cite>&#64;post</cite>, etc. make your API crystal clear</p>
+<p>📋 <strong>Pydantic Models</strong>: Automatic validation and documentation for request/response data</p>
+<p>🚀 <strong>CLI Tools</strong>: <cite>tatami create</cite> and <cite>tatami run</cite> for rapid development</p>
+<p>📚 <strong>Auto Documentation</strong>: OpenAPI/Swagger docs generated automatically</p>
+</section>
+<section id="what-s-next">
+<h2>What’s Next?<a class="headerlink" href="#what-s-next" title="Link to this heading">¶</a></h2>
+<p>Now that you’ve got the basics down, you can:</p>
+<ul class="simple">
+<li><p>Learn more about project structure and conventions in the next tutorial</p></li>
+<li><p>Dive into routing guide for advanced routing patterns</p></li>
+<li><p>Explore working with data for database integration</p></li>
+<li><p>Check out dependency injection for better code organization</p></li>
+</ul>
+<p>Ready to build something amazing? Let’s keep going! 🎯</p>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="../index.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">Home</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="your_first_api.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Your First API 📝</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Ibon</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/shibuya.js?v=c477d091"></script></body>
+</html>

@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>CLI Commands 🎛️ - Tatami documentation</title><link rel="shortcut icon" href="../_static/favicon.ico"/><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Docker Deployment 🐳" href="docker_deployment.html" /><link rel="prev" title="Installation 📦" href="installation.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=397bb51e" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=76b6f612" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="CLI Commands 🎛️"/>
+<meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      <img class="light-logo" src="../_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
+      <img class="dark-logo" src="../_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
+      <strong>Tatami</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2 -translate-x-2"></span>
+          <span class="hamburger_3 -translate-x-1"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn Tatami Step by Step</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/your_first_api.html">Your First API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/project_structure.html">Project Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/routing_guide.html">Routing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/working_with_data.html">Working with Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/dependency_injection.html">Dependency Injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/middleware_and_services.html">Middleware and Services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/testing_your_api.html">Testing Your API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/deployment.html">Deployment</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">CLI &amp; Tools</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CLI Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docker_deployment.html">Docker Deployment</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Migration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../migration/from_flask.html">From Flask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migration/from_fastapi.html">From FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migration/from_django.html">From Django</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/index.html">Advanced Topics Index</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#available-commands">Available Commands</a></li>
+<li><a class="reference internal" href="#tatami-create">tatami create</a></li>
+<li><a class="reference internal" href="#tatami-run">tatami run</a></li>
+<li><a class="reference internal" href="#tatami-doctor">tatami doctor</a></li>
+<li><a class="reference internal" href="#command-examples">Command Examples</a><ul>
+<li><a class="reference internal" href="#development-workflow">Development Workflow</a></li>
+<li><a class="reference internal" href="#production-deployment">Production Deployment</a></li>
+<li><a class="reference internal" href="#quick-prototyping">Quick Prototyping</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#configuration-modes">Configuration Modes</a></li>
+<li><a class="reference internal" href="#verbose-output">Verbose Output</a></li>
+<li><a class="reference internal" href="#cli-best-practices">CLI Best Practices</a><ul>
+<li><a class="reference internal" href="#development">&#128640; <strong>Development</strong></a></li>
+<li><a class="reference internal" href="#project-health">&#127959;&#65039; <strong>Project Health</strong></a></li>
+<li><a class="reference internal" href="#production">&#128202; <strong>Production</strong></a></li>
+<li><a class="reference internal" href="#debugging">&#128269; <strong>Debugging</strong></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li><a class="reference internal" href="#common-issues">Common Issues</a></li>
+<li><a class="reference internal" href="#getting-help">Getting Help</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#what-s-next">What&#8217;s Next?</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">Tatami</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">CLI Commands 🎛️</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="cli-commands">
+<h1>CLI Commands 🎛️<a class="headerlink" href="#cli-commands" title="Link to this heading">¶</a></h1>
+<p>Master the Tatami command-line interface for rapid development.</p>
+<section id="available-commands">
+<h2>Available Commands<a class="headerlink" href="#available-commands" title="Link to this heading">¶</a></h2>
+<p>Tatami provides several CLI commands to help you build and manage your applications.</p>
+</section>
+<section id="tatami-create">
+<h2>tatami create<a class="headerlink" href="#tatami-create" title="Link to this heading">¶</a></h2>
+<p>Create a new Tatami project with the standard structure.</p>
+<p><strong>Syntax:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">tatami<span class="w"> </span>create<span class="w"> </span>&lt;project_name&gt;
+</span></pre></div>
+</div>
+<p><strong>Example:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">tatami<span class="w"> </span>create<span class="w"> </span>my-blog-api
+</span></pre></div>
+</div>
+<p>This creates a new directory <cite>my-blog-api</cite> with the standard Tatami project structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">my-blog-api/
+</span><span data-line="2">├── config.yaml          # Main configuration
+</span><span data-line="3">├── config-dev.yaml      # Development config
+</span><span data-line="4">├── README.md            # Project documentation
+</span><span data-line="5">├── favicon.ico          # API favicon
+</span><span data-line="6">├── routers/             # API endpoints
+</span><span data-line="7">├── services/            # Business logic
+</span><span data-line="8">├── middleware/          # Request processing
+</span><span data-line="9">├── static/              # Static files
+</span><span data-line="10">└── templates/           # HTML templates
+</span></pre></div>
+</div>
+</section>
+<section id="tatami-run">
+<h2>tatami run<a class="headerlink" href="#tatami-run" title="Link to this heading">¶</a></h2>
+<p>Run a Tatami application using the convention-based approach.</p>
+<p><strong>Syntax:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">tatami<span class="w"> </span>run<span class="w"> </span>&lt;project_path&gt;<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</span></pre></div>
+</div>
+<p><strong>Options:</strong></p>
+<ul class="simple">
+<li><p><cite>–host HOST</cite> - Host to bind to (default: localhost)</p></li>
+<li><p><cite>–port PORT</cite> - Port to bind to (default: 8000)</p></li>
+<li><p><cite>–mode MODE</cite> - Configuration mode (loads config-{mode}.yaml)</p></li>
+<li><p><cite>–verbose, -v</cite> - Increase verbosity (-v for info, -vv for debug)</p></li>
+</ul>
+<p><strong>Examples:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Run with defaults</span>
+</span><span data-line="2">tatami<span class="w"> </span>run<span class="w"> </span>my-blog-api
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Run on all interfaces, port 8080</span>
+</span><span data-line="5">tatami<span class="w"> </span>run<span class="w"> </span>my-blog-api<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">8080</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Run in development mode with verbose output</span>
+</span><span data-line="8">tatami<span class="w"> </span>run<span class="w"> </span>my-blog-api<span class="w"> </span>--mode<span class="w"> </span>dev<span class="w"> </span>--verbose
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># Run with debug logging</span>
+</span><span data-line="11">tatami<span class="w"> </span>run<span class="w"> </span>my-blog-api<span class="w"> </span>-vv
+</span></pre></div>
+</div>
+<p><strong>What happens when you run:</strong></p>
+<ol class="arabic simple">
+<li><p>🔧 Loads configuration from <cite>config.yaml</cite> (and <cite>config-{mode}.yaml</cite> if specified)</p></li>
+<li><p>🔍 Auto-discovers routers in the <cite>routers/</cite> directory</p></li>
+<li><p>🧠 Auto-discovers services in the <cite>services/</cite> directory</p></li>
+<li><p>🔄 Loads middleware from the <cite>middleware/</cite> directory</p></li>
+<li><p>📁 Serves static files from <cite>static/</cite> at <cite>/static</cite></p></li>
+<li><p>📄 Configures templates from the <cite>templates/</cite> directory</p></li>
+<li><p>🎨 Includes favicon (custom or default)</p></li>
+<li><p>📚 Sets up automatic OpenAPI documentation</p></li>
+<li><p>🚀 Starts the server with uvicorn</p></li>
+</ol>
+</section>
+<section id="tatami-doctor">
+<h2>tatami doctor<a class="headerlink" href="#tatami-doctor" title="Link to this heading">¶</a></h2>
+<p>Analyze your project structure and report potential issues.</p>
+<p><strong>Syntax:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">tatami<span class="w"> </span>doctor<span class="w"> </span>&lt;project_path&gt;
+</span></pre></div>
+</div>
+<p><strong>Example:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">tatami<span class="w"> </span>doctor<span class="w"> </span>my-blog-api
+</span></pre></div>
+</div>
+<p><strong>Sample Output:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">🩺 Tatami is checking your project...
+</span><span data-line="2">✔ Configuration file found: config.yaml
+</span><span data-line="3">✔ Routers directory exists and contains 3 router(s)
+</span><span data-line="4">✔ Services directory exists and contains 2 service(s)
+</span><span data-line="5">✔ Static files directory configured
+</span><span data-line="6">✔ Templates directory configured
+</span><span data-line="7">⚠ No middleware found - consider adding authentication middleware
+</span><span data-line="8">ℹ Consider adding a config-prod.yaml for production settings
+</span><span data-line="9">
+</span><span data-line="10">✅ Your project looks good! Minor suggestions available.
+</span></pre></div>
+</div>
+<p><strong>What doctor checks:</strong></p>
+<ul class="simple">
+<li><p>✅ <strong>Configuration</strong>: Valid config files and structure</p></li>
+<li><p>✅ <strong>Routers</strong>: Proper router definitions and naming</p></li>
+<li><p>✅ <strong>Services</strong>: Service discovery and dependencies</p></li>
+<li><p>✅ <strong>Structure</strong>: Correct directory organization</p></li>
+<li><p>⚠️ <strong>Best Practices</strong>: Common patterns and recommendations</p></li>
+<li><p>🔍 <strong>Performance</strong>: Potential optimization opportunities</p></li>
+</ul>
+</section>
+<section id="command-examples">
+<h2>Command Examples<a class="headerlink" href="#command-examples" title="Link to this heading">¶</a></h2>
+<section id="development-workflow">
+<h3>Development Workflow<a class="headerlink" href="#development-workflow" title="Link to this heading">¶</a></h3>
+<p>Typical development workflow using CLI commands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># 1. Create new project</span>
+</span><span data-line="2">tatami<span class="w"> </span>create<span class="w"> </span>my-api
+</span><span data-line="3"><span class="nb">cd</span><span class="w"> </span>my-api
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># 2. Check project health</span>
+</span><span data-line="6">tatami<span class="w"> </span>doctor<span class="w"> </span>.
+</span><span data-line="7">
+</span><span data-line="8"><span class="c1"># 3. Run in development mode</span>
+</span><span data-line="9">tatami<span class="w"> </span>run<span class="w"> </span>.<span class="w"> </span>--mode<span class="w"> </span>dev<span class="w"> </span>--verbose
+</span><span data-line="10">
+</span><span data-line="11"><span class="c1"># 4. Make changes to routers/services...</span>
+</span><span data-line="12">
+</span><span data-line="13"><span class="c1"># 5. Check project again</span>
+</span><span data-line="14">tatami<span class="w"> </span>doctor<span class="w"> </span>.
+</span><span data-line="15">
+</span><span data-line="16"><span class="c1"># 6. Run with debug logging</span>
+</span><span data-line="17">tatami<span class="w"> </span>run<span class="w"> </span>.<span class="w"> </span>--mode<span class="w"> </span>dev<span class="w"> </span>-vv
+</span></pre></div>
+</div>
+</section>
+<section id="production-deployment">
+<h3>Production Deployment<a class="headerlink" href="#production-deployment" title="Link to this heading">¶</a></h3>
+<p>Prepare for production deployment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Check project is production-ready</span>
+</span><span data-line="2">tatami<span class="w"> </span>doctor<span class="w"> </span>my-api
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Run in production mode (using config.yaml)</span>
+</span><span data-line="5">tatami<span class="w"> </span>run<span class="w"> </span>my-api<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span>
+</span></pre></div>
+</div>
+</section>
+<section id="quick-prototyping">
+<h3>Quick Prototyping<a class="headerlink" href="#quick-prototyping" title="Link to this heading">¶</a></h3>
+<p>Rapid development cycle:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Create and run immediately</span>
+</span><span data-line="2">tatami<span class="w"> </span>create<span class="w"> </span>quick-prototype
+</span><span data-line="3"><span class="nb">cd</span><span class="w"> </span>quick-prototype
+</span><span data-line="4">tatami<span class="w"> </span>run<span class="w"> </span>.<span class="w"> </span>--mode<span class="w"> </span>dev<span class="w"> </span><span class="p">&amp;</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="c1"># Open API docs</span>
+</span><span data-line="7">open<span class="w"> </span>http://localhost:8000/docs/swagger
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="configuration-modes">
+<h2>Configuration Modes<a class="headerlink" href="#configuration-modes" title="Link to this heading">¶</a></h2>
+<p>The <cite>–mode</cite> flag loads additional configuration:</p>
+<p><strong>Default (no mode):</strong>
+- Loads <cite>config.yaml</cite></p>
+<p><strong>Development mode (`–mode dev`):</strong>
+- Loads <cite>config.yaml</cite>
+- Overlays <cite>config-dev.yaml</cite></p>
+<p><strong>Production mode (`–mode prod`):</strong>
+- Loads <cite>config.yaml</cite>
+- Overlays <cite>config-prod.yaml</cite></p>
+<p><strong>Custom mode (`–mode staging`):</strong>
+- Loads <cite>config.yaml</cite>
+- Overlays <cite>config-staging.yaml</cite></p>
+<p>Example configuration files:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># config.yaml (base configuration)</span>
+</span><span data-line="2"><span class="nt">app</span><span class="p">:</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;My</span><span class="nv"> </span><span class="s">API&quot;</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.0.0&quot;</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="nt">server</span><span class="p">:</span>
+</span><span data-line="7"><span class="w">  </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span>
+</span><span data-line="8"><span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8000</span>
+</span></pre></div>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># config-dev.yaml (development overrides)</span>
+</span><span data-line="2"><span class="nt">server</span><span class="p">:</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="nt">features</span><span class="p">:</span>
+</span><span data-line="6"><span class="w">  </span><span class="nt">debug</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span data-line="7"><span class="w">  </span><span class="nt">auto_reload</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span></pre></div>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># config-prod.yaml (production overrides)</span>
+</span><span data-line="2"><span class="nt">server</span><span class="p">:</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0.0.0.0&quot;</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="nt">features</span><span class="p">:</span>
+</span><span data-line="6"><span class="w">  </span><span class="nt">debug</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</span><span data-line="7"><span class="w">  </span><span class="nt">enable_cors</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</span></pre></div>
+</div>
+</section>
+<section id="verbose-output">
+<h2>Verbose Output<a class="headerlink" href="#verbose-output" title="Link to this heading">¶</a></h2>
+<p>Control logging verbosity with <cite>-v</cite> flags:</p>
+<p><strong>Normal output:</strong>
+.. code-block:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">🌱 Tatami 0.0.1-pre.1
+</span><span data-line="2">Running app my-api on http://localhost:8000
+</span></pre></div>
+</div>
+<p><strong>Verbose (`-v`):</strong>
+.. code-block:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">🌱 Tatami 0.0.1-pre.1
+</span><span data-line="2">Running app my-api on http://localhost:8000
+</span><span data-line="3">     • Config: config.yaml
+</span><span data-line="4">     • Routers: 3 discovered
+</span><span data-line="5">     • Services: 2 loaded
+</span><span data-line="6">     • Middleware: 1 loaded
+</span><span data-line="7">     • Static files: static/
+</span><span data-line="8">     • Templates: templates/
+</span></pre></div>
+</div>
+<p><strong>Debug (`-vv`):</strong>
+.. code-block:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">🌱 Tatami 0.0.1-pre.1
+</span><span data-line="2">DEBUG: Loading configuration from config.yaml
+</span><span data-line="3">DEBUG: Discovered router: Users in routers/users.py
+</span><span data-line="4">DEBUG: Discovered router: Posts in routers/posts.py
+</span><span data-line="5">DEBUG: Discovered service: UserService in services/user_service.py
+</span><span data-line="6">DEBUG: Loading middleware: AuthMiddleware
+</span><span data-line="7">Running app my-api on http://localhost:8000
+</span></pre></div>
+</div>
+</section>
+<section id="cli-best-practices">
+<h2>CLI Best Practices<a class="headerlink" href="#cli-best-practices" title="Link to this heading">¶</a></h2>
+<section id="development">
+<h3>🚀 <strong>Development</strong><a class="headerlink" href="#development" title="Link to this heading">¶</a></h3>
+<p>Use development mode with auto-reload:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">tatami<span class="w"> </span>run<span class="w"> </span>.<span class="w"> </span>--mode<span class="w"> </span>dev<span class="w"> </span>--verbose
+</span></pre></div>
+</div>
+</section>
+<section id="project-health">
+<h3>🏗️ <strong>Project Health</strong><a class="headerlink" href="#project-health" title="Link to this heading">¶</a></h3>
+<p>Run <cite>doctor</cite> regularly to catch issues early:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Add to your development workflow</span>
+</span><span data-line="2">tatami<span class="w"> </span>doctor<span class="w"> </span>.<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>tatami<span class="w"> </span>run<span class="w"> </span>.<span class="w"> </span>--mode<span class="w"> </span>dev
+</span></pre></div>
+</div>
+</section>
+<section id="production">
+<h3>📊 <strong>Production</strong><a class="headerlink" href="#production" title="Link to this heading">¶</a></h3>
+<p>Use production configuration:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">tatami<span class="w"> </span>run<span class="w"> </span>.<span class="w"> </span>--mode<span class="w"> </span>prod<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span>
+</span></pre></div>
+</div>
+</section>
+<section id="debugging">
+<h3>🔍 <strong>Debugging</strong><a class="headerlink" href="#debugging" title="Link to this heading">¶</a></h3>
+<p>Use debug logging for troubleshooting:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">tatami<span class="w"> </span>run<span class="w"> </span>.<span class="w"> </span>--mode<span class="w"> </span>dev<span class="w"> </span>-vv
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<section id="common-issues">
+<h3>Common Issues<a class="headerlink" href="#common-issues" title="Link to this heading">¶</a></h3>
+<p><strong>“Command not found: tatami”</strong>
+- Ensure Tatami is installed: <cite>pip install tatami</cite>
+- Check if you’re in the correct virtual environment</p>
+<p><strong>“No module named ‘tatami’”</strong>
+- Reinstall Tatami: <cite>pip uninstall tatami &amp;&amp; pip install tatami</cite></p>
+<p><strong>“Port already in use”</strong>
+- Use a different port: <cite>tatami run . –port 8080</cite>
+- Kill existing processes: <cite>lsof -ti:8000 | xargs kill</cite></p>
+<p><strong>“No routers found”</strong>
+- Check router files are in <cite>routers/</cite> directory
+- Ensure router classes inherit from <cite>router(‘/path’)</cite>
+- Run <cite>tatami doctor .</cite> for detailed analysis</p>
+</section>
+<section id="getting-help">
+<h3>Getting Help<a class="headerlink" href="#getting-help" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># General help</span>
+</span><span data-line="2">tatami<span class="w"> </span>--help
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Command-specific help</span>
+</span><span data-line="5">tatami<span class="w"> </span>run<span class="w"> </span>--help
+</span><span data-line="6">tatami<span class="w"> </span>create<span class="w"> </span>--help
+</span><span data-line="7">tatami<span class="w"> </span>doctor<span class="w"> </span>--help
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="what-s-next">
+<h2>What’s Next?<a class="headerlink" href="#what-s-next" title="Link to this heading">¶</a></h2>
+<p>Now that you’ve mastered the CLI, learn about Docker deployment and production configuration.</p>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="installation.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">Installation 📦</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="docker_deployment.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Docker Deployment 🐳</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Ibon</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/shibuya.js?v=c477d091"></script></body>
+</html>

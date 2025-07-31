@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Migrating from FastAPI ⚡➡️🎋 - Tatami documentation</title><link rel="shortcut icon" href="../_static/favicon.ico"/><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Migrating from Django 🎸➡️🎋" href="from_django.html" /><link rel="prev" title="Migrating from Flask 🍶➡️🎋" href="from_flask.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=397bb51e" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=76b6f612" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Migrating from FastAPI ⚡➡️🎋"/>
+<meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      <img class="light-logo" src="../_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
+      <img class="dark-logo" src="../_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
+      <strong>Tatami</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2 -translate-x-2"></span>
+          <span class="hamburger_3 -translate-x-1"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn Tatami Step by Step</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/your_first_api.html">Your First API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/project_structure.html">Project Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/routing_guide.html">Routing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/working_with_data.html">Working with Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/dependency_injection.html">Dependency Injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/middleware_and_services.html">Middleware and Services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/testing_your_api.html">Testing Your API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/deployment.html">Deployment</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">CLI &amp; Tools</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/commands.html">CLI Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/docker_deployment.html">Docker Deployment</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Migration Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="from_flask.html">From Flask</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">From FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="from_django.html">From Django</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/index.html">Advanced Topics Index</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#why-consider-tatami">Why Consider Tatami?</a></li>
+<li><a class="reference internal" href="#key-similarities">Key Similarities</a></li>
+<li><a class="reference internal" href="#key-differences">Key Differences</a></li>
+<li><a class="reference internal" href="#basic-fastapi-to-tatami-translation">Basic FastAPI to Tatami Translation</a><ul>
+<li><a class="reference internal" href="#fastapi-app-structure">FastAPI App Structure</a></li>
+<li><a class="reference internal" href="#equivalent-tatami-code">Equivalent Tatami Code</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#migration-strategies">Migration Strategies</a><ul>
+<li><a class="reference internal" href="#incremental-migration">1. Incremental Migration</a></li>
+<li><a class="reference internal" href="#complete-rewrite">2. Complete Rewrite</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#common-migration-patterns">Common Migration Patterns</a><ul>
+<li><a class="reference internal" href="#fastapi-path-parameters-tatami-path-parameters">FastAPI Path Parameters &#8594; Tatami Path Parameters</a></li>
+<li><a class="reference internal" href="#fastapi-query-parameters-tatami-query-parameters">FastAPI Query Parameters &#8594; Tatami Query Parameters</a></li>
+<li><a class="reference internal" href="#fastapi-dependencies-tatami-dependency-injection">FastAPI Dependencies &#8594; Tatami Dependency Injection</a></li>
+<li><a class="reference internal" href="#fastapi-middleware-tatami-middleware">FastAPI Middleware &#8594; Tatami Middleware</a></li>
+<li><a class="reference internal" href="#fastapi-background-tasks-tatami-services">FastAPI Background Tasks &#8594; Tatami Services</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#configuration-migration">Configuration Migration</a><ul>
+<li><a class="reference internal" href="#fastapi-settings">FastAPI Settings</a></li>
+<li><a class="reference internal" href="#tatami-configuration">Tatami Configuration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing-migration">Testing Migration</a><ul>
+<li><a class="reference internal" href="#fastapi-testing">FastAPI Testing</a></li>
+<li><a class="reference internal" href="#tatami-testing">Tatami Testing</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#project-structure-comparison">Project Structure Comparison</a><ul>
+<li><a class="reference internal" href="#fastapi-project-structure">FastAPI Project Structure</a></li>
+<li><a class="reference internal" href="#tatami-project-structure">Tatami Project Structure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#advantages-of-migration">Advantages of Migration</a><ul>
+<li><a class="reference internal" href="#better-organization">Better Organization</a></li>
+<li><a class="reference internal" href="#reduced-boilerplate">Reduced Boilerplate</a></li>
+<li><a class="reference internal" href="#auto-discovery">Auto-Discovery</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#migration-gotchas">Migration Gotchas</a><ul>
+<li><a class="reference internal" href="#dependency-injection-differences">1. Dependency Injection Differences</a></li>
+<li><a class="reference internal" href="#response-models">2. Response Models</a></li>
+<li><a class="reference internal" href="#exception-handling">3. Exception Handling</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#migration-checklist">Migration Checklist</a><ul>
+<li><a class="reference internal" href="#before-migration">Before Migration</a></li>
+<li><a class="reference internal" href="#during-migration">During Migration</a></li>
+<li><a class="reference internal" href="#after-migration">After Migration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#why-make-the-switch">Why Make the Switch?</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">Tatami</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Migrating from FastAPI ⚡➡️🎋</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="migrating-from-fastapi">
+<h1>Migrating from FastAPI ⚡➡️🎋<a class="headerlink" href="#migrating-from-fastapi" title="Link to this heading">¶</a></h1>
+<p>This guide helps FastAPI developers transition to Tatami, highlighting the similarities and unique advantages of Tatami’s approach.</p>
+<section id="why-consider-tatami">
+<h2>Why Consider Tatami?<a class="headerlink" href="#why-consider-tatami" title="Link to this heading">¶</a></h2>
+<p>As a FastAPI developer, you’ll appreciate Tatami’s:</p>
+<ul class="simple">
+<li><p>✅ <strong>Similar philosophy</strong> - Type hints and automatic validation</p></li>
+<li><p>✅ <strong>Better organization</strong> - Class-based routers group related endpoints</p></li>
+<li><p>✅ <strong>Cleaner structure</strong> - Convention-based project organization</p></li>
+<li><p>✅ <strong>Less boilerplate</strong> - Smart defaults reduce configuration</p></li>
+<li><p>✅ <strong>Explicit routing</strong> - Clear, obvious API definitions</p></li>
+<li><p>✅ <strong>Modular design</strong> - Built-in separation of concerns</p></li>
+</ul>
+</section>
+<section id="key-similarities">
+<h2>Key Similarities<a class="headerlink" href="#key-similarities" title="Link to this heading">¶</a></h2>
+<p>Both frameworks share:</p>
+<ul class="simple">
+<li><p><strong>ASGI-based</strong> for async support</p></li>
+<li><p><strong>Pydantic integration</strong> for data validation</p></li>
+<li><p><strong>Automatic OpenAPI</strong> documentation generation</p></li>
+<li><p><strong>Type hint support</strong> throughout</p></li>
+<li><p><strong>Modern Python patterns</strong> (3.8+)</p></li>
+</ul>
+</section>
+<section id="key-differences">
+<h2>Key Differences<a class="headerlink" href="#key-differences" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper docutils container" id="id1">
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">FastAPI vs Tatami Comparison</span><a class="headerlink" href="#id1" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Feature</p></th>
+<th class="head"><p>FastAPI</p></th>
+<th class="head"><p>Tatami</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Routing Style</strong></p></td>
+<td><p>Function decorators</p></td>
+<td><p>Class-based routers</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Project Structure</strong></p></td>
+<td><p>Flexible (manual setup)</p></td>
+<td><p>Convention-based discovery</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Organization</strong></p></td>
+<td><p>Single file or manual modules</p></td>
+<td><p>Clear separation by design</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Dependency Injection</strong></p></td>
+<td><p>Manual Depends() everywhere</p></td>
+<td><p>Auto-discovery and injection</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Configuration</strong></p></td>
+<td><p>Code-based or manual</p></td>
+<td><p>YAML-based with modes</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="basic-fastapi-to-tatami-translation">
+<h2>Basic FastAPI to Tatami Translation<a class="headerlink" href="#basic-fastapi-to-tatami-translation" title="Link to this heading">¶</a></h2>
+<section id="fastapi-app-structure">
+<h3>FastAPI App Structure<a class="headerlink" href="#fastapi-app-structure" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># FastAPI main.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastAPI</span><span class="p">,</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">HTTPException</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;My API&quot;</span><span class="p">)</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="9">    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="10">    <span class="n">email</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="11">
+</span><span data-line="12"><span class="k">class</span><span class="w"> </span><span class="nc">UserCreate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="13">    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="14">    <span class="n">email</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="15">
+</span><span data-line="16"><span class="c1"># In-memory storage</span>
+</span><span data-line="17"><span class="n">users_db</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span data-line="18">
+</span><span data-line="19"><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/users&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">List</span><span class="p">[</span><span class="n">User</span><span class="p">])</span>
+</span><span data-line="20"><span class="k">def</span><span class="w"> </span><span class="nf">get_users</span><span class="p">():</span>
+</span><span data-line="21">    <span class="k">return</span> <span class="n">users_db</span>
+</span><span data-line="22">
+</span><span data-line="23"><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/users&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">User</span><span class="p">)</span>
+</span><span data-line="24"><span class="k">def</span><span class="w"> </span><span class="nf">create_user</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">UserCreate</span><span class="p">):</span>
+</span><span data-line="25">    <span class="n">new_user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="o">**</span><span class="n">user</span><span class="o">.</span><span class="n">dict</span><span class="p">())</span>
+</span><span data-line="26">    <span class="n">users_db</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_user</span><span class="p">)</span>
+</span><span data-line="27">    <span class="k">return</span> <span class="n">new_user</span>
+</span><span data-line="28">
+</span><span data-line="29"><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/users/</span><span class="si">{user_id}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">User</span><span class="p">)</span>
+</span><span data-line="30"><span class="k">def</span><span class="w"> </span><span class="nf">get_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+</span><span data-line="31">    <span class="k">if</span> <span class="n">user_id</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">users_db</span><span class="p">):</span>
+</span><span data-line="32">        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">404</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;User not found&quot;</span><span class="p">)</span>
+</span><span data-line="33">    <span class="k">return</span> <span class="n">users_db</span><span class="p">[</span><span class="n">user_id</span><span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="equivalent-tatami-code">
+<h3>Equivalent Tatami Code<a class="headerlink" href="#equivalent-tatami-code" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># routers/users.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami</span><span class="w"> </span><span class="kn">import</span> <span class="n">router</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">post</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="7">    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="8">    <span class="n">email</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="k">class</span><span class="w"> </span><span class="nc">UserCreate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="11">    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="12">    <span class="n">email</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="13">
+</span><span data-line="14"><span class="k">class</span><span class="w"> </span><span class="nc">Users</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)):</span>
+</span><span data-line="15"><span class="w">    </span><span class="sd">&quot;&quot;&quot;User management endpoints&quot;&quot;&quot;</span>
+</span><span data-line="16">
+</span><span data-line="17">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="18">        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+</span><span data-line="19">        <span class="bp">self</span><span class="o">.</span><span class="n">users_db</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span data-line="20">
+</span><span data-line="21">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="22">    <span class="k">def</span><span class="w"> </span><span class="nf">get_users</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">User</span><span class="p">]:</span>
+</span><span data-line="23"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get all users&quot;&quot;&quot;</span>
+</span><span data-line="24">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">users_db</span>
+</span><span data-line="25">
+</span><span data-line="26">    <span class="nd">@post</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="27">    <span class="k">def</span><span class="w"> </span><span class="nf">create_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">UserCreate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">User</span><span class="p">:</span>
+</span><span data-line="28"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new user&quot;&quot;&quot;</span>
+</span><span data-line="29">        <span class="n">new_user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="o">**</span><span class="n">user</span><span class="o">.</span><span class="n">dict</span><span class="p">())</span>
+</span><span data-line="30">        <span class="bp">self</span><span class="o">.</span><span class="n">users_db</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_user</span><span class="p">)</span>
+</span><span data-line="31">        <span class="k">return</span> <span class="n">new_user</span>
+</span><span data-line="32">
+</span><span data-line="33">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/</span><span class="si">{user_id}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span data-line="34">    <span class="k">def</span><span class="w"> </span><span class="nf">get_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">User</span><span class="p">:</span>
+</span><span data-line="35"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get user by ID&quot;&quot;&quot;</span>
+</span><span data-line="36">        <span class="k">if</span> <span class="n">user_id</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">users_db</span><span class="p">):</span>
+</span><span data-line="37">            <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;User not found&#39;</span><span class="p">},</span> <span class="mi">404</span>
+</span><span data-line="38">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">users_db</span><span class="p">[</span><span class="n">user_id</span><span class="p">]</span>
+</span></pre></div>
+</div>
+<p><strong>Key improvements:</strong>
+- ✅ Related endpoints grouped in a class
+- ✅ Self-contained state management
+- ✅ Auto-discovery when using <cite>tatami run</cite>
+- ✅ Cleaner project organization</p>
+</section>
+</section>
+<section id="migration-strategies">
+<h2>Migration Strategies<a class="headerlink" href="#migration-strategies" title="Link to this heading">¶</a></h2>
+<section id="incremental-migration">
+<h3>1. Incremental Migration<a class="headerlink" href="#incremental-migration" title="Link to this heading">¶</a></h3>
+<p>Migrate FastAPI routers one by one:</p>
+<p><strong>Step 1: Convert a FastAPI router to Tatami</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># FastAPI router</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIRouter</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="n">router</span> <span class="o">=</span> <span class="n">APIRouter</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/posts&quot;</span><span class="p">)</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</span><span data-line="7"><span class="k">def</span><span class="w"> </span><span class="nf">get_posts</span><span class="p">():</span>
+</span><span data-line="8">    <span class="k">return</span> <span class="p">[]</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+</span><span data-line="11"><span class="k">def</span><span class="w"> </span><span class="nf">create_post</span><span class="p">(</span><span class="n">post</span><span class="p">:</span> <span class="n">PostCreate</span><span class="p">):</span>
+</span><span data-line="12">    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Post created&quot;</span><span class="p">}</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami router</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami</span><span class="w"> </span><span class="kn">import</span> <span class="n">router</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">post</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">class</span><span class="w"> </span><span class="nc">Posts</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/posts&#39;</span><span class="p">)):</span>
+</span><span data-line="5">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="6">    <span class="k">def</span><span class="w"> </span><span class="nf">get_posts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="7">        <span class="k">return</span> <span class="p">[]</span>
+</span><span data-line="8">
+</span><span data-line="9">    <span class="nd">@post</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="10">    <span class="k">def</span><span class="w"> </span><span class="nf">create_post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">post</span><span class="p">:</span> <span class="n">PostCreate</span><span class="p">):</span>
+</span><span data-line="11">        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Post created&quot;</span><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Step 2: Migrate Dependencies</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># FastAPI dependencies</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Depends</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">def</span><span class="w"> </span><span class="nf">get_db</span><span class="p">():</span>
+</span><span data-line="5">    <span class="n">db</span> <span class="o">=</span> <span class="n">SessionLocal</span><span class="p">()</span>
+</span><span data-line="6">    <span class="k">try</span><span class="p">:</span>
+</span><span data-line="7">        <span class="k">yield</span> <span class="n">db</span>
+</span><span data-line="8">    <span class="k">finally</span><span class="p">:</span>
+</span><span data-line="9">        <span class="n">db</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span><span data-line="10">
+</span><span data-line="11"><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/users&quot;</span><span class="p">)</span>
+</span><span data-line="12"><span class="k">def</span><span class="w"> </span><span class="nf">get_users</span><span class="p">(</span><span class="n">db</span><span class="p">:</span> <span class="n">Session</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)):</span>
+</span><span data-line="13">    <span class="k">return</span> <span class="n">crud</span><span class="o">.</span><span class="n">get_users</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami with service injection</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">Users</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)):</span>
+</span><span data-line="3">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_service</span><span class="p">:</span> <span class="n">UserService</span><span class="p">):</span>
+</span><span data-line="4">        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+</span><span data-line="5">        <span class="bp">self</span><span class="o">.</span><span class="n">user_service</span> <span class="o">=</span> <span class="n">user_service</span>
+</span><span data-line="6">
+</span><span data-line="7">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="8">    <span class="k">def</span><span class="w"> </span><span class="nf">get_users</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="9">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_service</span><span class="o">.</span><span class="n">get_all</span><span class="p">()</span>
+</span></pre></div>
+</div>
+</section>
+<section id="complete-rewrite">
+<h3>2. Complete Rewrite<a class="headerlink" href="#complete-rewrite" title="Link to this heading">¶</a></h3>
+<p>For clean architecture, consider a complete rewrite:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Create new Tatami project</span>
+</span><span data-line="2">tatami<span class="w"> </span>create<span class="w"> </span>my-migrated-api
+</span><span data-line="3"><span class="nb">cd</span><span class="w"> </span>my-migrated-api
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># Convert FastAPI routes to Tatami routers</span>
+</span><span data-line="6"><span class="c1"># Organize code into services and repositories</span>
+</span><span data-line="7"><span class="c1"># Update configuration to use YAML</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="common-migration-patterns">
+<h2>Common Migration Patterns<a class="headerlink" href="#common-migration-patterns" title="Link to this heading">¶</a></h2>
+<section id="fastapi-path-parameters-tatami-path-parameters">
+<h3>FastAPI Path Parameters → Tatami Path Parameters<a class="headerlink" href="#fastapi-path-parameters-tatami-path-parameters" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># FastAPI</span>
+</span><span data-line="2"><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/users/</span><span class="si">{user_id}</span><span class="s2">/posts/</span><span class="si">{post_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span data-line="3"><span class="k">def</span><span class="w"> </span><span class="nf">get_user_post</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">post_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+</span><span data-line="4">    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;user_id&quot;</span><span class="p">:</span> <span class="n">user_id</span><span class="p">,</span> <span class="s2">&quot;post_id&quot;</span><span class="p">:</span> <span class="n">post_id</span><span class="p">}</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">UserPosts</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/users/</span><span class="si">{user_id}</span><span class="s1">/posts&#39;</span><span class="p">)):</span>
+</span><span data-line="3">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/</span><span class="si">{post_id}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span data-line="4">    <span class="k">def</span><span class="w"> </span><span class="nf">get_user_post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">post_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+</span><span data-line="5">        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;user_id&quot;</span><span class="p">:</span> <span class="n">user_id</span><span class="p">,</span> <span class="s2">&quot;post_id&quot;</span><span class="p">:</span> <span class="n">post_id</span><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="fastapi-query-parameters-tatami-query-parameters">
+<h3>FastAPI Query Parameters → Tatami Query Parameters<a class="headerlink" href="#fastapi-query-parameters-tatami-query-parameters" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># FastAPI</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Query</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/search&quot;</span><span class="p">)</span>
+</span><span data-line="5"><span class="k">def</span><span class="w"> </span><span class="nf">search</span><span class="p">(</span>
+</span><span data-line="6">    <span class="n">q</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
+</span><span data-line="7">    <span class="n">page</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+</span><span data-line="8">    <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</span><span data-line="9"><span class="p">):</span>
+</span><span data-line="10">    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">q</span><span class="p">,</span> <span class="s2">&quot;page&quot;</span><span class="p">:</span> <span class="n">page</span><span class="p">,</span> <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="n">limit</span><span class="p">}</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami.param</span><span class="w"> </span><span class="kn">import</span> <span class="n">Query</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">class</span><span class="w"> </span><span class="nc">Search</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/search&#39;</span><span class="p">)):</span>
+</span><span data-line="5">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="6">    <span class="k">def</span><span class="w"> </span><span class="nf">search</span><span class="p">(</span>
+</span><span data-line="7">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="8">        <span class="n">q</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
+</span><span data-line="9">        <span class="n">page</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+</span><span data-line="10">        <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</span><span data-line="11">    <span class="p">):</span>
+</span><span data-line="12">        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">q</span><span class="p">,</span> <span class="s2">&quot;page&quot;</span><span class="p">:</span> <span class="n">page</span><span class="p">,</span> <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="n">limit</span><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="fastapi-dependencies-tatami-dependency-injection">
+<h3>FastAPI Dependencies → Tatami Dependency Injection<a class="headerlink" href="#fastapi-dependencies-tatami-dependency-injection" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># FastAPI</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Depends</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">def</span><span class="w"> </span><span class="nf">get_user_service</span><span class="p">():</span>
+</span><span data-line="5">    <span class="k">return</span> <span class="n">UserService</span><span class="p">()</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="k">def</span><span class="w"> </span><span class="nf">get_email_service</span><span class="p">():</span>
+</span><span data-line="8">    <span class="k">return</span> <span class="n">EmailService</span><span class="p">()</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/users&quot;</span><span class="p">)</span>
+</span><span data-line="11"><span class="k">def</span><span class="w"> </span><span class="nf">create_user</span><span class="p">(</span>
+</span><span data-line="12">    <span class="n">user</span><span class="p">:</span> <span class="n">UserCreate</span><span class="p">,</span>
+</span><span data-line="13">    <span class="n">user_service</span><span class="p">:</span> <span class="n">UserService</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_user_service</span><span class="p">),</span>
+</span><span data-line="14">    <span class="n">email_service</span><span class="p">:</span> <span class="n">EmailService</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_email_service</span><span class="p">)</span>
+</span><span data-line="15"><span class="p">):</span>
+</span><span data-line="16">    <span class="n">new_user</span> <span class="o">=</span> <span class="n">user_service</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span data-line="17">    <span class="n">email_service</span><span class="o">.</span><span class="n">send_welcome</span><span class="p">(</span><span class="n">new_user</span><span class="o">.</span><span class="n">email</span><span class="p">)</span>
+</span><span data-line="18">    <span class="k">return</span> <span class="n">new_user</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">Users</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)):</span>
+</span><span data-line="3">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_service</span><span class="p">:</span> <span class="n">UserService</span><span class="p">,</span> <span class="n">email_service</span><span class="p">:</span> <span class="n">EmailService</span><span class="p">):</span>
+</span><span data-line="4">        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+</span><span data-line="5">        <span class="bp">self</span><span class="o">.</span><span class="n">user_service</span> <span class="o">=</span> <span class="n">user_service</span>
+</span><span data-line="6">        <span class="bp">self</span><span class="o">.</span><span class="n">email_service</span> <span class="o">=</span> <span class="n">email_service</span>
+</span><span data-line="7">
+</span><span data-line="8">    <span class="nd">@post</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="9">    <span class="k">def</span><span class="w"> </span><span class="nf">create_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">UserCreate</span><span class="p">):</span>
+</span><span data-line="10">        <span class="n">new_user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_service</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span data-line="11">        <span class="bp">self</span><span class="o">.</span><span class="n">email_service</span><span class="o">.</span><span class="n">send_welcome</span><span class="p">(</span><span class="n">new_user</span><span class="o">.</span><span class="n">email</span><span class="p">)</span>
+</span><span data-line="12">        <span class="k">return</span> <span class="n">new_user</span>
+</span></pre></div>
+</div>
+</section>
+<section id="fastapi-middleware-tatami-middleware">
+<h3>FastAPI Middleware → Tatami Middleware<a class="headerlink" href="#fastapi-middleware-tatami-middleware" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># FastAPI</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi.middleware.cors</span><span class="w"> </span><span class="kn">import</span> <span class="n">CORSMiddleware</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="n">app</span><span class="o">.</span><span class="n">add_middleware</span><span class="p">(</span>
+</span><span data-line="5">    <span class="n">CORSMiddleware</span><span class="p">,</span>
+</span><span data-line="6">    <span class="n">allow_origins</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;*&quot;</span><span class="p">],</span>
+</span><span data-line="7">    <span class="n">allow_credentials</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span data-line="8">    <span class="n">allow_methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;*&quot;</span><span class="p">],</span>
+</span><span data-line="9">    <span class="n">allow_headers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;*&quot;</span><span class="p">],</span>
+</span><span data-line="10"><span class="p">)</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami</span>
+</span><span data-line="2"><span class="c1"># middleware/cors_middleware.py</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">starlette.middleware.cors</span><span class="w"> </span><span class="kn">import</span> <span class="n">CORSMiddleware</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># Auto-discovered and applied globally</span>
+</span></pre></div>
+</div>
+</section>
+<section id="fastapi-background-tasks-tatami-services">
+<h3>FastAPI Background Tasks → Tatami Services<a class="headerlink" href="#fastapi-background-tasks-tatami-services" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># FastAPI</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">BackgroundTasks</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">def</span><span class="w"> </span><span class="nf">send_email</span><span class="p">(</span><span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span data-line="5">    <span class="c1"># Send email logic</span>
+</span><span data-line="6">    <span class="k">pass</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/send-email&quot;</span><span class="p">)</span>
+</span><span data-line="9"><span class="k">def</span><span class="w"> </span><span class="nf">send_email_endpoint</span><span class="p">(</span>
+</span><span data-line="10">    <span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span data-line="11">    <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span data-line="12">    <span class="n">background_tasks</span><span class="p">:</span> <span class="n">BackgroundTasks</span>
+</span><span data-line="13"><span class="p">):</span>
+</span><span data-line="14">    <span class="n">background_tasks</span><span class="o">.</span><span class="n">add_task</span><span class="p">(</span><span class="n">send_email</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+</span><span data-line="15">    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Email will be sent&quot;</span><span class="p">}</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">Email</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/email&#39;</span><span class="p">)):</span>
+</span><span data-line="3">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">email_service</span><span class="p">:</span> <span class="n">EmailService</span><span class="p">):</span>
+</span><span data-line="4">        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+</span><span data-line="5">        <span class="bp">self</span><span class="o">.</span><span class="n">email_service</span> <span class="o">=</span> <span class="n">email_service</span>
+</span><span data-line="6">
+</span><span data-line="7">    <span class="nd">@post</span><span class="p">(</span><span class="s1">&#39;/send&#39;</span><span class="p">)</span>
+</span><span data-line="8">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">send_email</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span data-line="9">        <span class="c1"># Use asyncio or celery for background processing</span>
+</span><span data-line="10">        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">email_service</span><span class="o">.</span><span class="n">send_async</span><span class="p">(</span><span class="n">email</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+</span><span data-line="11">        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Email sent&quot;</span><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="configuration-migration">
+<h2>Configuration Migration<a class="headerlink" href="#configuration-migration" title="Link to this heading">¶</a></h2>
+<section id="fastapi-settings">
+<h3>FastAPI Settings<a class="headerlink" href="#fastapi-settings" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># FastAPI settings.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseSettings</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">class</span><span class="w"> </span><span class="nc">Settings</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+</span><span data-line="5">    <span class="n">app_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;My API&quot;</span>
+</span><span data-line="6">    <span class="n">database_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;sqlite:///./app.db&quot;</span>
+</span><span data-line="7">    <span class="n">secret_key</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="8">
+</span><span data-line="9">    <span class="k">class</span><span class="w"> </span><span class="nc">Config</span><span class="p">:</span>
+</span><span data-line="10">        <span class="n">env_file</span> <span class="o">=</span> <span class="s2">&quot;.env&quot;</span>
+</span><span data-line="11">
+</span><span data-line="12"><span class="n">settings</span> <span class="o">=</span> <span class="n">Settings</span><span class="p">()</span>
+</span></pre></div>
+</div>
+</section>
+<section id="tatami-configuration">
+<h3>Tatami Configuration<a class="headerlink" href="#tatami-configuration" title="Link to this heading">¶</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># config.yaml</span>
+</span><span data-line="2"><span class="nt">app</span><span class="p">:</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;My</span><span class="nv"> </span><span class="s">API&quot;</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">secret_key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${SECRET_KEY}&quot;</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="nt">database</span><span class="p">:</span>
+</span><span data-line="7"><span class="w">  </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sqlite:///./app.db&quot;</span>
+</span></pre></div>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># config-dev.yaml</span>
+</span><span data-line="2"><span class="nt">database</span><span class="p">:</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sqlite:///./dev.db&quot;</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="nt">features</span><span class="p">:</span>
+</span><span data-line="6"><span class="w">  </span><span class="nt">debug</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="testing-migration">
+<h2>Testing Migration<a class="headerlink" href="#testing-migration" title="Link to this heading">¶</a></h2>
+<section id="fastapi-testing">
+<h3>FastAPI Testing<a class="headerlink" href="#fastapi-testing" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># FastAPI testing</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi.testclient</span><span class="w"> </span><span class="kn">import</span> <span class="n">TestClient</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="n">client</span> <span class="o">=</span> <span class="n">TestClient</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="k">def</span><span class="w"> </span><span class="nf">test_get_users</span><span class="p">():</span>
+</span><span data-line="7">    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/users&quot;</span><span class="p">)</span>
+</span><span data-line="8">    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+</span><span data-line="9">    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span> <span class="o">==</span> <span class="p">[]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="tatami-testing">
+<h3>Tatami Testing<a class="headerlink" href="#tatami-testing" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami testing</span>
+</span><span data-line="2"><span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseRouter</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="k">def</span><span class="w"> </span><span class="nf">test_get_users</span><span class="p">():</span>
+</span><span data-line="6">    <span class="n">app</span> <span class="o">=</span> <span class="n">BaseRouter</span><span class="p">()</span>
+</span><span data-line="7">    <span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">Users</span><span class="p">())</span>
+</span><span data-line="8">
+</span><span data-line="9">    <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="n">app</span><span class="o">=</span><span class="n">app</span><span class="p">,</span> <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://test&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+</span><span data-line="10">        <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/users&quot;</span><span class="p">)</span>
+</span><span data-line="11">        <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+</span><span data-line="12">        <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span> <span class="o">==</span> <span class="p">[]</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="project-structure-comparison">
+<h2>Project Structure Comparison<a class="headerlink" href="#project-structure-comparison" title="Link to this heading">¶</a></h2>
+<section id="fastapi-project-structure">
+<h3>FastAPI Project Structure<a class="headerlink" href="#fastapi-project-structure" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">fastapi-project/
+</span><span data-line="2">├── main.py              # All routes or app setup
+</span><span data-line="3">├── models.py            # Pydantic models
+</span><span data-line="4">├── database.py          # Database setup
+</span><span data-line="5">├── crud.py              # Database operations
+</span><span data-line="6">├── dependencies.py      # Dependency functions
+</span><span data-line="7">├── routers/             # Optional organization
+</span><span data-line="8">│   ├── users.py
+</span><span data-line="9">│   └── posts.py
+</span><span data-line="10">└── requirements.txt
+</span></pre></div>
+</div>
+</section>
+<section id="tatami-project-structure">
+<h3>Tatami Project Structure<a class="headerlink" href="#tatami-project-structure" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">tatami-project/
+</span><span data-line="2">├── config.yaml          # Configuration
+</span><span data-line="3">├── routers/             # API endpoints (auto-discovered)
+</span><span data-line="4">│   ├── users.py
+</span><span data-line="5">│   └── posts.py
+</span><span data-line="6">├── services/            # Business logic (auto-discovered)
+</span><span data-line="7">│   ├── user_service.py
+</span><span data-line="8">│   └── email_service.py
+</span><span data-line="9">├── repositories/        # Data access (auto-discovered)
+</span><span data-line="10">│   └── user_repository.py
+</span><span data-line="11">├── middleware/          # Middleware (auto-discovered)
+</span><span data-line="12">│   └── auth_middleware.py
+</span><span data-line="13">├── static/              # Static files (auto-served)
+</span><span data-line="14">└── templates/           # Templates (auto-configured)
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="advantages-of-migration">
+<h2>Advantages of Migration<a class="headerlink" href="#advantages-of-migration" title="Link to this heading">¶</a></h2>
+<section id="better-organization">
+<h3>Better Organization<a class="headerlink" href="#better-organization" title="Link to this heading">¶</a></h3>
+<p>FastAPI encourages but doesn’t enforce good structure. Tatami provides it by default:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># FastAPI - everything in one file (common but not ideal)</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastAPI</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="c1"># 50+ route definitions here...</span>
+</span><span data-line="7"><span class="c1"># Models scattered throughout...</span>
+</span><span data-line="8"><span class="c1"># Business logic mixed with HTTP concerns...</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami - clear separation by convention</span>
+</span><span data-line="2"><span class="c1"># routers/users.py - HTTP concerns only</span>
+</span><span data-line="3"><span class="c1"># services/user_service.py - Business logic</span>
+</span><span data-line="4"><span class="c1"># repositories/user_repository.py - Data access</span>
+</span></pre></div>
+</div>
+</section>
+<section id="reduced-boilerplate">
+<h3>Reduced Boilerplate<a class="headerlink" href="#reduced-boilerplate" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># FastAPI - manual dependency injection everywhere</span>
+</span><span data-line="2"><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/users&quot;</span><span class="p">)</span>
+</span><span data-line="3"><span class="k">def</span><span class="w"> </span><span class="nf">get_users</span><span class="p">(</span>
+</span><span data-line="4">    <span class="n">user_service</span><span class="p">:</span> <span class="n">UserService</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_user_service</span><span class="p">),</span>
+</span><span data-line="5">    <span class="n">email_service</span><span class="p">:</span> <span class="n">EmailService</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_email_service</span><span class="p">)</span>
+</span><span data-line="6"><span class="p">):</span>
+</span><span data-line="7">    <span class="k">pass</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami - inject once in constructor</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">Users</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)):</span>
+</span><span data-line="3">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_service</span><span class="p">:</span> <span class="n">UserService</span><span class="p">,</span> <span class="n">email_service</span><span class="p">:</span> <span class="n">EmailService</span><span class="p">):</span>
+</span><span data-line="4">        <span class="bp">self</span><span class="o">.</span><span class="n">user_service</span> <span class="o">=</span> <span class="n">user_service</span>
+</span><span data-line="5">        <span class="bp">self</span><span class="o">.</span><span class="n">email_service</span> <span class="o">=</span> <span class="n">email_service</span>
+</span></pre></div>
+</div>
+</section>
+<section id="auto-discovery">
+<h3>Auto-Discovery<a class="headerlink" href="#auto-discovery" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># FastAPI - manual registration</span>
+</span><span data-line="2"><span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">users_router</span><span class="p">)</span>
+</span><span data-line="3"><span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">posts_router</span><span class="p">)</span>
+</span><span data-line="4"><span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">auth_router</span><span class="p">)</span>
+</span><span data-line="5"><span class="c1"># ... manual setup for everything</span>
+</span></pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami - automatic discovery</span>
+</span><span data-line="2">tatami<span class="w"> </span>run<span class="w"> </span>.<span class="w">  </span><span class="c1"># Discovers everything automatically</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="migration-gotchas">
+<h2>Migration Gotchas<a class="headerlink" href="#migration-gotchas" title="Link to this heading">¶</a></h2>
+<section id="dependency-injection-differences">
+<h3>1. Dependency Injection Differences<a class="headerlink" href="#dependency-injection-differences" title="Link to this heading">¶</a></h3>
+<p>FastAPI uses function-level dependency injection:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># FastAPI</span>
+</span><span data-line="2"><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/users&quot;</span><span class="p">)</span>
+</span><span data-line="3"><span class="k">def</span><span class="w"> </span><span class="nf">get_users</span><span class="p">(</span><span class="n">db</span><span class="p">:</span> <span class="n">Session</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_db</span><span class="p">)):</span>
+</span><span data-line="4">    <span class="k">pass</span>
+</span></pre></div>
+</div>
+<p>Tatami uses constructor-level injection:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">Users</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)):</span>
+</span><span data-line="3">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_service</span><span class="p">:</span> <span class="n">UserService</span><span class="p">):</span>
+</span><span data-line="4">        <span class="bp">self</span><span class="o">.</span><span class="n">user_service</span> <span class="o">=</span> <span class="n">user_service</span>
+</span></pre></div>
+</div>
+</section>
+<section id="response-models">
+<h3>2. Response Models<a class="headerlink" href="#response-models" title="Link to this heading">¶</a></h3>
+<p>FastAPI uses <cite>response_model</cite> parameter:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># FastAPI</span>
+</span><span data-line="2"><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/users&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">List</span><span class="p">[</span><span class="n">User</span><span class="p">])</span>
+</span><span data-line="3"><span class="k">def</span><span class="w"> </span><span class="nf">get_users</span><span class="p">():</span>
+</span><span data-line="4">    <span class="k">pass</span>
+</span></pre></div>
+</div>
+<p>Tatami uses return type hints:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami</span>
+</span><span data-line="2"><span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="3"><span class="k">def</span><span class="w"> </span><span class="nf">get_users</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">User</span><span class="p">]:</span>
+</span><span data-line="4">    <span class="k">pass</span>
+</span></pre></div>
+</div>
+</section>
+<section id="exception-handling">
+<h3>3. Exception Handling<a class="headerlink" href="#exception-handling" title="Link to this heading">¶</a></h3>
+<p>FastAPI uses HTTPException:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># FastAPI</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPException</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/users/</span><span class="si">{user_id}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span data-line="5"><span class="k">def</span><span class="w"> </span><span class="nf">get_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+</span><span data-line="6">    <span class="k">if</span> <span class="n">user_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">users</span><span class="p">:</span>
+</span><span data-line="7">        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">404</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;User not found&quot;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<p>Tatami uses tuple returns:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tatami</span>
+</span><span data-line="2"><span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/</span><span class="si">{user_id}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span data-line="3"><span class="k">def</span><span class="w"> </span><span class="nf">get_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+</span><span data-line="4">    <span class="k">if</span> <span class="n">user_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">users</span><span class="p">:</span>
+</span><span data-line="5">        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;User not found&quot;</span><span class="p">},</span> <span class="mi">404</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="migration-checklist">
+<h2>Migration Checklist<a class="headerlink" href="#migration-checklist" title="Link to this heading">¶</a></h2>
+<section id="before-migration">
+<h3>Before Migration<a class="headerlink" href="#before-migration" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>[ ] <strong>Audit FastAPI app</strong> - Catalog all routes, dependencies, middleware</p></li>
+<li><p>[ ] <strong>Identify business logic</strong> - What can be moved to services?</p></li>
+<li><p>[ ] <strong>Review dependencies</strong> - How are services currently injected?</p></li>
+<li><p>[ ] <strong>Document current structure</strong> - Understand existing organization</p></li>
+</ul>
+</section>
+<section id="during-migration">
+<h3>During Migration<a class="headerlink" href="#during-migration" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>[ ] <strong>Create Tatami project</strong> - <cite>tatami create new-app</cite></p></li>
+<li><p>[ ] <strong>Convert routes to routers</strong> - Group related endpoints</p></li>
+<li><p>[ ] <strong>Extract services</strong> - Move business logic to service classes</p></li>
+<li><p>[ ] <strong>Update dependencies</strong> - Use constructor injection</p></li>
+<li><p>[ ] <strong>Migrate configuration</strong> - Convert to YAML format</p></li>
+</ul>
+</section>
+<section id="after-migration">
+<h3>After Migration<a class="headerlink" href="#after-migration" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>[ ] <strong>Test thoroughly</strong> - Ensure all functionality works</p></li>
+<li><p>[ ] <strong>Verify auto-discovery</strong> - Check <cite>tatami doctor</cite></p></li>
+<li><p>[ ] <strong>Update deployment</strong> - Use <cite>tatami run</cite> for serving</p></li>
+<li><p>[ ] <strong>Document changes</strong> - API docs are auto-generated</p></li>
+</ul>
+</section>
+</section>
+<section id="why-make-the-switch">
+<h2>Why Make the Switch?<a class="headerlink" href="#why-make-the-switch" title="Link to this heading">¶</a></h2>
+<p>While FastAPI is excellent, Tatami offers:</p>
+<ul class="simple">
+<li><p>🏗️ <strong>Better Architecture</strong> - Enforced separation of concerns</p></li>
+<li><p>🔧 <strong>Less Configuration</strong> - Convention over configuration approach</p></li>
+<li><p>📁 <strong>Cleaner Projects</strong> - Organized structure from day one</p></li>
+<li><p>🚀 <strong>Faster Development</strong> - Auto-discovery reduces boilerplate</p></li>
+<li><p>🧪 <strong>Better Testing</strong> - Clear dependencies make mocking easier</p></li>
+</ul>
+<p>The migration effort pays off in maintainability and team productivity! 🎋</p>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="from_flask.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">Migrating from Flask 🍶➡️🎋</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="from_django.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Migrating from Django 🎸➡️🎋</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Ibon</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/shibuya.js?v=c477d091"></script></body>
+</html>

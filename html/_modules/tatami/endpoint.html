@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>tatami.endpoint - Tatami documentation</title><link rel="shortcut icon" href="../../_static/favicon.ico"/><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=397bb51e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/shibuya.css?v=76b6f612" />
+    <link media="print" rel="stylesheet" type="text/css" href="../../_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="tatami.endpoint"/>
+<meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../../index.html">
+      <img class="light-logo" src="../../_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
+      <img class="dark-logo" src="../../_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
+      <strong>Tatami</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2 -translate-x-2"></span>
+          <span class="hamburger_3 -translate-x-1"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn Tatami Step by Step</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/your_first_api.html">Your First API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/project_structure.html">Project Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/routing_guide.html">Routing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/working_with_data.html">Working with Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/dependency_injection.html">Dependency Injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/middleware_and_services.html">Middleware and Services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/testing_your_api.html">Testing Your API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/deployment.html">Deployment</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">CLI &amp; Tools</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/commands.html">CLI Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/docker_deployment.html">Docker Deployment</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Migration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../migration/from_flask.html">From Flask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../migration/from_fastapi.html">From FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../migration/from_django.html">From Django</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced/index.html">Advanced Topics Index</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../../index.html"><span itemprop="name">Tatami</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">Module code</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">tatami.endpoint</strong>
+        <meta itemprop="position" content="3" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <h1>Source code for tatami.endpoint</h1><div class="highlight"><pre>
+<span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+</span><span data-line="2"><span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+</span><span data-line="3"><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">lru_cache</span><span class="p">,</span> <span class="n">wraps</span>
+</span><span data-line="5"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Annotated</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Awaitable</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span>
+</span><span data-line="6">                    <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeAlias</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span>
+</span><span data-line="7">                    <span class="n">get_args</span><span class="p">,</span> <span class="n">get_origin</span><span class="p">,</span> <span class="n">overload</span><span class="p">)</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+</span><span data-line="10"><span class="kn">from</span><span class="w"> </span><span class="nn">starlette.requests</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
+</span><span data-line="11"><span class="kn">from</span><span class="w"> </span><span class="nn">starlette.routing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Route</span>
+</span><span data-line="12">
+</span><span data-line="13"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami._utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">human_friendly_description_from_name</span><span class="p">,</span>
+</span><span data-line="14">                           <span class="n">serialize_json</span><span class="p">,</span> <span class="n">wrap_response</span><span class="p">)</span>
+</span><span data-line="15"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">TatamiObject</span>
+</span><span data-line="16"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami.di</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">__TATAMI_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED</span><span class="p">,</span>
+</span><span data-line="17">                       <span class="n">Inject</span><span class="p">,</span> <span class="n">Scope</span><span class="p">,</span> <span class="n">is_injectable</span><span class="p">,</span> <span class="n">is_tatami_object</span><span class="p">)</span>
+</span><span data-line="18"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami.param</span><span class="w"> </span><span class="kn">import</span> <span class="n">Header</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">Query</span>
+</span><span data-line="19"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami.responses</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONResponse</span><span class="p">,</span> <span class="n">Response</span>
+</span><span data-line="20"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami.validation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">ValidationException</span><span class="p">,</span>
+</span><span data-line="21">                               <span class="n">create_multiple_validation_errors_response</span><span class="p">,</span>
+</span><span data-line="22">                               <span class="n">create_validation_error_response</span><span class="p">,</span>
+</span><span data-line="23">                               <span class="n">validate_parameter</span><span class="p">)</span>
+</span><span data-line="24">
+</span><span data-line="25"><span class="n">Tag</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
+</span><span data-line="26"><span class="n">HTTPMethod</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="s1">&#39;PUT&#39;</span><span class="p">,</span> <span class="s1">&#39;PATCH&#39;</span><span class="p">,</span> <span class="s1">&#39;DELETE&#39;</span><span class="p">,</span> <span class="s1">&#39;HEAD&#39;</span><span class="p">,</span> <span class="s1">&#39;OPTIONS&#39;</span><span class="p">]</span>
+</span><span data-line="27"><span class="n">F</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;F&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">Callable</span><span class="p">)</span>
+</span><span data-line="28">
+</span><span data-line="29"><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;tatami.endpoint&#39;</span><span class="p">)</span>
+</span><span data-line="30">
+</span><span data-line="31">
+</span><span data-line="32"><span class="k">def</span><span class="w"> </span><span class="nf">_format_header_name</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span data-line="33"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert parameter name to HTTP header format (replace _ with -, title case).&quot;&quot;&quot;</span>
+</span><span data-line="34">    <span class="k">return</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
+</span><span data-line="35">
+</span><span data-line="36">
+</span><span data-line="37"><span class="k">def</span><span class="w"> </span><span class="nf">_convert_and_validate_parameter</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">target_type</span><span class="p">,</span> <span class="n">field_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">any</span><span class="p">:</span>
+</span><span data-line="38"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="39"><span class="sd">    Convert and validate string parameter value to target type using the validation system.</span>
+</span><span data-line="40"><span class="sd">    </span>
+</span><span data-line="41"><span class="sd">    Args:</span>
+</span><span data-line="42"><span class="sd">        value: The string value from the request</span>
+</span><span data-line="43"><span class="sd">        target_type: The target type to convert to</span>
+</span><span data-line="44"><span class="sd">        field_name: Name of the field for error reporting</span>
+</span><span data-line="45"><span class="sd">        </span>
+</span><span data-line="46"><span class="sd">    Returns:</span>
+</span><span data-line="47"><span class="sd">        The validated and converted value</span>
+</span><span data-line="48"><span class="sd">        </span>
+</span><span data-line="49"><span class="sd">    Raises:</span>
+</span><span data-line="50"><span class="sd">        ValidationException: If validation fails</span>
+</span><span data-line="51"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="52">    <span class="k">return</span> <span class="n">validate_parameter</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">target_type</span><span class="p">,</span> <span class="n">field_name</span><span class="p">)</span>
+</span><span data-line="53">
+</span><span data-line="54"><span class="nd">@lru_cache</span>
+</span><span data-line="55"><span class="k">def</span><span class="w"> </span><span class="nf">_extract_param_info</span><span class="p">(</span><span class="n">param_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">annotation</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">any</span><span class="p">]:</span>
+</span><span data-line="56"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="57"><span class="sd">    Extract parameter information from type annotation.</span>
+</span><span data-line="58"><span class="sd">    </span>
+</span><span data-line="59"><span class="sd">    Returns:</span>
+</span><span data-line="60"><span class="sd">        tuple: (param_type, param_name, actual_type)</span>
+</span><span data-line="61"><span class="sd">        where param_type is one of &#39;headers&#39;, &#39;query&#39;, &#39;path&#39;, &#39;body&#39;</span>
+</span><span data-line="62"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="63">    <span class="c1"># Check if it&#39;s an Annotated type</span>
+</span><span data-line="64">    <span class="k">if</span> <span class="n">get_origin</span><span class="p">(</span><span class="n">annotation</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Annotated</span><span class="p">:</span>
+</span><span data-line="65">        <span class="n">args</span> <span class="o">=</span> <span class="n">get_args</span><span class="p">(</span><span class="n">annotation</span><span class="p">)</span>
+</span><span data-line="66">        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+</span><span data-line="67">            <span class="n">actual_type</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span><span data-line="68">            <span class="n">metadata</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+</span><span data-line="69">            
+</span><span data-line="70">            <span class="c1"># Look for Header, Query, or Path in metadata</span>
+</span><span data-line="71">            <span class="k">for</span> <span class="n">meta</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
+</span><span data-line="72">                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">Header</span><span class="p">):</span>
+</span><span data-line="73">                    <span class="n">header_name</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">name</span> <span class="k">if</span> <span class="n">meta</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">_format_header_name</span><span class="p">(</span><span class="n">param_name</span><span class="p">)</span>
+</span><span data-line="74">                    <span class="k">return</span> <span class="s1">&#39;headers&#39;</span><span class="p">,</span> <span class="n">header_name</span><span class="p">,</span> <span class="n">actual_type</span>
+</span><span data-line="75">                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">Query</span><span class="p">):</span>
+</span><span data-line="76">                    <span class="n">query_name</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">name</span> <span class="k">if</span> <span class="n">meta</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">param_name</span>
+</span><span data-line="77">                    <span class="k">return</span> <span class="s1">&#39;query&#39;</span><span class="p">,</span> <span class="n">query_name</span><span class="p">,</span> <span class="n">actual_type</span>
+</span><span data-line="78">                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
+</span><span data-line="79">                    <span class="n">path_name</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">name</span> <span class="k">if</span> <span class="n">meta</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">param_name</span>
+</span><span data-line="80">                    <span class="k">return</span> <span class="s1">&#39;path&#39;</span><span class="p">,</span> <span class="n">path_name</span><span class="p">,</span> <span class="n">actual_type</span>
+</span><span data-line="81">                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">Inject</span><span class="p">):</span>
+</span><span data-line="82">                    <span class="k">return</span> <span class="s1">&#39;injected&#39;</span><span class="p">,</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">annotation</span>
+</span><span data-line="83">    
+</span><span data-line="84">    <span class="c1"># Check if it&#39;s a BaseModel (body parameter)</span>
+</span><span data-line="85">    <span class="k">try</span><span class="p">:</span>
+</span><span data-line="86">        <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">annotation</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">annotation</span><span class="p">,</span> <span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="87">            <span class="k">return</span> <span class="s1">&#39;body&#39;</span><span class="p">,</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">annotation</span>
+</span><span data-line="88">    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+</span><span data-line="89">        <span class="k">pass</span>
+</span><span data-line="90">
+</span><span data-line="91">    <span class="c1"># Same for requests</span>
+</span><span data-line="92">    <span class="k">try</span><span class="p">:</span>
+</span><span data-line="93">        <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">annotation</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">annotation</span><span class="p">,</span> <span class="n">Request</span><span class="p">):</span>
+</span><span data-line="94">            <span class="k">return</span> <span class="s1">&#39;injected&#39;</span><span class="p">,</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">annotation</span>
+</span><span data-line="95">    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+</span><span data-line="96">        <span class="k">pass</span>
+</span><span data-line="97">
+</span><span data-line="98">    <span class="c1"># and more injectable objects</span>
+</span><span data-line="99">    <span class="k">if</span> <span class="n">is_injectable</span><span class="p">(</span><span class="n">annotation</span><span class="p">):</span>
+</span><span data-line="100">        <span class="k">return</span> <span class="s1">&#39;injected&#39;</span><span class="p">,</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">annotation</span>
+</span><span data-line="101">    
+</span><span data-line="102">    <span class="c1"># For unannotated parameters, infer based on path presence</span>
+</span><span data-line="103">    <span class="c1"># If parameter name exists in path, it&#39;s a path parameter</span>
+</span><span data-line="104">    <span class="k">if</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="se">{{</span><span class="si">{</span><span class="n">param_name</span><span class="si">}</span><span class="se">}}</span><span class="s1">&#39;</span> <span class="ow">in</span> <span class="n">path</span><span class="p">:</span>
+</span><span data-line="105">        <span class="n">param_type</span> <span class="o">=</span> <span class="n">annotation</span> <span class="k">if</span> <span class="n">annotation</span> <span class="o">!=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">empty</span> <span class="k">else</span> <span class="nb">str</span>
+</span><span data-line="106">        <span class="k">return</span> <span class="s1">&#39;path&#39;</span><span class="p">,</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">param_type</span>
+</span><span data-line="107">    <span class="k">else</span><span class="p">:</span>
+</span><span data-line="108">        <span class="c1"># Otherwise, it&#39;s a query parameter</span>
+</span><span data-line="109">        <span class="n">param_type</span> <span class="o">=</span> <span class="n">annotation</span> <span class="k">if</span> <span class="n">annotation</span> <span class="o">!=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">empty</span> <span class="k">else</span> <span class="nb">str</span>
+</span><span data-line="110">        <span class="k">return</span> <span class="s1">&#39;query&#39;</span><span class="p">,</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">param_type</span>
+</span><span data-line="111">    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Parameter &#39;</span><span class="si">{</span><span class="n">param_name</span><span class="si">}</span><span class="s2">&#39; must be explicitly annotated with Query(), Header(), Path(), or be a BaseModel&quot;</span><span class="p">)</span>
+</span><span data-line="112">
+</span><span data-line="113"><span class="nd">@lru_cache</span>
+</span><span data-line="114"><span class="k">def</span><span class="w"> </span><span class="nf">_extract_parameters</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span><span data-line="115"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="116"><span class="sd">    Extract parameter information from function signature.</span>
+</span><span data-line="117"><span class="sd">    </span>
+</span><span data-line="118"><span class="sd">    Path and Query parameters can be inferred automatically:</span>
+</span><span data-line="119"><span class="sd">    - If parameter name exists in path (e.g., {user_id}), it&#39;s a path parameter</span>
+</span><span data-line="120"><span class="sd">    - Otherwise, it&#39;s a query parameter</span>
+</span><span data-line="121"><span class="sd">    - Headers and body parameters must be explicitly annotated</span>
+</span><span data-line="122"><span class="sd">    </span>
+</span><span data-line="123"><span class="sd">    Returns:</span>
+</span><span data-line="124"><span class="sd">        dict: Contains &#39;headers&#39;, &#39;query&#39;, &#39;path&#39;, and &#39;body&#39; parameter mappings</span>
+</span><span data-line="125"><span class="sd">        Each mapping contains param_name -&gt; {&#39;key&#39;: str, &#39;type&#39;: type}</span>
+</span><span data-line="126"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="127">    <span class="n">sig</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+</span><span data-line="128">    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+</span><span data-line="129">        <span class="s1">&#39;headers&#39;</span><span class="p">:</span> <span class="p">{},</span>  <span class="c1"># param_name -&gt; {&#39;key&#39;: header_name, &#39;type&#39;: type}</span>
+</span><span data-line="130">        <span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="p">{},</span>    <span class="c1"># param_name -&gt; {&#39;key&#39;: query_name, &#39;type&#39;: type}  </span>
+</span><span data-line="131">        <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="p">{},</span>     <span class="c1"># param_name -&gt; {&#39;key&#39;: path_name, &#39;type&#39;: type}</span>
+</span><span data-line="132">        <span class="s1">&#39;body&#39;</span><span class="p">:</span> <span class="p">{},</span>     <span class="c1"># param_name -&gt; model_class</span>
+</span><span data-line="133">        <span class="s1">&#39;injected&#39;</span><span class="p">:</span> <span class="p">{},</span> <span class="c1"># param_name -&gt; injected_object</span>
+</span><span data-line="134">    <span class="p">}</span>
+</span><span data-line="135">    
+</span><span data-line="136">    <span class="k">for</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">sig</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span data-line="137">        <span class="c1"># Skip &#39;self&#39; parameter</span>
+</span><span data-line="138">        <span class="k">if</span> <span class="n">param_name</span> <span class="o">==</span> <span class="s1">&#39;self&#39;</span><span class="p">:</span>
+</span><span data-line="139">            <span class="k">continue</span>
+</span><span data-line="140">            
+</span><span data-line="141">        <span class="n">annotation</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">annotation</span>
+</span><span data-line="142">        
+</span><span data-line="143">        <span class="c1"># Handle both annotated and unannotated parameters</span>
+</span><span data-line="144">        <span class="n">param_type</span><span class="p">,</span> <span class="n">param_key</span><span class="p">,</span> <span class="n">actual_type</span> <span class="o">=</span> <span class="n">_extract_param_info</span><span class="p">(</span><span class="n">param_name</span><span class="p">,</span> <span class="n">annotation</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+</span><span data-line="145">        
+</span><span data-line="146">        <span class="k">if</span> <span class="n">param_type</span> <span class="o">==</span> <span class="s1">&#39;body&#39;</span><span class="p">:</span>
+</span><span data-line="147">            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;body&#39;</span><span class="p">][</span><span class="n">param_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">actual_type</span>
+</span><span data-line="148">        <span class="k">elif</span> <span class="n">param_type</span> <span class="o">==</span> <span class="s1">&#39;injected&#39;</span><span class="p">:</span>
+</span><span data-line="149">            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;injected&#39;</span><span class="p">][</span><span class="n">param_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">actual_type</span>
+</span><span data-line="150">        <span class="k">else</span><span class="p">:</span>
+</span><span data-line="151">            <span class="n">params</span><span class="p">[</span><span class="n">param_type</span><span class="p">][</span><span class="n">param_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;key&#39;</span><span class="p">:</span> <span class="n">param_key</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="n">actual_type</span><span class="p">}</span>
+</span><span data-line="152">    
+</span><span data-line="153">    <span class="k">return</span> <span class="n">params</span>
+</span><span data-line="154">
+</span><span data-line="155"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_resolve_parameters</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+</span><span data-line="156">    <span class="n">params_config</span> <span class="o">=</span> <span class="n">_extract_parameters</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+</span><span data-line="157">    <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span data-line="158">    <span class="n">validation_errors</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span data-line="159">
+</span><span data-line="160">    <span class="k">for</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">param_type</span> <span class="ow">in</span> <span class="n">params_config</span><span class="p">[</span><span class="s1">&#39;injected&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span data-line="161">        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param_type</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">param_type</span><span class="p">,</span> <span class="n">Request</span><span class="p">):</span>
+</span><span data-line="162">            <span class="n">kwargs</span><span class="p">[</span><span class="n">param_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span>
+</span><span data-line="163">        
+</span><span data-line="164">        <span class="k">elif</span> <span class="n">get_origin</span><span class="p">(</span><span class="n">param_type</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Annotated</span><span class="p">:</span>
+</span><span data-line="165">            <span class="n">actual_type</span><span class="p">,</span> <span class="n">inject_object</span> <span class="o">=</span> <span class="n">get_args</span><span class="p">(</span><span class="n">param_type</span><span class="p">)</span>
+</span><span data-line="166">            
+</span><span data-line="167">            <span class="k">if</span> <span class="n">inject_object</span><span class="o">.</span><span class="n">factory</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="168">                <span class="k">if</span> <span class="n">is_injectable</span><span class="p">(</span><span class="n">actual_type</span><span class="p">):</span>
+</span><span data-line="169">                    <span class="n">metadata</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">actual_type</span><span class="p">,</span> <span class="n">__TATAMI_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED</span><span class="p">)</span>
+</span><span data-line="170">                    <span class="k">if</span> <span class="n">metadata</span><span class="o">.</span><span class="n">scope</span> <span class="o">==</span> <span class="n">Scope</span><span class="o">.</span><span class="n">SINGLETON</span><span class="p">:</span>
+</span><span data-line="171">                        <span class="k">if</span> <span class="n">metadata</span><span class="o">.</span><span class="n">singleton</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="172">                            <span class="n">metadata</span><span class="o">.</span><span class="n">singleton</span> <span class="o">=</span> <span class="n">actual_type</span><span class="p">()</span>
+</span><span data-line="173">                        <span class="n">instance</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">singleton</span>
+</span><span data-line="174">                    <span class="k">else</span><span class="p">:</span>
+</span><span data-line="175">                        <span class="n">instance</span> <span class="o">=</span> <span class="n">actual_type</span><span class="p">()</span>
+</span><span data-line="176">                <span class="k">else</span><span class="p">:</span>
+</span><span data-line="177">                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Cannot inject object of type </span><span class="si">{</span><span class="n">inject_object</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span data-line="178">            <span class="k">else</span><span class="p">:</span>
+</span><span data-line="179">                <span class="n">factory_kwargs</span><span class="p">,</span> <span class="n">factory_validation_errors</span> <span class="o">=</span> <span class="k">await</span> <span class="n">_resolve_parameters</span><span class="p">(</span><span class="n">inject_object</span><span class="o">.</span><span class="n">factory</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+</span><span data-line="180">                <span class="k">if</span> <span class="n">inject_object</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">scope</span> <span class="o">==</span> <span class="n">Scope</span><span class="o">.</span><span class="n">SINGLETON</span><span class="p">:</span>
+</span><span data-line="181">                    <span class="k">if</span> <span class="n">inject_object</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">singleton</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="182">                        <span class="n">inject_object</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">singleton</span> <span class="o">=</span> <span class="n">instance</span> <span class="o">=</span> <span class="n">inject_object</span><span class="o">.</span><span class="n">factory</span><span class="p">(</span><span class="o">**</span><span class="n">factory_kwargs</span><span class="p">)</span>
+</span><span data-line="183">                    <span class="n">instance</span> <span class="o">=</span> <span class="n">inject_object</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">singleton</span>
+</span><span data-line="184">                <span class="k">else</span><span class="p">:</span>
+</span><span data-line="185">                    <span class="n">instance</span> <span class="o">=</span> <span class="n">inject_object</span><span class="o">.</span><span class="n">factory</span><span class="p">(</span><span class="o">**</span><span class="n">factory_kwargs</span><span class="p">)</span>
+</span><span data-line="186">                
+</span><span data-line="187">                <span class="n">validation_errors</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">factory_validation_errors</span><span class="p">)</span>
+</span><span data-line="188">
+</span><span data-line="189">            <span class="n">kwargs</span><span class="p">[</span><span class="n">param_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">instance</span>
+</span><span data-line="190">
+</span><span data-line="191">    <span class="c1"># Extract and validate path parameters</span>
+</span><span data-line="192">    <span class="k">for</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">param_info</span> <span class="ow">in</span> <span class="n">params_config</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span data-line="193">        <span class="n">param_key</span> <span class="o">=</span> <span class="n">param_info</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">]</span>
+</span><span data-line="194">        <span class="n">param_type</span> <span class="o">=</span> <span class="n">param_info</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span>
+</span><span data-line="195">        <span class="k">if</span> <span class="n">param_key</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">path_params</span><span class="p">:</span>
+</span><span data-line="196">            <span class="n">raw_value</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">path_params</span><span class="p">[</span><span class="n">param_key</span><span class="p">]</span>
+</span><span data-line="197">            <span class="k">try</span><span class="p">:</span>
+</span><span data-line="198">                <span class="n">kwargs</span><span class="p">[</span><span class="n">param_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">_convert_and_validate_parameter</span><span class="p">(</span><span class="n">raw_value</span><span class="p">,</span> <span class="n">param_type</span><span class="p">,</span> <span class="n">param_name</span><span class="p">)</span>
+</span><span data-line="199">            <span class="k">except</span> <span class="n">ValidationException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span data-line="200">                <span class="n">validation_errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</span><span data-line="201">    
+</span><span data-line="202">    <span class="c1"># Extract and validate query parameters</span>
+</span><span data-line="203">    <span class="k">for</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">param_info</span> <span class="ow">in</span> <span class="n">params_config</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span data-line="204">        <span class="n">param_key</span> <span class="o">=</span> <span class="n">param_info</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">]</span>
+</span><span data-line="205">        <span class="n">param_type</span> <span class="o">=</span> <span class="n">param_info</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span>
+</span><span data-line="206">        <span class="k">if</span> <span class="n">param_key</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">query_params</span><span class="p">:</span>
+</span><span data-line="207">            <span class="n">raw_value</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">query_params</span><span class="p">[</span><span class="n">param_key</span><span class="p">]</span>
+</span><span data-line="208">            <span class="k">try</span><span class="p">:</span>
+</span><span data-line="209">                <span class="n">kwargs</span><span class="p">[</span><span class="n">param_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">_convert_and_validate_parameter</span><span class="p">(</span><span class="n">raw_value</span><span class="p">,</span> <span class="n">param_type</span><span class="p">,</span> <span class="n">param_name</span><span class="p">)</span>
+</span><span data-line="210">            <span class="k">except</span> <span class="n">ValidationException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span data-line="211">                <span class="n">validation_errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</span><span data-line="212">    
+</span><span data-line="213">    <span class="c1"># Extract and validate header parameters</span>
+</span><span data-line="214">    <span class="k">for</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">param_info</span> <span class="ow">in</span> <span class="n">params_config</span><span class="p">[</span><span class="s1">&#39;headers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span data-line="215">        <span class="n">param_key</span> <span class="o">=</span> <span class="n">param_info</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">]</span>
+</span><span data-line="216">        <span class="n">param_type</span> <span class="o">=</span> <span class="n">param_info</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span>
+</span><span data-line="217">        <span class="k">if</span> <span class="n">param_key</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">:</span>
+</span><span data-line="218">            <span class="n">raw_value</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="n">param_key</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+</span><span data-line="219">            <span class="k">try</span><span class="p">:</span>
+</span><span data-line="220">                <span class="n">kwargs</span><span class="p">[</span><span class="n">param_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">_convert_and_validate_parameter</span><span class="p">(</span><span class="n">raw_value</span><span class="p">,</span> <span class="n">param_type</span><span class="p">,</span> <span class="n">param_name</span><span class="p">)</span>
+</span><span data-line="221">            <span class="k">except</span> <span class="n">ValidationException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span data-line="222">                <span class="n">validation_errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</span><span data-line="223">        <span class="k">else</span><span class="p">:</span>
+</span><span data-line="224">            <span class="c1"># TODO raise a bad request error (400), the header is missing. We will set it to None for now</span>
+</span><span data-line="225">            <span class="n">kwargs</span><span class="p">[</span><span class="n">param_name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="226">    
+</span><span data-line="227">    <span class="c1"># Extract and validate body parameters for POST, PUT, PATCH requests</span>
+</span><span data-line="228">    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="s1">&#39;PUT&#39;</span><span class="p">,</span> <span class="s1">&#39;PATCH&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">params_config</span><span class="p">[</span><span class="s1">&#39;body&#39;</span><span class="p">]:</span>
+</span><span data-line="229">        <span class="k">try</span><span class="p">:</span>
+</span><span data-line="230">            <span class="n">body</span> <span class="o">=</span> <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</span><span data-line="231">            <span class="k">for</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">model_class</span> <span class="ow">in</span> <span class="n">params_config</span><span class="p">[</span><span class="s1">&#39;body&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span data-line="232">                <span class="k">try</span><span class="p">:</span>
+</span><span data-line="233">                    <span class="n">kwargs</span><span class="p">[</span><span class="n">param_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">validate_parameter</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">model_class</span><span class="p">,</span> <span class="n">param_name</span><span class="p">)</span>
+</span><span data-line="234">                <span class="k">except</span> <span class="n">ValidationException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span data-line="235">                    <span class="n">validation_errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</span><span data-line="236">        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span data-line="237">            <span class="c1"># Failed to parse JSON body</span>
+</span><span data-line="238">            <span class="n">validation_errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ValidationException</span><span class="p">(</span>
+</span><span data-line="239">                <span class="s2">&quot;request_body&quot;</span><span class="p">,</span> 
+</span><span data-line="240">                <span class="s2">&quot;invalid_json&quot;</span><span class="p">,</span> 
+</span><span data-line="241">                <span class="nb">dict</span><span class="p">,</span> 
+</span><span data-line="242">                <span class="sa">f</span><span class="s2">&quot;Failed to parse JSON body: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="243">            <span class="p">))</span>
+</span><span data-line="244">
+</span><span data-line="245">    <span class="k">return</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">validation_errors</span>
+</span><span data-line="246">
+<div class="viewcode-block" id="Endpoint">
+<a class="viewcode-back" href="../../reference/api.html#tatami.endpoint.Endpoint">[docs]</a>
+</span><span data-line="247"><span class="k">class</span><span class="w"> </span><span class="nc">Endpoint</span><span class="p">(</span><span class="n">TatamiObject</span><span class="p">):</span>
+<div class="viewcode-block" id="Endpoint.__init__">
+<a class="viewcode-back" href="../../reference/api.html#tatami.endpoint.Endpoint.__init__">[docs]</a>
+</span><span data-line="248">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">request_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Request</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">response_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Response</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">tags</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+</span><span data-line="249">        <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="o">=</span> <span class="n">func</span>
+</span><span data-line="250">        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
+</span><span data-line="251">        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">path</span>
+</span><span data-line="252">        <span class="bp">self</span><span class="o">.</span><span class="n">request_type</span> <span class="o">=</span> <span class="n">request_type</span>
+</span><span data-line="253">        <span class="bp">self</span><span class="o">.</span><span class="n">response_type</span> <span class="o">=</span> <span class="n">response_type</span> <span class="ow">or</span> <span class="n">JSONResponse</span>
+</span><span data-line="254">        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span> <span class="ow">or</span> <span class="p">[]</span>
+</span><span data-line="255">        <span class="bp">self</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</span><span data-line="256">        <span class="bp">self</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="s2">&quot;__doc__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+</span><span data-line="257">
+</span><span data-line="258">    <span class="k">def</span><span class="w"> </span><span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">owner</span><span class="p">):</span>
+</span><span data-line="259">        <span class="k">if</span> <span class="n">instance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="260">            <span class="k">return</span> <span class="bp">self</span>
+</span><span data-line="261">        <span class="k">return</span> <span class="n">BoundEndpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">)</span>
+</span><span data-line="262">    
+</span><span data-line="263">    <span class="nd">@property</span>
+</span><span data-line="264">    <span class="k">def</span><span class="w"> </span><span class="nf">deprecated</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span data-line="265">        <span class="k">return</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="s1">&#39;__deprecated__&#39;</span><span class="p">)</span></div>
+
+</span><span data-line="266">
+</span><span data-line="267">
+<div class="viewcode-block" id="BoundEndpoint">
+<a class="viewcode-back" href="../../reference/api.html#tatami.endpoint.BoundEndpoint">[docs]</a>
+</span><span data-line="268"><span class="k">class</span><span class="w"> </span><span class="nc">BoundEndpoint</span><span class="p">(</span><span class="n">TatamiObject</span><span class="p">):</span>
+<div class="viewcode-block" id="BoundEndpoint.__init__">
+<a class="viewcode-back" href="../../reference/api.html#tatami.endpoint.BoundEndpoint.__init__">[docs]</a>
+</span><span data-line="269">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">:</span> <span class="n">Endpoint</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
+</span><span data-line="270">        <span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span> <span class="o">=</span> <span class="n">endpoint</span>
+</span><span data-line="271">        <span class="bp">self</span><span class="o">.</span><span class="n">_instance</span> <span class="o">=</span> <span class="n">instance</span>
+</span><span data-line="272">        <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">endpoint</span><span class="o">.</span><span class="n">method</span>
+</span><span data-line="273">        <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">endpoint</span><span class="o">.</span><span class="n">path</span>
+</span><span data-line="274">        <span class="bp">self</span><span class="o">.</span><span class="n">include_in_schema</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+</span><span data-line="275">
+</span><span data-line="276">    <span class="nd">@property</span>
+</span><span data-line="277">    <span class="k">def</span><span class="w"> </span><span class="nf">tags</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span data-line="278">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="o">.</span><span class="n">tags</span>
+</span><span data-line="279">    
+</span><span data-line="280">    <span class="nd">@property</span>
+</span><span data-line="281">    <span class="k">def</span><span class="w"> </span><span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span data-line="282">        <span class="k">return</span> <span class="n">human_friendly_description_from_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+</span><span data-line="283">    
+</span><span data-line="284">    <span class="nd">@property</span>
+</span><span data-line="285">    <span class="k">def</span><span class="w"> </span><span class="nf">docs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span data-line="286">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span>
+</span><span data-line="287">    
+</span><span data-line="288">    <span class="nd">@property</span>
+</span><span data-line="289">    <span class="k">def</span><span class="w"> </span><span class="nf">signature</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">inspect</span><span class="o">.</span><span class="n">Signature</span><span class="p">:</span>
+</span><span data-line="290">        <span class="k">return</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="o">.</span><span class="n">func</span><span class="p">)</span>
+</span><span data-line="291">    
+</span><span data-line="292">    <span class="nd">@property</span>
+</span><span data-line="293">    <span class="k">def</span><span class="w"> </span><span class="nf">request_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Request</span><span class="p">,</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+</span><span data-line="294">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="o">.</span><span class="n">request_type</span>
+</span><span data-line="295">    
+</span><span data-line="296">    <span class="nd">@property</span>
+</span><span data-line="297">    <span class="k">def</span><span class="w"> </span><span class="nf">response_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Response</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">],</span> <span class="kc">None</span><span class="p">]:</span>
+</span><span data-line="298">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="o">.</span><span class="n">response_type</span>
+</span><span data-line="299">    
+</span><span data-line="300">    <span class="nd">@property</span>
+</span><span data-line="301">    <span class="k">def</span><span class="w"> </span><span class="nf">deprecated</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span data-line="302">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="o">.</span><span class="n">deprecated</span>
+</span><span data-line="303">
+</span><span data-line="304">    <span class="nd">@property</span>
+</span><span data-line="305">    <span class="k">def</span><span class="w"> </span><span class="nf">endpoint_function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="306">        <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_ep_fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span data-line="307">            <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span data-line="308">        <span class="k">return</span> <span class="n">wraps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="o">.</span><span class="n">func</span><span class="p">)(</span><span class="n">_ep_fn</span><span class="p">)</span>
+</span><span data-line="309">
+<div class="viewcode-block" id="BoundEndpoint.run">
+<a class="viewcode-back" href="../../reference/api.html#tatami.endpoint.BoundEndpoint.run">[docs]</a>
+</span><span data-line="310">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Response</span><span class="p">,</span> <span class="n">Awaitable</span><span class="p">[</span><span class="n">Response</span><span class="p">]]:</span>
+</span><span data-line="311"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="312"><span class="sd">        Handle an incoming HTTP request by extracting path parameters, query parameters,</span>
+</span><span data-line="313"><span class="sd">        headers, and request body based on function annotations, invoking the endpoint </span>
+</span><span data-line="314"><span class="sd">        function, and returning an appropriate response.</span>
+</span><span data-line="315">
+</span><span data-line="316"><span class="sd">        The method:</span>
+</span><span data-line="317"><span class="sd">        - Extracts path parameters from the request URL.</span>
+</span><span data-line="318"><span class="sd">        - Extracts query parameters from the request query string.</span>
+</span><span data-line="319"><span class="sd">        - Extracts headers from the request headers.</span>
+</span><span data-line="320"><span class="sd">        - For POST, PUT, or PATCH methods, attempts to parse the JSON body and</span>
+</span><span data-line="321"><span class="sd">        instantiate Pydantic models defined in function annotations.</span>
+</span><span data-line="322"><span class="sd">        - Validates all parameters against their type annotations.</span>
+</span><span data-line="323"><span class="sd">        - Calls the endpoint function (`self.ep_fn`) with the app instance and</span>
+</span><span data-line="324"><span class="sd">        all extracted parameters.</span>
+</span><span data-line="325"><span class="sd">        - Awaits the result if it is awaitable.</span>
+</span><span data-line="326"><span class="sd">        - Wraps the result in a response using `self.response_type` if defined,</span>
+</span><span data-line="327"><span class="sd">        otherwise uses a default wrapper.</span>
+</span><span data-line="328">
+</span><span data-line="329"><span class="sd">        Args:</span>
+</span><span data-line="330"><span class="sd">            request (Request): The incoming HTTP request object.</span>
+</span><span data-line="331">
+</span><span data-line="332"><span class="sd">        Returns:</span>
+</span><span data-line="333"><span class="sd">            Union[Response, Awaitable[Response]]: A Starlette Response instance,</span>
+</span><span data-line="334"><span class="sd">            either directly returned or awaited.</span>
+</span><span data-line="335">
+</span><span data-line="336"><span class="sd">        Usage example:</span>
+</span><span data-line="337"><span class="sd">        </span>
+</span><span data-line="338"><span class="sd">        .. code-block:: python</span>
+</span><span data-line="339">
+</span><span data-line="340"><span class="sd">            # Assume `endpoint` is an instance with `run` method,</span>
+</span><span data-line="341"><span class="sd">            # and `request` is a Starlette Request object.</span>
+</span><span data-line="342">
+</span><span data-line="343"><span class="sd">            response = await endpoint.run(request)</span>
+</span><span data-line="344"><span class="sd">            # `response` is a Starlette Response object ready to be sent back to the client.</span>
+</span><span data-line="345"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="346">        <span class="c1"># Extract parameter configuration from function signature</span>
+</span><span data-line="347">        <span class="n">kwargs</span><span class="p">,</span> <span class="n">validation_errors</span> <span class="o">=</span> <span class="k">await</span> <span class="n">_resolve_parameters</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+</span><span data-line="348">        
+</span><span data-line="349">        <span class="c1"># Return validation errors if any occurred</span>
+</span><span data-line="350">        <span class="k">if</span> <span class="n">validation_errors</span><span class="p">:</span>
+</span><span data-line="351">            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">validation_errors</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+</span><span data-line="352">                <span class="k">return</span> <span class="n">create_validation_error_response</span><span class="p">(</span><span class="n">validation_errors</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</span><span data-line="353">            <span class="k">else</span><span class="p">:</span>
+</span><span data-line="354">                <span class="k">return</span> <span class="n">create_multiple_validation_errors_response</span><span class="p">(</span><span class="n">validation_errors</span><span class="p">)</span>
+</span><span data-line="355">        
+</span><span data-line="356">        <span class="c1"># Call the endpoint function</span>
+</span><span data-line="357">        <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">iscoroutinefunction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="o">.</span><span class="n">func</span><span class="p">):</span>
+</span><span data-line="358">            <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span data-line="359">        <span class="k">else</span><span class="p">:</span>
+</span><span data-line="360">            <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span><span class="o">.</span><span class="n">run_in_executor</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+</span><span data-line="361">
+</span><span data-line="362">        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="o">.</span><span class="n">response_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="363">            <span class="k">return</span> <span class="n">wrap_response</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+</span><span data-line="364">        
+</span><span data-line="365">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="o">.</span><span class="n">response_type</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+</span><span data-line="366">
+</span><span data-line="367">    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span data-line="368">        <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">ismethod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="o">.</span><span class="n">func</span><span class="p">):</span>
+</span><span data-line="369">            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span data-line="370">        <span class="k">else</span><span class="p">:</span>
+</span><span data-line="371">            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_instance</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span data-line="372">    
+<div class="viewcode-block" id="BoundEndpoint.get_route">
+<a class="viewcode-back" href="../../reference/api.html#tatami.endpoint.BoundEndpoint.get_route">[docs]</a>
+</span><span data-line="373">    <span class="k">def</span><span class="w"> </span><span class="nf">get_route</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Route</span><span class="p">:</span>
+</span><span data-line="374">        <span class="k">return</span> <span class="n">Route</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">])</span></div>
+</div>
+
+</span><span data-line="375">
+</span><span data-line="376"><span class="c1"># Universal request helper</span>
+</span><span data-line="377"><span class="nd">@overload</span>
+</span><span data-line="378"><span class="k">def</span><span class="w"> </span><span class="nf">request</span><span class="p">(</span><span class="n">method</span><span class="p">:</span> <span class="n">HTTPMethod</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span> <span class="o">...</span>
+</span><span data-line="379"><span class="nd">@overload</span>
+</span><span data-line="380"><span class="k">def</span><span class="w"> </span><span class="nf">request</span><span class="p">(</span><span class="n">method</span><span class="p">:</span> <span class="n">HTTPMethod</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">response_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Response</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span> <span class="o">...</span>
+</span><span data-line="381"><span class="nd">@overload</span>
+</span><span data-line="382"><span class="k">def</span><span class="w"> </span><span class="nf">request</span><span class="p">(</span><span class="n">method</span><span class="p">:</span> <span class="n">HTTPMethod</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">response_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Response</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span> <span class="o">...</span>
+</span><span data-line="383">
+<div class="viewcode-block" id="request">
+<a class="viewcode-back" href="../../reference/api.html#tatami.endpoint.request">[docs]</a>
+</span><span data-line="384"><span class="k">def</span><span class="w"> </span><span class="nf">request</span><span class="p">(</span><span class="n">method</span><span class="p">:</span> <span class="n">HTTPMethod</span><span class="p">,</span> <span class="n">path_or_func</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">response_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Response</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Endpoint</span><span class="p">:</span>
+</span><span data-line="385"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="386"><span class="sd">    Convenience factory function to create an `Endpoint` instance with the given HTTP method and path.</span>
+</span><span data-line="387"><span class="sd">    Meant to be used as a decorator.</span>
+</span><span data-line="388">
+</span><span data-line="389"><span class="sd">    Args:</span>
+</span><span data-line="390"><span class="sd">        method (str): The HTTP method for the endpoint (e.g., &#39;GET&#39;, &#39;POST&#39;, &#39;PUT&#39;, etc.).</span>
+</span><span data-line="391"><span class="sd">        path (str): The URL path pattern for the endpoint (e.g., &#39;/users/{user_id}&#39;).</span>
+</span><span data-line="392"><span class="sd">        response_type (Optional[Type[Response]]): Optional Starlette Response subclass to use for responses.</span>
+</span><span data-line="393">
+</span><span data-line="394"><span class="sd">    Returns:</span>
+</span><span data-line="395"><span class="sd">        Endpoint: An instance of `Endpoint` initialized with the specified method, path, and response type.</span>
+</span><span data-line="396">
+</span><span data-line="397"><span class="sd">    Usage example:</span>
+</span><span data-line="398"><span class="sd">    </span>
+</span><span data-line="399"><span class="sd">    .. code-block:: python</span>
+</span><span data-line="400">
+</span><span data-line="401"><span class="sd">        @request(&#39;GET&#39;, &#39;/users/{user_id}&#39;, response_type=JSONResponse)</span>
+</span><span data-line="402"><span class="sd">        def get_user_by_id(self, user_id):</span>
+</span><span data-line="403"><span class="sd">            ...</span>
+</span><span data-line="404"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="405">    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+</span><span data-line="406">        <span class="k">return</span> <span class="n">wraps</span><span class="p">(</span><span class="n">fn</span><span class="p">)(</span><span class="n">Endpoint</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">path_or_func</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path_or_func</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">response_type</span><span class="p">))</span>
+</span><span data-line="407">
+</span><span data-line="408">    <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">path_or_func</span><span class="p">):</span>
+</span><span data-line="409">        <span class="k">return</span> <span class="n">decorator</span><span class="p">(</span><span class="n">path_or_func</span><span class="p">)</span>
+</span><span data-line="410">    <span class="k">return</span> <span class="n">decorator</span></div>
+
+</span><span data-line="411">
+</span><span data-line="412">
+</span><span data-line="413"><span class="c1"># Convenience decorators for all HTTP verbs</span>
+</span><span data-line="414"><span class="c1"># GET</span>
+</span><span data-line="415"><span class="nd">@overload</span>
+</span><span data-line="416"><span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span>
+</span><span data-line="417"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="418"><span class="sd">    Marks a function as a GET endpoint using the parent router&#39;s path.</span>
+</span><span data-line="419">
+</span><span data-line="420"><span class="sd">    This is a shorthand for declaring a GET route without specifying an additional path.</span>
+</span><span data-line="421"><span class="sd">    The endpoint will be mounted at the path defined by the class or router it belongs to.</span>
+</span><span data-line="422">
+</span><span data-line="423"><span class="sd">    Example:</span>
+</span><span data-line="424"><span class="sd">        @get</span>
+</span><span data-line="425"><span class="sd">        def index(): ...</span>
+</span><span data-line="426">
+</span><span data-line="427"><span class="sd">    Args:</span>
+</span><span data-line="428"><span class="sd">        func: The endpoint function to register.</span>
+</span><span data-line="429">
+</span><span data-line="430"><span class="sd">    Returns:</span>
+</span><span data-line="431"><span class="sd">        The same function, unmodified.</span>
+</span><span data-line="432"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="433"><span class="nd">@overload</span>
+</span><span data-line="434"><span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">response_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Response</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span>
+</span><span data-line="435"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="436"><span class="sd">    Marks a function as a GET endpoint at a given subpath of the parent router.</span>
+</span><span data-line="437">
+</span><span data-line="438"><span class="sd">    The full path will be composed by joining the parent router&#39;s path with the provided one.</span>
+</span><span data-line="439">
+</span><span data-line="440"><span class="sd">    Example:</span>
+</span><span data-line="441"><span class="sd">        @get(&quot;/items&quot;)</span>
+</span><span data-line="442"><span class="sd">        def list_items(): ...</span>
+</span><span data-line="443">
+</span><span data-line="444"><span class="sd">    Args:</span>
+</span><span data-line="445"><span class="sd">        path: Subpath relative to the parent router (must start with &#39;/&#39;).</span>
+</span><span data-line="446"><span class="sd">        response_type: Optional response format hint (e.g., &quot;json&quot;, &quot;html&quot;).</span>
+</span><span data-line="447">
+</span><span data-line="448"><span class="sd">    Returns:</span>
+</span><span data-line="449"><span class="sd">        A decorator that registers the function as a GET endpoint.</span>
+</span><span data-line="450"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="451"><span class="nd">@overload</span>
+</span><span data-line="452"><span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">response_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Response</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span>
+</span><span data-line="453"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="454"><span class="sd">    Marks a function as a GET endpoint at the parent router&#39;s path,</span>
+</span><span data-line="455"><span class="sd">    while allowing an optional response type.</span>
+</span><span data-line="456">
+</span><span data-line="457"><span class="sd">    Example:</span>
+</span><span data-line="458"><span class="sd">        @get(response_type=&quot;json&quot;)</span>
+</span><span data-line="459"><span class="sd">        def index(): ...</span>
+</span><span data-line="460">
+</span><span data-line="461"><span class="sd">    Args:</span>
+</span><span data-line="462"><span class="sd">        response_type: Optional response format hint (e.g., &quot;json&quot;, &quot;html&quot;).</span>
+</span><span data-line="463">
+</span><span data-line="464"><span class="sd">    Returns:</span>
+</span><span data-line="465"><span class="sd">        A decorator that registers the function as a GET endpoint.</span>
+</span><span data-line="466"><span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="get">
+<a class="viewcode-back" href="../../reference/api.html#tatami.endpoint.get">[docs]</a>
+</span><span data-line="467"><span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="n">path_or_func</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span data-line="468"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="469"><span class="sd">    Registers a function as a GET endpoint. This decorator supports multiple forms:</span>
+</span><span data-line="470">
+</span><span data-line="471"><span class="sd">    - `@get`: Registers the endpoint at the parent router&#39;s path.</span>
+</span><span data-line="472"><span class="sd">    - `@get(&quot;/subpath&quot;)`: Registers the endpoint at a subpath relative to the parent router.</span>
+</span><span data-line="473"><span class="sd">    - `@get(response_type=&quot;json&quot;)`: Registers at the parent path with a specified response type.</span>
+</span><span data-line="474"><span class="sd">    - `@get(&quot;/subpath&quot;, response_type=&quot;json&quot;)`: Registers at a subpath with response type metadata.</span>
+</span><span data-line="475">
+</span><span data-line="476"><span class="sd">    The full route is composed by joining the parent router&#39;s path with the provided subpath.</span>
+</span><span data-line="477">
+</span><span data-line="478"><span class="sd">    Args:</span>
+</span><span data-line="479"><span class="sd">        path_or_func: A subpath string (starting with &#39;/&#39;) or the function to decorate.</span>
+</span><span data-line="480"><span class="sd">                      If omitted, the endpoint is registered at the parent router’s path.</span>
+</span><span data-line="481"><span class="sd">        **kwargs: Optional metadata such as `response_type`.</span>
+</span><span data-line="482">
+</span><span data-line="483"><span class="sd">    Returns:</span>
+</span><span data-line="484"><span class="sd">        Either the original function or a decorator that wraps it.</span>
+</span><span data-line="485"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="486">    <span class="k">return</span> <span class="n">request</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">path_or_func</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+</span><span data-line="487">
+</span><span data-line="488"><span class="c1"># POST</span>
+</span><span data-line="489"><span class="nd">@overload</span>
+</span><span data-line="490"><span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span> <span class="o">...</span>
+</span><span data-line="491"><span class="nd">@overload</span>
+</span><span data-line="492"><span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">response_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Response</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span> <span class="o">...</span>
+</span><span data-line="493"><span class="nd">@overload</span>
+</span><span data-line="494"><span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">response_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Response</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span> <span class="o">...</span>
+<div class="viewcode-block" id="post">
+<a class="viewcode-back" href="../../reference/api.html#tatami.endpoint.post">[docs]</a>
+</span><span data-line="495"><span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span><span class="n">path_or_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span data-line="496">    <span class="k">return</span> <span class="n">request</span><span class="p">(</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="n">path_or_func</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+</span><span data-line="497">
+</span><span data-line="498"><span class="c1"># PUT</span>
+</span><span data-line="499"><span class="nd">@overload</span>
+</span><span data-line="500"><span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span> <span class="o">...</span>
+</span><span data-line="501"><span class="nd">@overload</span>
+</span><span data-line="502"><span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">response_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Response</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span> <span class="o">...</span>
+</span><span data-line="503"><span class="nd">@overload</span>
+</span><span data-line="504"><span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">response_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Response</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span> <span class="o">...</span>
+<div class="viewcode-block" id="put">
+<a class="viewcode-back" href="../../reference/api.html#tatami.endpoint.put">[docs]</a>
+</span><span data-line="505"><span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="n">path_or_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span data-line="506">    <span class="k">return</span> <span class="n">request</span><span class="p">(</span><span class="s2">&quot;PUT&quot;</span><span class="p">,</span> <span class="n">path_or_func</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+</span><span data-line="507">
+</span><span data-line="508"><span class="c1"># PATCH</span>
+</span><span data-line="509"><span class="nd">@overload</span>
+</span><span data-line="510"><span class="k">def</span><span class="w"> </span><span class="nf">patch</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span> <span class="o">...</span>
+</span><span data-line="511"><span class="nd">@overload</span>
+</span><span data-line="512"><span class="k">def</span><span class="w"> </span><span class="nf">patch</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">response_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Response</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span> <span class="o">...</span>
+</span><span data-line="513"><span class="nd">@overload</span>
+</span><span data-line="514"><span class="k">def</span><span class="w"> </span><span class="nf">patch</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">response_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Response</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span> <span class="o">...</span>
+<div class="viewcode-block" id="patch">
+<a class="viewcode-back" href="../../reference/api.html#tatami.endpoint.patch">[docs]</a>
+</span><span data-line="515"><span class="k">def</span><span class="w"> </span><span class="nf">patch</span><span class="p">(</span><span class="n">path_or_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span data-line="516">    <span class="k">return</span> <span class="n">request</span><span class="p">(</span><span class="s2">&quot;PATCH&quot;</span><span class="p">,</span> <span class="n">path_or_func</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+</span><span data-line="517">
+</span><span data-line="518"><span class="c1"># DELETE</span>
+</span><span data-line="519"><span class="nd">@overload</span>
+</span><span data-line="520"><span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span> <span class="o">...</span>
+</span><span data-line="521"><span class="nd">@overload</span>
+</span><span data-line="522"><span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">response_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Response</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span> <span class="o">...</span>
+</span><span data-line="523"><span class="nd">@overload</span>
+</span><span data-line="524"><span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">response_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Response</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span> <span class="o">...</span>
+<div class="viewcode-block" id="delete">
+<a class="viewcode-back" href="../../reference/api.html#tatami.endpoint.delete">[docs]</a>
+</span><span data-line="525"><span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="n">path_or_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span data-line="526">    <span class="k">return</span> <span class="n">request</span><span class="p">(</span><span class="s2">&quot;DELETE&quot;</span><span class="p">,</span> <span class="n">path_or_func</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+</span><span data-line="527">
+</span><span data-line="528"><span class="c1"># HEAD</span>
+</span><span data-line="529"><span class="nd">@overload</span>
+</span><span data-line="530"><span class="k">def</span><span class="w"> </span><span class="nf">head</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span> <span class="o">...</span>
+</span><span data-line="531"><span class="nd">@overload</span>
+</span><span data-line="532"><span class="k">def</span><span class="w"> </span><span class="nf">head</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">response_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Response</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span> <span class="o">...</span>
+</span><span data-line="533"><span class="nd">@overload</span>
+</span><span data-line="534"><span class="k">def</span><span class="w"> </span><span class="nf">head</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">response_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Response</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span> <span class="o">...</span>
+<div class="viewcode-block" id="head">
+<a class="viewcode-back" href="../../reference/api.html#tatami.endpoint.head">[docs]</a>
+</span><span data-line="535"><span class="k">def</span><span class="w"> </span><span class="nf">head</span><span class="p">(</span><span class="n">path_or_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span data-line="536">    <span class="k">return</span> <span class="n">request</span><span class="p">(</span><span class="s2">&quot;HEAD&quot;</span><span class="p">,</span> <span class="n">path_or_func</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+</span><span data-line="537">
+</span><span data-line="538"><span class="c1"># OPTIONS</span>
+</span><span data-line="539"><span class="nd">@overload</span>
+</span><span data-line="540"><span class="k">def</span><span class="w"> </span><span class="nf">options</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span> <span class="o">...</span>
+</span><span data-line="541"><span class="nd">@overload</span>
+</span><span data-line="542"><span class="k">def</span><span class="w"> </span><span class="nf">options</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">response_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Response</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span> <span class="o">...</span>
+</span><span data-line="543"><span class="nd">@overload</span>
+</span><span data-line="544"><span class="k">def</span><span class="w"> </span><span class="nf">options</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">response_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Response</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span> <span class="o">...</span>
+<div class="viewcode-block" id="options">
+<a class="viewcode-back" href="../../reference/api.html#tatami.endpoint.options">[docs]</a>
+</span><span data-line="545"><span class="k">def</span><span class="w"> </span><span class="nf">options</span><span class="p">(</span><span class="n">path_or_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span data-line="546">    <span class="k">return</span> <span class="n">request</span><span class="p">(</span><span class="s2">&quot;OPTIONS&quot;</span><span class="p">,</span> <span class="n">path_or_func</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+</span></pre></div>
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Ibon</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/shibuya.js?v=c477d091"></script></body>
+</html>

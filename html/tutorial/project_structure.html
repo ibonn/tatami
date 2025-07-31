@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Project Structure &amp; Conventions 📁 - Tatami documentation</title><link rel="shortcut icon" href="../_static/favicon.ico"/><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Routing Guide 🗺️" href="routing_guide.html" /><link rel="prev" title="Your First API 📝" href="your_first_api.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=397bb51e" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=76b6f612" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Project Structure &amp; Conventions 📁"/>
+<meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      <img class="light-logo" src="../_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
+      <img class="dark-logo" src="../_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
+      <strong>Tatami</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2 -translate-x-2"></span>
+          <span class="hamburger_3 -translate-x-1"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn Tatami Step by Step</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="your_first_api.html">Your First API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Project Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="routing_guide.html">Routing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="working_with_data.html">Working with Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dependency_injection.html">Dependency Injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="middleware_and_services.html">Middleware and Services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing_your_api.html">Testing Your API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deployment.html">Deployment</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">CLI &amp; Tools</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/commands.html">CLI Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/docker_deployment.html">Docker Deployment</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Migration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../migration/from_flask.html">From Flask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migration/from_fastapi.html">From FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migration/from_django.html">From Django</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/index.html">Advanced Topics Index</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#why-project-structure-matters">Why Project Structure Matters</a></li>
+<li><a class="reference internal" href="#the-tatami-project-structure">The Tatami Project Structure</a></li>
+<li><a class="reference internal" href="#configuration-files">Configuration Files</a><ul>
+<li><a class="reference internal" href="#config-yaml">config.yaml</a></li>
+<li><a class="reference internal" href="#config-dev-yaml">config-dev.yaml</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-routers-directory">The <cite>routers/</cite> Directory &#127919;</a><ul>
+<li><a class="reference internal" href="#router-file-example">Router File Example</a></li>
+<li><a class="reference internal" href="#router-naming-conventions">Router Naming Conventions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-services-directory">The <cite>services/</cite> Directory &#129504;</a><ul>
+<li><a class="reference internal" href="#service-example">Service Example</a></li>
+<li><a class="reference internal" href="#auto-discovery-of-services">Auto-Discovery of Services</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-middleware-directory">The <cite>middleware/</cite> Directory &#128260;</a><ul>
+<li><a class="reference internal" href="#middleware-example">Middleware Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-static-directory">The <cite>static/</cite> Directory &#128193;</a></li>
+<li><a class="reference internal" href="#the-templates-directory">The <cite>templates/</cite> Directory &#128196;</a><ul>
+<li><a class="reference internal" href="#template-example">Template Example</a></li>
+<li><a class="reference internal" href="#customizing-tatami-s-auto-generated-pages">Customizing Tatami&#8217;s Auto-Generated Pages</a></li>
+<li><a class="reference internal" href="#available-template-variables">Available Template Variables</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-mounts-directory">The <cite>mounts/</cite> Directory &#128450;&#65039;</a><ul>
+<li><a class="reference internal" href="#mount-example">Mount Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#convention-based-auto-discovery">Convention-Based Auto-Discovery</a><ul>
+<li><a class="reference internal" href="#routers-from-routers">&#128194; <strong>Routers</strong> (from <cite>routers/</cite>)</a></li>
+<li><a class="reference internal" href="#services-from-services">&#129504; <strong>Services</strong> (from <cite>services/</cite>)</a></li>
+<li><a class="reference internal" href="#middleware-from-middleware">&#128260; <strong>Middleware</strong> (from <cite>middleware/</cite>)</a></li>
+<li><a class="reference internal" href="#static-files-from-static">&#128193; <strong>Static Files</strong> (from <cite>static/</cite>)</a></li>
+<li><a class="reference internal" href="#templates-from-templates">&#128196; <strong>Templates</strong> (from <cite>templates/</cite>)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#best-practices">Best Practices</a><ul>
+<li><a class="reference internal" href="#keep-routers-thin">&#127919; Keep Routers Thin</a></li>
+<li><a class="reference internal" href="#put-logic-in-services">&#129504; Put Logic in Services</a></li>
+<li><a class="reference internal" href="#use-pydantic-models">&#128203; Use Pydantic Models</a></li>
+<li><a class="reference internal" href="#configure-thoughtfully">&#128295; Configure Thoughtfully</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#why-this-structure-works">Why This Structure Works</a><ul>
+<li><a class="reference internal" href="#rapid-development">&#128640; <strong>Rapid Development</strong></a></li>
+<li><a class="reference internal" href="#easy-navigation">&#129517; <strong>Easy Navigation</strong></a></li>
+<li><a class="reference internal" href="#testability">&#129514; <strong>Testability</strong></a></li>
+<li><a class="reference internal" href="#scalability">&#128200; <strong>Scalability</strong></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#real-world-example">Real-World Example</a></li>
+<li><a class="reference internal" href="#what-s-next">What&#8217;s Next?</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">Tatami</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Project Structure &amp; Conventions 📁</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="project-structure-conventions">
+<h1>Project Structure &amp; Conventions 📁<a class="headerlink" href="#project-structure-conventions" title="Link to this heading">¶</a></h1>
+<p>Tatami uses smart conventions to organize your code, making projects easy to understand and maintain. This guide explains the project structure and how Tatami’s convention-over-configuration approach works.</p>
+<section id="why-project-structure-matters">
+<h2>Why Project Structure Matters<a class="headerlink" href="#why-project-structure-matters" title="Link to this heading">¶</a></h2>
+<p>Good project structure:</p>
+<ul class="simple">
+<li><p>🧭 <strong>Guides developers</strong> - New team members know where to find things</p></li>
+<li><p>🔍 <strong>Improves maintainability</strong> - Related code stays together</p></li>
+<li><p>⚡ <strong>Enables automation</strong> - Tatami can auto-discover components</p></li>
+<li><p>🧪 <strong>Simplifies testing</strong> - Clear separation makes testing easier</p></li>
+<li><p>📈 <strong>Scales well</strong> - Structure remains clean as projects grow</p></li>
+</ul>
+</section>
+<section id="the-tatami-project-structure">
+<h2>The Tatami Project Structure<a class="headerlink" href="#the-tatami-project-structure" title="Link to this heading">¶</a></h2>
+<p>When you run <cite>tatami create myproject</cite>, you get this structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">myproject/
+</span><span data-line="2">├── config.yaml          # 🔧 Main configuration
+</span><span data-line="3">├── config-dev.yaml      # 🛠️ Development configuration
+</span><span data-line="4">├── README.md            # 📖 Project documentation
+</span><span data-line="5">├── favicon.ico          # 🎨 API favicon
+</span><span data-line="6">├── routers/             # 🎯 HTTP endpoints and routing
+</span><span data-line="7">│   └── __init__.py
+</span><span data-line="8">├── services/            # 🧠 Business logic layer
+</span><span data-line="9">│   └── __init__.py
+</span><span data-line="10">├── middleware/          # 🔄 Request/response processing
+</span><span data-line="11">│   └── __init__.py
+</span><span data-line="12">├── static/              # 📁 Static files (CSS, JS, images)
+</span><span data-line="13">├── templates/           # 📄 HTML templates (Jinja2)
+</span><span data-line="14">└── mounts/              # 🗂️ Sub-applications
+</span></pre></div>
+</div>
+<p>Let’s explore each directory in detail.</p>
+</section>
+<section id="configuration-files">
+<h2>Configuration Files<a class="headerlink" href="#configuration-files" title="Link to this heading">¶</a></h2>
+<section id="config-yaml">
+<h3>config.yaml<a class="headerlink" href="#config-yaml" title="Link to this heading">¶</a></h3>
+<p>The main configuration file. Tatami uses YAML for clean, readable config:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># config.yaml</span>
+</span><span data-line="2"><span class="nt">app</span><span class="p">:</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;My</span><span class="nv"> </span><span class="s">Amazing</span><span class="nv"> </span><span class="s">API&quot;</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;A</span><span class="nv"> </span><span class="s">Tatami-powered</span><span class="nv"> </span><span class="s">API&quot;</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.0.0&quot;</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="nt">server</span><span class="p">:</span>
+</span><span data-line="8"><span class="w">  </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0.0.0.0&quot;</span>
+</span><span data-line="9"><span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8000</span>
+</span><span data-line="10">
+</span><span data-line="11"><span class="nt">database</span><span class="p">:</span>
+</span><span data-line="12"><span class="w">  </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sqlite:///./app.db&quot;</span>
+</span><span data-line="13">
+</span><span data-line="14"><span class="nt">features</span><span class="p">:</span>
+</span><span data-line="15"><span class="w">  </span><span class="nt">enable_docs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span data-line="16"><span class="w">  </span><span class="nt">enable_cors</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</span></pre></div>
+</div>
+</section>
+<section id="config-dev-yaml">
+<h3>config-dev.yaml<a class="headerlink" href="#config-dev-yaml" title="Link to this heading">¶</a></h3>
+<p>Development-specific overrides:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># config-dev.yaml</span>
+</span><span data-line="2"><span class="nt">server</span><span class="p">:</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="nt">database</span><span class="p">:</span>
+</span><span data-line="7"><span class="w">  </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sqlite:///./dev.db&quot;</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="nt">features</span><span class="p">:</span>
+</span><span data-line="10"><span class="w">  </span><span class="nt">enable_cors</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span data-line="11"><span class="w">  </span><span class="nt">debug</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span></pre></div>
+</div>
+<p>Use development config with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">tatami<span class="w"> </span>run<span class="w"> </span>.<span class="w"> </span>--mode<span class="w"> </span>dev
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="the-routers-directory">
+<h2>The <cite>routers/</cite> Directory 🎯<a class="headerlink" href="#the-routers-directory" title="Link to this heading">¶</a></h2>
+<p>This is where your API endpoints live. Each file becomes a router:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">routers/
+</span><span data-line="2">├── __init__.py          # Makes it a Python package
+</span><span data-line="3">├── users.py             # User management endpoints
+</span><span data-line="4">├── posts.py             # Blog post endpoints
+</span><span data-line="5">├── auth.py              # Authentication endpoints
+</span><span data-line="6">└── admin/               # Admin endpoints (nested)
+</span><span data-line="7">    ├── __init__.py
+</span><span data-line="8">    ├── analytics.py
+</span><span data-line="9">    └── settings.py
+</span></pre></div>
+</div>
+<section id="router-file-example">
+<h3>Router File Example<a class="headerlink" href="#router-file-example" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># routers/users.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami</span><span class="w"> </span><span class="kn">import</span> <span class="n">router</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">post</span><span class="p">,</span> <span class="n">put</span><span class="p">,</span> <span class="n">delete</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">services.user_service</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserService</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="7">    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="8">    <span class="n">email</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="k">class</span><span class="w"> </span><span class="nc">Users</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)):</span>
+</span><span data-line="11"><span class="w">    </span><span class="sd">&quot;&quot;&quot;User management endpoints&quot;&quot;&quot;</span>
+</span><span data-line="12">
+</span><span data-line="13">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_service</span><span class="p">:</span> <span class="n">UserService</span><span class="p">):</span>
+</span><span data-line="14">        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+</span><span data-line="15">        <span class="bp">self</span><span class="o">.</span><span class="n">user_service</span> <span class="o">=</span> <span class="n">user_service</span>
+</span><span data-line="16">
+</span><span data-line="17">    <span class="nd">@get</span>
+</span><span data-line="18">    <span class="k">def</span><span class="w"> </span><span class="nf">list_users</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span data-line="19"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get all users&quot;&quot;&quot;</span>
+</span><span data-line="20">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_service</span><span class="o">.</span><span class="n">get_all</span><span class="p">()</span>
+</span><span data-line="21">
+</span><span data-line="22">    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/</span><span class="si">{user_id}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span><span data-line="23">    <span class="k">def</span><span class="w"> </span><span class="nf">get_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+</span><span data-line="24"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Get user by ID&quot;&quot;&quot;</span>
+</span><span data-line="25">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_service</span><span class="o">.</span><span class="n">get_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</span><span data-line="26">
+</span><span data-line="27">    <span class="nd">@post</span>
+</span><span data-line="28">    <span class="k">def</span><span class="w"> </span><span class="nf">create_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">):</span>
+</span><span data-line="29"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new user&quot;&quot;&quot;</span>
+</span><span data-line="30">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_service</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="router-naming-conventions">
+<h3>Router Naming Conventions<a class="headerlink" href="#router-naming-conventions" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>File names</strong> become route prefixes: <cite>users.py</cite> → <cite>/users</cite></p></li>
+<li><p><strong>Class names</strong> should match the file: <cite>Users</cite> class in <cite>users.py</cite></p></li>
+<li><p><strong>Method names</strong> are descriptive and use HTTP decorators</p></li>
+</ul>
+</section>
+</section>
+<section id="the-services-directory">
+<h2>The <cite>services/</cite> Directory 🧠<a class="headerlink" href="#the-services-directory" title="Link to this heading">¶</a></h2>
+<p>Services contain your business logic, separated from HTTP concerns:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">services/
+</span><span data-line="2">├── __init__.py
+</span><span data-line="3">├── user_service.py      # User business logic
+</span><span data-line="4">├── email_service.py     # Email sending logic
+</span><span data-line="5">├── payment_service.py   # Payment processing
+</span><span data-line="6">└── data/               # Data access layer
+</span><span data-line="7">    ├── __init__.py
+</span><span data-line="8">    ├── user_repository.py
+</span><span data-line="9">    └── post_repository.py
+</span></pre></div>
+</div>
+<section id="service-example">
+<h3>Service Example<a class="headerlink" href="#service-example" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># services/user_service.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami.di</span><span class="w"> </span><span class="kn">import</span> <span class="n">injectable</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">services.data.user_repository</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserRepository</span>
+</span><span data-line="5"><span class="kn">from</span><span class="w"> </span><span class="nn">routers.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">User</span><span class="p">,</span> <span class="n">UserCreate</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="nd">@injectable</span>
+</span><span data-line="8"><span class="k">class</span><span class="w"> </span><span class="nc">UserService</span><span class="p">:</span>
+</span><span data-line="9"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Business logic for user management&quot;&quot;&quot;</span>
+</span><span data-line="10">
+</span><span data-line="11">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_repo</span><span class="p">:</span> <span class="n">UserRepository</span><span class="p">):</span>
+</span><span data-line="12">        <span class="bp">self</span><span class="o">.</span><span class="n">user_repo</span> <span class="o">=</span> <span class="n">user_repo</span>
+</span><span data-line="13">
+</span><span data-line="14">    <span class="k">def</span><span class="w"> </span><span class="nf">create_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_data</span><span class="p">:</span> <span class="n">UserCreate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">User</span><span class="p">:</span>
+</span><span data-line="15">        <span class="c1"># Business logic: validation, rules, etc.</span>
+</span><span data-line="16">        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_repo</span><span class="o">.</span><span class="n">get_by_email</span><span class="p">(</span><span class="n">user_data</span><span class="o">.</span><span class="n">email</span><span class="p">):</span>
+</span><span data-line="17">            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Email already exists&quot;</span><span class="p">)</span>
+</span><span data-line="18">
+</span><span data-line="19">        <span class="c1"># Create user</span>
+</span><span data-line="20">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_repo</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">user_data</span><span class="p">)</span>
+</span><span data-line="21">
+</span><span data-line="22">    <span class="k">def</span><span class="w"> </span><span class="nf">get_user_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">User</span><span class="p">]:</span>
+</span><span data-line="23">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_repo</span><span class="o">.</span><span class="n">get_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</span><span data-line="24">
+</span><span data-line="25">    <span class="k">def</span><span class="w"> </span><span class="nf">get_all_users</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">User</span><span class="p">]:</span>
+</span><span data-line="26">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_repo</span><span class="o">.</span><span class="n">get_all</span><span class="p">()</span>
+</span></pre></div>
+</div>
+</section>
+<section id="auto-discovery-of-services">
+<h3>Auto-Discovery of Services<a class="headerlink" href="#auto-discovery-of-services" title="Link to this heading">¶</a></h3>
+<p>Tatami automatically discovers and makes services available for dependency injection:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># This service is automatically available for injection</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami.di</span><span class="w"> </span><span class="kn">import</span> <span class="n">injectable</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="nd">@injectable</span>
+</span><span data-line="5"><span class="k">class</span><span class="w"> </span><span class="nc">EmailService</span><span class="p">:</span>
+</span><span data-line="6">    <span class="k">def</span><span class="w"> </span><span class="nf">send_welcome_email</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_email</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span data-line="7">        <span class="c1"># Email sending logic</span>
+</span><span data-line="8">        <span class="k">pass</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># Use it in a router</span>
+</span><span data-line="11"><span class="k">class</span><span class="w"> </span><span class="nc">Users</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)):</span>
+</span><span data-line="12">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">email_service</span><span class="p">:</span> <span class="n">EmailService</span><span class="p">):</span>
+</span><span data-line="13">        <span class="bp">self</span><span class="o">.</span><span class="n">email_service</span> <span class="o">=</span> <span class="n">email_service</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="the-middleware-directory">
+<h2>The <cite>middleware/</cite> Directory 🔄<a class="headerlink" href="#the-middleware-directory" title="Link to this heading">¶</a></h2>
+<p>Middleware processes requests and responses:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">middleware/
+</span><span data-line="2">├── __init__.py
+</span><span data-line="3">├── auth_middleware.py    # Authentication
+</span><span data-line="4">├── cors_middleware.py    # CORS handling
+</span><span data-line="5">├── logging_middleware.py # Request logging
+</span><span data-line="6">└── rate_limit_middleware.py # Rate limiting
+</span></pre></div>
+</div>
+<section id="middleware-example">
+<h3>Middleware Example<a class="headerlink" href="#middleware-example" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># middleware/auth_middleware.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">starlette.middleware.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseHTTPMiddleware</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">starlette.requests</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">starlette.responses</span><span class="w"> </span><span class="kn">import</span> <span class="n">Response</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="k">class</span><span class="w"> </span><span class="nc">AuthMiddleware</span><span class="p">(</span><span class="n">BaseHTTPMiddleware</span><span class="p">):</span>
+</span><span data-line="7">    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">call_next</span><span class="p">):</span>
+</span><span data-line="8">        <span class="c1"># Check authentication</span>
+</span><span data-line="9">        <span class="n">auth_header</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Authorization&#39;</span><span class="p">)</span>
+</span><span data-line="10">
+</span><span data-line="11">        <span class="k">if</span> <span class="ow">not</span> <span class="n">auth_header</span> <span class="ow">and</span> <span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;/api/&#39;</span><span class="p">):</span>
+</span><span data-line="12">            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="s2">&quot;Unauthorized&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="mi">401</span><span class="p">)</span>
+</span><span data-line="13">
+</span><span data-line="14">        <span class="c1"># Process request</span>
+</span><span data-line="15">        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">call_next</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</span><span data-line="16">        <span class="k">return</span> <span class="n">response</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="the-static-directory">
+<h2>The <cite>static/</cite> Directory 📁<a class="headerlink" href="#the-static-directory" title="Link to this heading">¶</a></h2>
+<p>Static files are automatically served at <cite>/static</cite>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">static/
+</span><span data-line="2">├── css/
+</span><span data-line="3">│   ├── styles.css
+</span><span data-line="4">│   └── admin.css
+</span><span data-line="5">├── js/
+</span><span data-line="6">│   ├── app.js
+</span><span data-line="7">│   └── utils.js
+</span><span data-line="8">├── images/
+</span><span data-line="9">│   ├── logo.png
+</span><span data-line="10">│   └── favicon.ico
+</span><span data-line="11">└── docs/
+</span><span data-line="12">    └── api_guide.pdf
+</span></pre></div>
+</div>
+<p>Files are accessible at:
+- <cite>/static/css/styles.css</cite>
+- <cite>/static/js/app.js</cite>
+- <cite>/static/images/logo.png</cite></p>
+</section>
+<section id="the-templates-directory">
+<h2>The <cite>templates/</cite> Directory 📄<a class="headerlink" href="#the-templates-directory" title="Link to this heading">¶</a></h2>
+<p>HTML templates for server-side rendering:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">templates/
+</span><span data-line="2">├── base.html            # Base template
+</span><span data-line="3">├── index.html           # Homepage
+</span><span data-line="4">├── users/
+</span><span data-line="5">│   ├── list.html        # User list page
+</span><span data-line="6">│   └── detail.html      # User detail page
+</span><span data-line="7">├── admin/
+</span><span data-line="8">│   ├── dashboard.html
+</span><span data-line="9">│   └── reports.html
+</span><span data-line="10">└── __tatami__/          # 🎋 Tatami system templates
+</span><span data-line="11">    ├── docs_landing.html    # Custom docs landing page
+</span><span data-line="12">    ├── swagger.html         # Custom Swagger UI
+</span><span data-line="13">    └── redoc.html           # Custom ReDoc UI
+</span></pre></div>
+</div>
+<section id="template-example">
+<h3>Template Example<a class="headerlink" href="#template-example" title="Link to this heading">¶</a></h3>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="cm">&lt;!-- templates/users/list.html --&gt;</span>
+</span><span data-line="2"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+</span><span data-line="3"><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+</span><span data-line="4"><span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+</span><span data-line="5">    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Users - {{ app_name }}<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+</span><span data-line="6">    <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/static/css/styles.css&quot;</span><span class="p">&gt;</span>
+</span><span data-line="7"><span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+</span><span data-line="8"><span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+</span><span data-line="9">    <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Users<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</span><span data-line="10">    <span class="p">&lt;</span><span class="nt">ul</span><span class="p">&gt;</span>
+</span><span data-line="11">    {% for user in users %}
+</span><span data-line="12">        <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>{{ user.name }} ({{ user.email }})<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+</span><span data-line="13">    {% endfor %}
+</span><span data-line="14">    <span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+</span><span data-line="15"><span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="customizing-tatami-s-auto-generated-pages">
+<h3>Customizing Tatami’s Auto-Generated Pages<a class="headerlink" href="#customizing-tatami-s-auto-generated-pages" title="Link to this heading">¶</a></h3>
+<p>Tatami automatically provides several pages like documentation and API explorers. You can customize these by creating templates in the special <cite>__tatami__/</cite> directory:</p>
+<p><strong>Automatic Docs Landing Page</strong></p>
+<p>Tatami serves a landing page at <cite>/docs/</cite> that links to all available documentation. Customize it with:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="cm">&lt;!-- templates/__tatami__/docs_landing.html --&gt;</span>
+</span><span data-line="2"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+</span><span data-line="3"><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+</span><span data-line="4"><span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+</span><span data-line="5">    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>{{ app_name }} API Documentation<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+</span><span data-line="6">    <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/static/css/docs.css&quot;</span><span class="p">&gt;</span>
+</span><span data-line="7"><span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+</span><span data-line="8"><span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+</span><span data-line="9">    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;docs-container&quot;</span><span class="p">&gt;</span>
+</span><span data-line="10">        <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>{{ app_name }} API Documentation<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</span><span data-line="11">        <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Welcome to the {{ app_name }} API documentation portal.<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span><span data-line="12">
+</span><span data-line="13">        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;docs-links&quot;</span><span class="p">&gt;</span>
+</span><span data-line="14">            <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/docs/swagger&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;docs-link&quot;</span><span class="p">&gt;</span>
+</span><span data-line="15">                <span class="p">&lt;</span><span class="nt">h3</span><span class="p">&gt;</span>📊 Swagger UI<span class="p">&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
+</span><span data-line="16">                <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Interactive API explorer with request/response examples<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span><span data-line="17">            <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span><span data-line="18">
+</span><span data-line="19">            <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/docs/redoc&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;docs-link&quot;</span><span class="p">&gt;</span>
+</span><span data-line="20">                <span class="p">&lt;</span><span class="nt">h3</span><span class="p">&gt;</span>📚 ReDoc<span class="p">&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
+</span><span data-line="21">                <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Beautiful API documentation with detailed schemas<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span><span data-line="22">            <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span><span data-line="23">
+</span><span data-line="24">            <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/docs/openapi.json&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;docs-link&quot;</span><span class="p">&gt;</span>
+</span><span data-line="25">                <span class="p">&lt;</span><span class="nt">h3</span><span class="p">&gt;</span>📄 OpenAPI Spec<span class="p">&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
+</span><span data-line="26">                <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Raw OpenAPI 3.0 specification in JSON format<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span><span data-line="27">            <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span><span data-line="28">        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span data-line="29">    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span data-line="30"><span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+</span><span data-line="31"><span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</span></pre></div>
+</div>
+<p><strong>Custom Swagger/ReDoc Templates</strong></p>
+<p>Override the default Swagger or ReDoc interfaces:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="cm">&lt;!-- templates/__tatami__/swagger.html --&gt;</span>
+</span><span data-line="2"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+</span><span data-line="3"><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+</span><span data-line="4"><span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+</span><span data-line="5">    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>{{ app_name }} - Swagger UI<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+</span><span data-line="6">    <span class="cm">&lt;!-- Your custom styling --&gt;</span>
+</span><span data-line="7">    <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/static/css/custom-swagger.css&quot;</span><span class="p">&gt;</span>
+</span><span data-line="8"><span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+</span><span data-line="9"><span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+</span><span data-line="10">    <span class="cm">&lt;!-- Custom header --&gt;</span>
+</span><span data-line="11">    <span class="p">&lt;</span><span class="nt">header</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;api-header&quot;</span><span class="p">&gt;</span>
+</span><span data-line="12">        <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>{{ app_name }} API Explorer<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</span><span data-line="13">    <span class="p">&lt;/</span><span class="nt">header</span><span class="p">&gt;</span>
+</span><span data-line="14">
+</span><span data-line="15">    <span class="cm">&lt;!-- Swagger UI will be injected here --&gt;</span>
+</span><span data-line="16">    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;swagger-ui&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span><span data-line="17">
+</span><span data-line="18">    <span class="cm">&lt;!-- Custom footer --&gt;</span>
+</span><span data-line="19">    <span class="p">&lt;</span><span class="nt">footer</span><span class="p">&gt;</span>© 2025 {{ app_name }}<span class="p">&lt;/</span><span class="nt">footer</span><span class="p">&gt;</span>
+</span><span data-line="20"><span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+</span><span data-line="21"><span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="available-template-variables">
+<h3>Available Template Variables<a class="headerlink" href="#available-template-variables" title="Link to this heading">¶</a></h3>
+<p>In <cite>__tatami__/</cite> templates, you have access to:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">app_name</span></code> - Your application name</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">app_version</span></code> - Application version</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">openapi_spec</span></code> - The OpenAPI specification object</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">base_url</span></code> - Base URL of your API</p></li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">docs_url</span></code> - URL to documentation landing page</dt><dd><p>&lt;/html&gt;</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
+<section id="the-mounts-directory">
+<h2>The <cite>mounts/</cite> Directory 🗂️<a class="headerlink" href="#the-mounts-directory" title="Link to this heading">¶</a></h2>
+<p>Mount sub-applications or external ASGI apps:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">mounts/
+</span><span data-line="2">├── admin_app.py         # Admin interface
+</span><span data-line="3">├── docs_app.py          # Custom docs app
+</span><span data-line="4">└── legacy_app.py        # Legacy application
+</span></pre></div>
+</div>
+<section id="mount-example">
+<h3>Mount Example<a class="headerlink" href="#mount-example" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># mounts/admin_app.py</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">starlette.applications</span><span class="w"> </span><span class="kn">import</span> <span class="n">Starlette</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">starlette.routing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Route</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">starlette.responses</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONResponse</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">admin_dashboard</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+</span><span data-line="7">    <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">({</span><span class="s2">&quot;page&quot;</span><span class="p">:</span> <span class="s2">&quot;admin dashboard&quot;</span><span class="p">})</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="c1"># This gets mounted at /admin</span>
+</span><span data-line="10"><span class="n">admin_app</span> <span class="o">=</span> <span class="n">Starlette</span><span class="p">(</span><span class="n">routes</span><span class="o">=</span><span class="p">[</span>
+</span><span data-line="11">    <span class="n">Route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">admin_dashboard</span><span class="p">),</span>
+</span><span data-line="12"><span class="p">])</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="convention-based-auto-discovery">
+<h2>Convention-Based Auto-Discovery<a class="headerlink" href="#convention-based-auto-discovery" title="Link to this heading">¶</a></h2>
+<p>Tatami automatically discovers and registers:</p>
+<section id="routers-from-routers">
+<h3>📂 <strong>Routers</strong> (from <cite>routers/</cite>)<a class="headerlink" href="#routers-from-routers" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Files with router classes are registered</p></li>
+<li><p>Nested directories create sub-routes</p></li>
+<li><p>Example: <cite>routers/admin/users.py</cite> → <cite>/admin/users</cite></p></li>
+</ul>
+</section>
+<section id="services-from-services">
+<h3>🧠 <strong>Services</strong> (from <cite>services/</cite>)<a class="headerlink" href="#services-from-services" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Classes are available for dependency injection</p></li>
+<li><p>Automatic singleton management</p></li>
+<li><p>Constructor dependencies are resolved</p></li>
+</ul>
+</section>
+<section id="middleware-from-middleware">
+<h3>🔄 <strong>Middleware</strong> (from <cite>middleware/</cite>)<a class="headerlink" href="#middleware-from-middleware" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Middleware classes are registered globally</p></li>
+<li><p>Order can be controlled with naming (01_auth.py, 02_cors.py)</p></li>
+</ul>
+</section>
+<section id="static-files-from-static">
+<h3>📁 <strong>Static Files</strong> (from <cite>static/</cite>)<a class="headerlink" href="#static-files-from-static" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Automatically served at <cite>/static</cite></p></li>
+<li><p>No configuration needed</p></li>
+</ul>
+</section>
+<section id="templates-from-templates">
+<h3>📄 <strong>Templates</strong> (from <cite>templates/</cite>)<a class="headerlink" href="#templates-from-templates" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Jinja2 environment auto-configured</p></li>
+<li><p>Templates available in routers</p></li>
+</ul>
+</section>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">¶</a></h2>
+<section id="keep-routers-thin">
+<h3>🎯 Keep Routers Thin<a class="headerlink" href="#keep-routers-thin" title="Link to this heading">¶</a></h3>
+<p>Routers should handle HTTP concerns only:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># ✅ Good - thin router</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">Users</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)):</span>
+</span><span data-line="3">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_service</span><span class="p">:</span> <span class="n">UserService</span><span class="p">):</span>
+</span><span data-line="4">        <span class="bp">self</span><span class="o">.</span><span class="n">user_service</span> <span class="o">=</span> <span class="n">user_service</span>
+</span><span data-line="5">
+</span><span data-line="6">    <span class="nd">@post</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="7">    <span class="k">def</span><span class="w"> </span><span class="nf">create_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">UserCreate</span><span class="p">):</span>
+</span><span data-line="8">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_service</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># ❌ Bad - fat router</span>
+</span><span data-line="11"><span class="k">class</span><span class="w"> </span><span class="nc">Users</span><span class="p">(</span><span class="n">router</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)):</span>
+</span><span data-line="12">    <span class="nd">@post</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span data-line="13">    <span class="k">def</span><span class="w"> </span><span class="nf">create_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">UserCreate</span><span class="p">):</span>
+</span><span data-line="14">        <span class="c1"># Don&#39;t put business logic here!</span>
+</span><span data-line="15">        <span class="k">if</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">():</span>
+</span><span data-line="16">            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Email exists&quot;</span><span class="p">)</span>
+</span><span data-line="17">        <span class="c1"># ... more business logic</span>
+</span></pre></div>
+</div>
+</section>
+<section id="put-logic-in-services">
+<h3>🧠 Put Logic in Services<a class="headerlink" href="#put-logic-in-services" title="Link to this heading">¶</a></h3>
+<p>Services handle business rules and data access:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># ✅ Good - service handles business logic</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">tatami.di</span><span class="w"> </span><span class="kn">import</span> <span class="n">injectable</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="nd">@injectable</span>
+</span><span data-line="5"><span class="k">class</span><span class="w"> </span><span class="nc">UserService</span><span class="p">:</span>
+</span><span data-line="6">    <span class="k">def</span><span class="w"> </span><span class="nf">create_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_data</span><span class="p">:</span> <span class="n">UserCreate</span><span class="p">):</span>
+</span><span data-line="7">        <span class="c1"># Validation</span>
+</span><span data-line="8">        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_exists</span><span class="p">(</span><span class="n">user_data</span><span class="o">.</span><span class="n">email</span><span class="p">):</span>
+</span><span data-line="9">            <span class="k">raise</span> <span class="n">UserAlreadyExistsError</span><span class="p">()</span>
+</span><span data-line="10">
+</span><span data-line="11">        <span class="c1"># Business rules</span>
+</span><span data-line="12">        <span class="n">user_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_business_rules</span><span class="p">(</span><span class="n">user_data</span><span class="p">)</span>
+</span><span data-line="13">
+</span><span data-line="14">        <span class="c1"># Data access</span>
+</span><span data-line="15">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_repo</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">user_data</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="use-pydantic-models">
+<h3>📋 Use Pydantic Models<a class="headerlink" href="#use-pydantic-models" title="Link to this heading">¶</a></h3>
+<p>Define clear data contracts:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># models.py or in router files</span>
+</span><span data-line="2"><span class="k">class</span><span class="w"> </span><span class="nc">UserCreate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="3">    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">min_length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</span><span data-line="4">    <span class="n">email</span><span class="p">:</span> <span class="n">EmailStr</span>
+</span><span data-line="5">    <span class="n">age</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="k">class</span><span class="w"> </span><span class="nc">UserResponse</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span data-line="8">    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+</span><span data-line="9">    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="10">    <span class="n">email</span><span class="p">:</span> <span class="nb">str</span>
+</span><span data-line="11">    <span class="n">created_at</span><span class="p">:</span> <span class="n">datetime</span>
+</span></pre></div>
+</div>
+</section>
+<section id="configure-thoughtfully">
+<h3>🔧 Configure Thoughtfully<a class="headerlink" href="#configure-thoughtfully" title="Link to this heading">¶</a></h3>
+<p>Keep configuration clean and environment-specific:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># config.yaml - production defaults</span>
+</span><span data-line="2"><span class="nt">database</span><span class="p">:</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">pool_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">echo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="nt">features</span><span class="p">:</span>
+</span><span data-line="7"><span class="w">  </span><span class="nt">debug</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</span><span data-line="8"><span class="w">  </span><span class="nt">enable_profiling</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># config-dev.yaml - development overrides</span>
+</span><span data-line="11"><span class="nt">database</span><span class="p">:</span>
+</span><span data-line="12"><span class="w">  </span><span class="nt">echo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span data-line="13">
+</span><span data-line="14"><span class="nt">features</span><span class="p">:</span>
+</span><span data-line="15"><span class="w">  </span><span class="nt">debug</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span data-line="16"><span class="w">  </span><span class="nt">enable_profiling</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="why-this-structure-works">
+<h2>Why This Structure Works<a class="headerlink" href="#why-this-structure-works" title="Link to this heading">¶</a></h2>
+<section id="rapid-development">
+<h3>🚀 <strong>Rapid Development</strong><a class="headerlink" href="#rapid-development" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>No boilerplate configuration</p></li>
+<li><p>Auto-discovery reduces setup time</p></li>
+<li><p>Clear separation of concerns</p></li>
+</ul>
+</section>
+<section id="easy-navigation">
+<h3>🧭 <strong>Easy Navigation</strong><a class="headerlink" href="#easy-navigation" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Predictable file locations</p></li>
+<li><p>Related code stays together</p></li>
+<li><p>New developers onboard quickly</p></li>
+</ul>
+</section>
+<section id="testability">
+<h3>🧪 <strong>Testability</strong><a class="headerlink" href="#testability" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Services can be unit tested easily</p></li>
+<li><p>HTTP layer separated from business logic</p></li>
+<li><p>Dependency injection enables mocking</p></li>
+</ul>
+</section>
+<section id="scalability">
+<h3>📈 <strong>Scalability</strong><a class="headerlink" href="#scalability" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Structure remains clean as projects grow</p></li>
+<li><p>Easy to split into microservices later</p></li>
+<li><p>Clear boundaries between components</p></li>
+</ul>
+</section>
+</section>
+<section id="real-world-example">
+<h2>Real-World Example<a class="headerlink" href="#real-world-example" title="Link to this heading">¶</a></h2>
+<p>Here’s how a real e-commerce API might be structured:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">ecommerce-api/
+</span><span data-line="2">├── config.yaml
+</span><span data-line="3">├── routers/
+</span><span data-line="4">│   ├── products.py          # Product catalog
+</span><span data-line="5">│   ├── users.py             # User management
+</span><span data-line="6">│   ├── orders.py            # Order processing
+</span><span data-line="7">│   ├── payments.py          # Payment handling
+</span><span data-line="8">│   └── admin/
+</span><span data-line="9">│       ├── analytics.py     # Admin analytics
+</span><span data-line="10">│       └── inventory.py     # Inventory management
+</span><span data-line="11">├── services/
+</span><span data-line="12">│   ├── product_service.py   # Product business logic
+</span><span data-line="13">│   ├── order_service.py     # Order processing
+</span><span data-line="14">│   ├── payment_service.py   # Payment integration
+</span><span data-line="15">│   ├── email_service.py     # Email notifications
+</span><span data-line="16">│   └── data/
+</span><span data-line="17">│       ├── product_repo.py  # Product data access
+</span><span data-line="18">│       └── order_repo.py    # Order data access
+</span><span data-line="19">├── middleware/
+</span><span data-line="20">│   ├── auth_middleware.py   # Authentication
+</span><span data-line="21">│   ├── rate_limit.py        # Rate limiting
+</span><span data-line="22">│   └── request_logging.py   # Request logging
+</span><span data-line="23">├── static/
+</span><span data-line="24">│   ├── css/
+</span><span data-line="25">│   └── js/
+</span><span data-line="26">└── templates/
+</span><span data-line="27">    ├── emails/              # Email templates
+</span><span data-line="28">    └── admin/               # Admin interface
+</span></pre></div>
+</div>
+<p>This structure scales from small APIs to large applications while maintaining clarity and organization.</p>
+</section>
+<section id="what-s-next">
+<h2>What’s Next?<a class="headerlink" href="#what-s-next" title="Link to this heading">¶</a></h2>
+<p>Now that you understand Tatami’s project structure, you’re ready to:</p>
+<ul class="simple">
+<li><p>Learn advanced routing patterns and techniques</p></li>
+<li><p>Explore dependency injection for better code organization</p></li>
+<li><p>Dive into middleware development</p></li>
+<li><p>Master testing strategies for Tatami applications</p></li>
+</ul>
+<p>The structure is your foundation - let’s build something amazing on it! 🏗️</p>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="your_first_api.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">Your First API 📝</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="routing_guide.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Routing Guide 🗺️</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Ibon</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/shibuya.js?v=c477d091"></script></body>
+</html>
