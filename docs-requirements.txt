@@ -1,0 +1,4 @@
+sphinx==8.2.3
+shibuya==2025.7.24
+# Install the tatami package for autodoc
+-e .
