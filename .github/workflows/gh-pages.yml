@@ -41,11 +41,11 @@ jobs:
       - name: Install dependencies
         run: python3 -m pip install -r docs-requirements.txt
 
-      - run: make html
+      - run: sphinx-build -M html ./source ./build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         if: github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
+          publish_dir: ./build
