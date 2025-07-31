@@ -1,3 +1,4 @@
+import asyncio
 import inspect
 import logging
 from functools import wraps
@@ -353,9 +354,10 @@ class BoundEndpoint(TatamiObject):
                 return create_multiple_validation_errors_response(validation_errors)
         
         # Call the endpoint function
-        result = self(**kwargs)
-        if inspect.isawaitable(result):
-            result = await result
+        if inspect.iscoroutinefunction(self._endpoint.func):
+            result = await self(**kwargs)
+        else:
+            result = await asyncio.get_event_loop().run_in_executor(None, lambda: self(**kwargs))
 
         if self._endpoint.response_type is None:
             return wrap_response(self._endpoint.func, result)
