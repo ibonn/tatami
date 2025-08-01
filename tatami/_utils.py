@@ -1,30 +1,18 @@
-import datetime
-import decimal
 import importlib.util
 import inspect
 import os
 import re
-from dataclasses import asdict, is_dataclass
 from io import IOBase
 from types import ModuleType
 from typing import TYPE_CHECKING, Any, Callable, Mapping, MutableSequence, Type
-from uuid import UUID
 
-from jinja2 import Environment, FileSystemLoader
 from pydantic import BaseModel
-from pydantic_core import PydanticUndefinedType
-from starlette.responses import (HTMLResponse, JSONResponse, Response,
-                                 StreamingResponse)
+from starlette.responses import Response, StreamingResponse
+
+from tatami.responses import JSONResponse, TemplateResponse
 
 if TYPE_CHECKING:
     from tatami.endpoint import BoundEndpoint
-
-
-class TemplateResponse(HTMLResponse):
-    def __init__(self, template_name: str, content = None, status_code = 200, headers = None, media_type = None, background = None):
-        environment = Environment(loader=FileSystemLoader('templates'))
-        template = environment.get_template(template_name)
-        super().__init__(template.render(content), status_code, headers, media_type, background)
 
 
 def get_request_type(fn: Callable) -> dict[str, Type[BaseModel]]:
@@ -48,73 +36,17 @@ def update_dict(d: dict, update_with: dict):
             d[k] = v
 
 
-def serialize_json(x: Any, _visited: set = None) -> Any:
-    if _visited is None:
-        _visited = set()
-    
-    # Check for circular references
-    obj_id = id(x)
-    if obj_id in _visited:
-        return None  # JSON-compatible way to handle circular references
-    
-    # For primitive types, return as-is without adding to visited
-    if x is None or isinstance(x, (str, int, float, bool)):
-        return x
-    
-    # Add to visited set for complex objects
-    _visited.add(obj_id)
-    
-    try:
-        if isinstance(x, BaseModel):
-            return x.model_dump()
-        
-        if isinstance(x, (list, tuple, set)):
-            return [serialize_json(y, _visited) for y in x]
-        
-        if isinstance(x, Mapping):
-            return {a: serialize_json(b, _visited) for a, b in x.items()}
-        
-        if isinstance(x, UUID):
-            return str(x)
-        
-        if isinstance(x, decimal.Decimal):
-            return float(x)
-        
-        if is_dataclass(x):
-            return serialize_json(asdict(x), _visited)
-        
-        if isinstance(x, (datetime.datetime, datetime.date, datetime.time)):
-            return x.isoformat()
-        
-        # Special handling for Pydantic model classes
-        if isinstance(x, type) and issubclass(x, BaseModel):
-            return x.model_json_schema()
-        
-        if hasattr(x, '__slots__'):
-            return {slot: serialize_json(getattr(x, slot), _visited) for slot in x.__slots__ if hasattr(x, slot)}
-        
-        if hasattr(x, '__dict__'):
-            return serialize_json(vars(x), _visited)
-        
-        if isinstance(x, PydanticUndefinedType):
-            return None
-        
-        return x
-    finally:
-        # Remove from visited set when done processing
-        _visited.discard(obj_id)
-
 def human_friendly_description_from_name(name: str) -> str:
     return ' '.join(name.split('_')).capitalize()
 
 def wrap_response(ep_fn: Callable, ep_result: Any) -> Response:
     try:
         if isinstance(ep_result, BaseModel):
-            return JSONResponse(serialize_json(ep_result))
+            return JSONResponse(ep_result)
     except:
         pass
     
-    for extension in ['jinja2', 'html', 'jinja']:
+    for extension in ['jinja2', 'jinja', 'html']:
         template_path = os.path.join('templates', f'{ep_fn.__name__}.{extension}')
         if os.path.isfile(template_path):
             return TemplateResponse(template_path, ep_result)
@@ -128,7 +60,7 @@ def wrap_response(ep_fn: Callable, ep_result: Any) -> Response:
     except:
         pass
 
-    return JSONResponse(serialize_json(ep_result))
+    return JSONResponse(ep_result)
 
 def path_to_module(path: str) -> str:
     fn, _ = os.path.splitext(path)
