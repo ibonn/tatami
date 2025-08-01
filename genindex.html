@@ -7,6 +7,7 @@
     setColorMode(localStorage._theme||"auto");
   </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=397bb51e" />
     <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=76b6f612" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,8 +23,8 @@
   <div class="sy-head-blur"></div>
   <div class="sy-head-inner sy-container mx-auto">
     <a class="sy-head-brand" href="index.html">
-      <img class="light-logo" src="_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
-      <img class="dark-logo" src="_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
+      <img class="light-logo" src="_static/tatami-logo-black.png" alt="Tatami" height="28" loading="lazy" />
+      <img class="dark-logo" src="_static/tatami-logo-white.png" alt="Tatami" height="28" loading="lazy" />
       <strong>Tatami</strong>
     </a>
     <div class="sy-head-nav" id="head-nav">
@@ -66,6 +67,7 @@ data-aria-dark="Switch to auto color mode">
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#J"><strong>J</strong></a>
+ | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
@@ -87,6 +89,8 @@ data-aria-dark="Switch to auto color mode">
         <li><a href="api/_modules/tatami.di.html#tatami.di.Inject.__init__">(tatami.di.Inject method)</a>, <a href="reference/api.html#tatami.di.Inject.__init__">[1]</a>
 </li>
         <li><a href="api/_modules/tatami.di.html#tatami.di.InjectableMetadata.__init__">(tatami.di.InjectableMetadata method)</a>, <a href="reference/api.html#tatami.di.InjectableMetadata.__init__">[1]</a>
+</li>
+        <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.Doctor.__init__">(tatami.doctor.Doctor method)</a>
 </li>
         <li><a href="api/_modules/tatami.endpoint.html#tatami.endpoint.BoundEndpoint.__init__">(tatami.endpoint.BoundEndpoint method)</a>, <a href="reference/api.html#tatami.endpoint.BoundEndpoint.__init__">[1]</a>
 </li>
@@ -113,6 +117,8 @@ data-aria-dark="Switch to auto color mode">
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.Doctor.add_message">add_message() (tatami.doctor.Doctor method)</a>
+</li>
       <li><a href="api/_modules/tatami.router.html#tatami.router.BaseRouter.add_middleware">add_middleware() (tatami.router.BaseRouter method)</a>, <a href="reference/api.html#tatami.router.BaseRouter.add_middleware">[1]</a>
 </li>
   </ul></td>
@@ -120,6 +126,8 @@ data-aria-dark="Switch to auto color mode">
       <li><a href="api/_modules/tatami.router.html#tatami.router.BaseRouter.add_route">add_route() (tatami.router.BaseRouter method)</a>, <a href="reference/api.html#tatami.router.BaseRouter.add_route">[1]</a>
 </li>
       <li><a href="api/_modules/tatami.openapi.html#tatami.openapi.add_schema_to_spec">add_schema_to_spec() (in module tatami.openapi)</a>
+</li>
+      <li><a href="api/_modules/tatami.config.html#tatami.config.Config.app_name">app_name (tatami.config.Config attribute)</a>, <a href="reference/api.html#tatami.config.Config.app_name">[1]</a>
 </li>
   </ul></td>
 </tr></table>
@@ -129,9 +137,13 @@ data-aria-dark="Switch to auto color mode">
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/_modules/tatami.router.html#tatami.router.BaseRouter">BaseRouter (class in tatami.router)</a>, <a href="reference/api.html#tatami.router.BaseRouter">[1]</a>
 </li>
+      <li><a href="api/_modules/tatami.endpoint.html#tatami.endpoint.BoundEndpoint">BoundEndpoint (class in tatami.endpoint)</a>, <a href="reference/api.html#tatami.endpoint.BoundEndpoint">[1]</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/_modules/tatami.endpoint.html#tatami.endpoint.BoundEndpoint">BoundEndpoint (class in tatami.endpoint)</a>, <a href="reference/api.html#tatami.endpoint.BoundEndpoint">[1]</a>
+      <li><a href="api/_modules/tatami.convention.html#tatami.convention.build_app_from_dir">build_app_from_dir() (in module tatami.convention)</a>
+</li>
+      <li><a href="api/_modules/tatami.convention.html#tatami.convention.build_from_dir">build_from_dir() (in module tatami.convention)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -141,12 +153,20 @@ data-aria-dark="Switch to auto color mode">
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/_modules/tatami._utils.html#tatami._utils.camel_to_snake">camel_to_snake() (in module tatami._utils)</a>, <a href="reference/api.html#tatami._utils.camel_to_snake">[1]</a>
 </li>
+      <li><a href="api/_modules/tatami.config.html#tatami.config.Config">Config (class in tatami.config)</a>, <a href="reference/api.html#tatami.config.Config">[1]</a>
+</li>
       <li><a href="api/_modules/tatami.router.html#tatami.router.ProjectIntrospection.config_file">config_file (tatami.router.ProjectIntrospection attribute)</a>, <a href="reference/api.html#tatami.router.ProjectIntrospection.config_file">[1]</a>
 
       <ul>
         <li><a href="api/_modules/tatami.router.html#tatami.router.Summary.config_file">(tatami.router.Summary attribute)</a>, <a href="reference/api.html#tatami.router.Summary.config_file">[1]</a>
 </li>
       </ul></li>
+      <li><a href="api/_modules/tatami.config.html#tatami.config.ConfigConflictError">ConfigConflictError</a>, <a href="reference/api.html#tatami.config.ConfigConflictError">[1]</a>
+</li>
+      <li><a href="api/_modules/tatami.config.html#tatami.config.ConfigError">ConfigError</a>, <a href="reference/api.html#tatami.config.ConfigError">[1]</a>
+</li>
+      <li><a href="api/_modules/tatami.config.html#tatami.config.DatabaseConfig.connection_string">connection_string (tatami.config.DatabaseConfig attribute)</a>, <a href="reference/api.html#tatami.config.DatabaseConfig.connection_string">[1]</a>
+</li>
       <li><a href="api/_modules/tatami.router.html#tatami.router.ConventionRouter">ConventionRouter (class in tatami.router)</a>, <a href="reference/api.html#tatami.router.ConventionRouter">[1]</a>
 </li>
       <li><a href="api/_modules/tatami.openapi.html#tatami.openapi.create_docs_landing_page">create_docs_landing_page() (in module tatami.openapi)</a>
@@ -157,6 +177,8 @@ data-aria-dark="Switch to auto color mode">
 </li>
       <li><a href="api/_modules/tatami.openapi.html#tatami.openapi.create_openapi_endpoint">create_openapi_endpoint() (in module tatami.openapi)</a>
 </li>
+      <li><a href="api/_modules/tatami.convention.html#tatami.convention.create_project">create_project() (in module tatami.convention)</a>
+</li>
       <li><a href="api/_modules/tatami.openapi.html#tatami.openapi.create_rapidoc_endpoint">create_rapidoc_endpoint() (in module tatami.openapi)</a>
 </li>
       <li><a href="api/_modules/tatami.openapi.html#tatami.openapi.create_redoc_endpoint">create_redoc_endpoint() (in module tatami.openapi)</a>
@@ -165,25 +187,47 @@ data-aria-dark="Switch to auto color mode">
 </li>
       <li><a href="api/_modules/tatami.validation.html#tatami.validation.create_validation_error_response">create_validation_error_response() (in module tatami.validation)</a>, <a href="reference/api.html#tatami.validation.create_validation_error_response">[1]</a>
 </li>
+      <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.MessageLevel.CRITICAL">CRITICAL (tatami.doctor.MessageLevel attribute)</a>
+</li>
+      <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.Summary.critical">critical (tatami.doctor.Summary attribute)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/_modules/tatami.config.html#tatami.config.Config.database">database (tatami.config.Config attribute)</a>, <a href="reference/api.html#tatami.config.Config.database">[1]</a>
+</li>
+      <li><a href="api/_modules/tatami.config.html#tatami.config.DatabaseConfig">DatabaseConfig (class in tatami.config)</a>, <a href="reference/api.html#tatami.config.DatabaseConfig">[1]</a>
+</li>
+      <li><a href="api/_modules/tatami.config.html#tatami.config.DatabaseConfig.db_type">db_type (tatami.config.DatabaseConfig attribute)</a>, <a href="reference/api.html#tatami.config.DatabaseConfig.db_type">[1]</a>
+</li>
       <li><a href="api/_modules/tatami.router.html#tatami.router.DecoratedRouter">DecoratedRouter (class in tatami.router)</a>, <a href="reference/api.html#tatami.router.DecoratedRouter">[1]</a>
+</li>
+      <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.MessageLevel.DEFAULT">DEFAULT (tatami.doctor.MessageLevel attribute)</a>
 </li>
       <li><a href="api/_modules/tatami.endpoint.html#tatami.endpoint.delete">delete() (in module tatami.endpoint)</a>, <a href="reference/api.html#tatami.endpoint.delete">[1]</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/_modules/tatami.endpoint.html#tatami.endpoint.BoundEndpoint.deprecated">deprecated (tatami.endpoint.BoundEndpoint property)</a>, <a href="reference/api.html#tatami.endpoint.BoundEndpoint.deprecated">[1]</a>
 
       <ul>
         <li><a href="api/_modules/tatami.endpoint.html#tatami.endpoint.Endpoint.deprecated">(tatami.endpoint.Endpoint property)</a>, <a href="reference/api.html#tatami.endpoint.Endpoint.deprecated">[1]</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.Diagnose.detail">detail (tatami.doctor.Diagnose attribute)</a>
+</li>
+      <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.Diagnose">Diagnose (class in tatami.doctor)</a>
+</li>
+      <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.diagnose_project">diagnose_project() (in module tatami.doctor)</a>
+</li>
       <li><a href="api/_modules/tatami.endpoint.html#tatami.endpoint.BoundEndpoint.docs">docs (tatami.endpoint.BoundEndpoint property)</a>, <a href="reference/api.html#tatami.endpoint.BoundEndpoint.docs">[1]</a>
+</li>
+      <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.Doctor">Doctor (class in tatami.doctor)</a>
+</li>
+      <li><a href="api/_modules/tatami.config.html#tatami.config.DatabaseConfig.driver">driver (tatami.config.DatabaseConfig attribute)</a>, <a href="reference/api.html#tatami.config.DatabaseConfig.driver">[1]</a>
 </li>
   </ul></td>
 </tr></table>
@@ -206,6 +250,12 @@ data-aria-dark="Switch to auto color mode">
       <li><a href="api/_modules/tatami.router.html#tatami.router.ProjectIntrospection.favicon_path">favicon_path (tatami.router.ProjectIntrospection attribute)</a>, <a href="reference/api.html#tatami.router.ProjectIntrospection.favicon_path">[1]</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/_modules/tatami.config.html#tatami.config.find_config">find_config() (in module tatami.config)</a>, <a href="reference/api.html#tatami.config.find_config">[1]</a>
+</li>
+      <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.Message.frame">frame (tatami.doctor.Message attribute)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="G">G</h2>
@@ -215,10 +265,14 @@ data-aria-dark="Switch to auto color mode">
 </li>
       <li><a href="api/_modules/tatami.endpoint.html#tatami.endpoint.get">get() (in module tatami.endpoint)</a>, <a href="reference/api.html#tatami.endpoint.get">[1]</a>
 </li>
-      <li><a href="api/_modules/tatami.router.html#tatami.router.BaseRouter.get_openapi_spec">get_openapi_spec() (tatami.router.BaseRouter method)</a>, <a href="reference/api.html#tatami.router.BaseRouter.get_openapi_spec">[1]</a>
+      <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.Doctor.get_diagnose">get_diagnose() (tatami.doctor.Doctor method)</a>
+</li>
+      <li><a href="api/_modules/tatami.convention.html#tatami.convention.get_favicon_router">get_favicon_router() (in module tatami.convention)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/_modules/tatami.router.html#tatami.router.BaseRouter.get_openapi_spec">get_openapi_spec() (tatami.router.BaseRouter method)</a>, <a href="reference/api.html#tatami.router.BaseRouter.get_openapi_spec">[1]</a>
+</li>
       <li><a href="api/_modules/tatami.openapi.html#tatami.openapi.get_parameter_schema">get_parameter_schema() (in module tatami.openapi)</a>
 </li>
       <li><a href="api/_modules/tatami._utils.html#tatami._utils.get_request_type">get_request_type() (in module tatami._utils)</a>, <a href="reference/api.html#tatami._utils.get_request_type">[1]</a>
@@ -235,9 +289,13 @@ data-aria-dark="Switch to auto color mode">
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/_modules/tatami.endpoint.html#tatami.endpoint.head">head() (in module tatami.endpoint)</a>, <a href="reference/api.html#tatami.endpoint.head">[1]</a>
 </li>
+      <li><a href="api/_modules/tatami.param.html#tatami.param.Header">Header (class in tatami.param)</a>, <a href="reference/api.html#tatami.param.Header">[1]</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/_modules/tatami.param.html#tatami.param.Header">Header (class in tatami.param)</a>, <a href="reference/api.html#tatami.param.Header">[1]</a>
+      <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.MessageLevel.HIGH">HIGH (tatami.doctor.MessageLevel attribute)</a>
+</li>
+      <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.Summary.high">high (tatami.doctor.Summary attribute)</a>
 </li>
       <li><a href="api/_modules/tatami._utils.html#tatami._utils.human_friendly_description_from_name">human_friendly_description_from_name() (in module tatami._utils)</a>, <a href="reference/api.html#tatami._utils.human_friendly_description_from_name">[1]</a>
 </li>
@@ -261,6 +319,8 @@ data-aria-dark="Switch to auto color mode">
 </li>
       <li><a href="api/_modules/tatami.di.html#tatami.di.InjectableMetadata">InjectableMetadata (class in tatami.di)</a>, <a href="reference/api.html#tatami.di.InjectableMetadata">[1]</a>
 </li>
+      <li><a href="api/_modules/tatami.config.html#tatami.config.InvalidFileError">InvalidFileError</a>, <a href="reference/api.html#tatami.config.InvalidFileError">[1]</a>
+</li>
       <li><a href="api/_modules/tatami.di.html#tatami.di.is_injectable">is_injectable() (in module tatami.di)</a>, <a href="reference/api.html#tatami.di.is_injectable">[1]</a>
 </li>
       <li><a href="api/_modules/tatami.di.html#tatami.di.is_tatami_object">is_tatami_object() (in module tatami.di)</a>, <a href="reference/api.html#tatami.di.is_tatami_object">[1]</a>
@@ -276,9 +336,39 @@ data-aria-dark="Switch to auto color mode">
   </ul></td>
 </tr></table>
 
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.Message.level">level (tatami.doctor.Message attribute)</a>
+</li>
+      <li><a href="api/_modules/tatami.config.html#tatami.config.load_config">load_config() (in module tatami.config)</a>, <a href="reference/api.html#tatami.config.load_config">[1]</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/_modules/tatami.config.html#tatami.config.load_dotenv_files">load_dotenv_files() (in module tatami.config)</a>, <a href="reference/api.html#tatami.config.load_dotenv_files">[1]</a>
+</li>
+      <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.MessageLevel.LOW">LOW (tatami.doctor.MessageLevel attribute)</a>
+</li>
+      <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.Summary.low">low (tatami.doctor.Summary attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/api.html#tatami.__main__.main">main() (in module tatami.__main__)</a>
+</li>
+      <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.MessageLevel.MEDIUM">MEDIUM (tatami.doctor.MessageLevel attribute)</a>
+</li>
+      <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.Summary.medium">medium (tatami.doctor.Summary attribute)</a>
+</li>
+      <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.Message">Message (class in tatami.doctor)</a>
+</li>
+      <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.Message.message">message (tatami.doctor.Message attribute)</a>
+</li>
+      <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.MessageLevel">MessageLevel (class in tatami.doctor)</a>
+</li>
       <li><a href="api/_modules/tatami.router.html#tatami.router.ProjectIntrospection.middleware">middleware (tatami.router.ProjectIntrospection attribute)</a>, <a href="reference/api.html#tatami.router.ProjectIntrospection.middleware">[1]</a>
 
       <ul>
@@ -287,9 +377,21 @@ data-aria-dark="Switch to auto color mode">
       </ul></li>
       <li><a href="api/_modules/tatami.router.html#tatami.router.ProjectIntrospection.middleware_count">middleware_count (tatami.router.ProjectIntrospection property)</a>, <a href="reference/api.html#tatami.router.ProjectIntrospection.middleware_count">[1]</a>
 </li>
-      <li><a href="api/_modules/tatami.router.html#tatami.router.ProjectIntrospection.model_config">model_config (tatami.router.ProjectIntrospection attribute)</a>, <a href="reference/api.html#tatami.router.ProjectIntrospection.model_config">[1]</a>
+      <li><a href="api/_modules/tatami.config.html#tatami.config.MissingEnvVarError">MissingEnvVarError</a>, <a href="reference/api.html#tatami.config.MissingEnvVarError">[1]</a>
+</li>
+      <li><a href="api/_modules/tatami.config.html#tatami.config.Config.model_config">model_config (tatami.config.Config attribute)</a>, <a href="reference/api.html#tatami.config.Config.model_config">[1]</a>
 
       <ul>
+        <li><a href="api/_modules/tatami.config.html#tatami.config.DatabaseConfig.model_config">(tatami.config.DatabaseConfig attribute)</a>, <a href="reference/api.html#tatami.config.DatabaseConfig.model_config">[1]</a>
+</li>
+        <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.Diagnose.model_config">(tatami.doctor.Diagnose attribute)</a>
+</li>
+        <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.Message.model_config">(tatami.doctor.Message attribute)</a>
+</li>
+        <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.Summary.model_config">(tatami.doctor.Summary attribute)</a>
+</li>
+        <li><a href="api/_modules/tatami.router.html#tatami.router.ProjectIntrospection.model_config">(tatami.router.ProjectIntrospection attribute)</a>, <a href="reference/api.html#tatami.router.ProjectIntrospection.model_config">[1]</a>
+</li>
         <li><a href="api/_modules/tatami.router.html#tatami.router.Summary.model_config">(tatami.router.Summary attribute)</a>, <a href="reference/api.html#tatami.router.Summary.model_config">[1]</a>
 </li>
       </ul></li>
@@ -301,17 +403,27 @@ data-aria-dark="Switch to auto color mode">
         <li><a href="api/_modules/tatami.router.html#tatami.router.Summary.models">(tatami.router.Summary attribute)</a>, <a href="reference/api.html#tatami.router.Summary.models">[1]</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/_modules/tatami.router.html#tatami.router.ProjectIntrospection.models_source">models_source (tatami.router.ProjectIntrospection attribute)</a>, <a href="reference/api.html#tatami.router.ProjectIntrospection.models_source">[1]</a>
 </li>
       <li>
     module
 
       <ul>
+        <li><a href="reference/api.html#module-tatami.__main__">tatami.__main__</a>
+</li>
         <li><a href="api/_modules/tatami._utils.html#module-tatami._utils">tatami._utils</a>, <a href="reference/api.html#module-tatami._utils">[1]</a>
+</li>
+        <li><a href="api/_modules/tatami.config.html#module-tatami.config">tatami.config</a>, <a href="reference/api.html#module-tatami.config">[1]</a>
+</li>
+        <li><a href="api/_modules/tatami.convention.html#module-tatami.convention">tatami.convention</a>
 </li>
         <li><a href="api/_modules/tatami.core.html#module-tatami.core">tatami.core</a>
 </li>
         <li><a href="api/_modules/tatami.di.html#module-tatami.di">tatami.di</a>, <a href="reference/api.html#module-tatami.di">[1]</a>
+</li>
+        <li><a href="api/_modules/tatami.doctor.html#module-tatami.doctor">tatami.doctor</a>
 </li>
         <li><a href="api/_modules/tatami.endpoint.html#module-tatami.endpoint">tatami.endpoint</a>, <a href="reference/api.html#module-tatami.endpoint">[1]</a>
 </li>
@@ -326,8 +438,6 @@ data-aria-dark="Switch to auto color mode">
         <li><a href="api/_modules/tatami.validation.html#module-tatami.validation">tatami.validation</a>, <a href="reference/api.html#module-tatami.validation">[1]</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/_modules/tatami.router.html#tatami.router.BaseRouter.mount">mount() (tatami.router.BaseRouter method)</a>, <a href="reference/api.html#tatami.router.BaseRouter.mount">[1]</a>
 </li>
       <li><a href="api/_modules/tatami.router.html#tatami.router.ProjectIntrospection.mount_count">mount_count (tatami.router.ProjectIntrospection property)</a>, <a href="reference/api.html#tatami.router.ProjectIntrospection.mount_count">[1]</a>
@@ -420,22 +530,32 @@ data-aria-dark="Switch to auto color mode">
 </li>
       <li><a href="api/_modules/tatami.router.html#tatami.router.ProjectIntrospection.services">services (tatami.router.ProjectIntrospection attribute)</a>, <a href="reference/api.html#tatami.router.ProjectIntrospection.services">[1]</a>
 </li>
+      <li><a href="api/_modules/tatami.config.html#tatami.config.Config.set_env_vars">set_env_vars() (tatami.config.Config class method)</a>, <a href="reference/api.html#tatami.config.Config.set_env_vars">[1]</a>
+</li>
       <li><a href="api/_modules/tatami.endpoint.html#tatami.endpoint.BoundEndpoint.signature">signature (tatami.endpoint.BoundEndpoint property)</a>, <a href="reference/api.html#tatami.endpoint.BoundEndpoint.signature">[1]</a>
+</li>
+      <li><a href="api/_modules/tatami.di.html#tatami.di.InjectableMetadata.singleton">singleton (tatami.di.InjectableMetadata attribute)</a>, <a href="reference/api.html#tatami.di.InjectableMetadata.singleton">[1]</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/_modules/tatami.di.html#tatami.di.InjectableMetadata.singleton">singleton (tatami.di.InjectableMetadata attribute)</a>, <a href="reference/api.html#tatami.di.InjectableMetadata.singleton">[1]</a>
-</li>
       <li><a href="api/_modules/tatami.di.html#tatami.di.Scope.SINGLETON">SINGLETON (tatami.di.Scope attribute)</a>, <a href="reference/api.html#tatami.di.Scope.SINGLETON">[1]</a>
 </li>
       <li><a href="api/_modules/tatami.router.html#tatami.router.Summary.static">static (tatami.router.Summary attribute)</a>, <a href="reference/api.html#tatami.router.Summary.static">[1]</a>
 </li>
       <li><a href="api/_modules/tatami.router.html#tatami.router.ProjectIntrospection.static_path">static_path (tatami.router.ProjectIntrospection attribute)</a>, <a href="reference/api.html#tatami.router.ProjectIntrospection.static_path">[1]</a>
 </li>
-      <li><a href="api/_modules/tatami.router.html#tatami.router.Summary">Summary (class in tatami.router)</a>, <a href="reference/api.html#tatami.router.Summary">[1]</a>
+      <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.Summary">Summary (class in tatami.doctor)</a>
+
+      <ul>
+        <li><a href="api/_modules/tatami.router.html#tatami.router.Summary">(class in tatami.router)</a>, <a href="reference/api.html#tatami.router.Summary">[1]</a>
 </li>
-      <li><a href="api/_modules/tatami.endpoint.html#tatami.endpoint.BoundEndpoint.summary">summary (tatami.endpoint.BoundEndpoint property)</a>, <a href="reference/api.html#tatami.endpoint.BoundEndpoint.summary">[1]</a>
+      </ul></li>
+      <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.Diagnose.summary">summary (tatami.doctor.Diagnose property)</a>
+
+      <ul>
+        <li><a href="api/_modules/tatami.endpoint.html#tatami.endpoint.BoundEndpoint.summary">(tatami.endpoint.BoundEndpoint property)</a>, <a href="reference/api.html#tatami.endpoint.BoundEndpoint.summary">[1]</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -445,10 +565,31 @@ data-aria-dark="Switch to auto color mode">
       <li><a href="api/_modules/tatami.endpoint.html#tatami.endpoint.BoundEndpoint.tags">tags (tatami.endpoint.BoundEndpoint property)</a>, <a href="reference/api.html#tatami.endpoint.BoundEndpoint.tags">[1]</a>
 </li>
       <li>
+    tatami.__main__
+
+      <ul>
+        <li><a href="reference/api.html#module-tatami.__main__">module</a>
+</li>
+      </ul></li>
+      <li>
     tatami._utils
 
       <ul>
         <li><a href="api/_modules/tatami._utils.html#module-tatami._utils">module</a>, <a href="reference/api.html#module-tatami._utils">[1]</a>
+</li>
+      </ul></li>
+      <li>
+    tatami.config
+
+      <ul>
+        <li><a href="api/_modules/tatami.config.html#module-tatami.config">module</a>, <a href="reference/api.html#module-tatami.config">[1]</a>
+</li>
+      </ul></li>
+      <li>
+    tatami.convention
+
+      <ul>
+        <li><a href="api/_modules/tatami.convention.html#module-tatami.convention">module</a>
 </li>
       </ul></li>
       <li>
@@ -466,12 +607,21 @@ data-aria-dark="Switch to auto color mode">
 </li>
       </ul></li>
       <li>
+    tatami.doctor
+
+      <ul>
+        <li><a href="api/_modules/tatami.doctor.html#module-tatami.doctor">module</a>
+</li>
+      </ul></li>
+      <li>
     tatami.endpoint
 
       <ul>
         <li><a href="api/_modules/tatami.endpoint.html#module-tatami.endpoint">module</a>, <a href="reference/api.html#module-tatami.endpoint">[1]</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     tatami.openapi
 
@@ -486,8 +636,6 @@ data-aria-dark="Switch to auto color mode">
         <li><a href="api/_modules/tatami.param.html#module-tatami.param">module</a>, <a href="reference/api.html#module-tatami.param">[1]</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     tatami.responses
 
@@ -539,16 +687,22 @@ data-aria-dark="Switch to auto color mode">
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/_modules/tatami.validation.html#tatami.validation.ValidationException">ValidationException</a>, <a href="reference/api.html#tatami.validation.ValidationException">[1]</a>
 </li>
+      <li><a href="api/_modules/tatami.config.html#tatami.config.Config.version">version (tatami.config.Config attribute)</a>, <a href="reference/api.html#tatami.config.Config.version">[1]</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/_modules/tatami._utils.html#tatami._utils.with_new_base">with_new_base() (in module tatami._utils)</a>, <a href="reference/api.html#tatami._utils.with_new_base">[1]</a>
+      <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.MessageLevel.WARNING">WARNING (tatami.doctor.MessageLevel attribute)</a>
+</li>
+      <li><a href="api/_modules/tatami.doctor.html#tatami.doctor.Summary.warning">warning (tatami.doctor.Summary attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/_modules/tatami._utils.html#tatami._utils.with_new_base">with_new_base() (in module tatami._utils)</a>, <a href="reference/api.html#tatami._utils.with_new_base">[1]</a>
+</li>
       <li><a href="api/_modules/tatami._utils.html#tatami._utils.wrap_response">wrap_response() (in module tatami._utils)</a>, <a href="reference/api.html#tatami._utils.wrap_response">[1]</a>
 </li>
   </ul></td>
@@ -579,5 +733,7 @@ data-aria-dark="Switch to auto color mode">
       <script src="_static/documentation_options.js?v=8af993ce"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
       <script src="_static/shibuya.js?v=c477d091"></script></body>
 </html>

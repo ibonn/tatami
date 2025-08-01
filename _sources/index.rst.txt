@@ -112,6 +112,7 @@ This means:
 
    Configuration <reference/configuration>
    API Reference <reference/api>
+   Branding & Assets <branding>
 
 Need Help? 🤝
 ------------

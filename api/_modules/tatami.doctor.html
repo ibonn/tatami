@@ -7,6 +7,7 @@
     setColorMode(localStorage._theme||"auto");
   </script><link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=397bb51e" />
     <link rel="stylesheet" type="text/css" href="../../_static/shibuya.css?v=76b6f612" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link media="print" rel="stylesheet" type="text/css" href="../../_static/print.css?v=20ff2c19" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,8 +25,8 @@
   <div class="sy-head-blur"></div>
   <div class="sy-head-inner sy-container mx-auto">
     <a class="sy-head-brand" href="../../index.html">
-      <img class="light-logo" src="../../_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
-      <img class="dark-logo" src="../../_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
+      <img class="light-logo" src="../../_static/tatami-logo-black.png" alt="Tatami" height="28" loading="lazy" />
+      <img class="dark-logo" src="../../_static/tatami-logo-white.png" alt="Tatami" height="28" loading="lazy" />
       <strong>Tatami</strong>
     </a>
     <div class="sy-head-nav" id="head-nav">
@@ -86,6 +87,7 @@ data-aria-dark="Switch to auto color mode">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../reference/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../reference/api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../branding.html">Branding &amp; Assets</a></li>
 </ul>
 
         </div>
@@ -97,7 +99,47 @@ data-aria-dark="Switch to auto color mode">
     <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
       <i class="i-lucide close"></i>
     </button>
-    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#tatami.doctor.Diagnose"><code class="docutils literal notranslate"><span class="pre">Diagnose</span></code></a><ul>
+<li><a class="reference internal" href="#tatami.doctor.Diagnose.detail"><code class="docutils literal notranslate">detail</span></code></a></li>
+<li><a class="reference internal" href="#tatami.doctor.Diagnose.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+<li><a class="reference internal" href="#tatami.doctor.Diagnose.summary"><code class="docutils literal notranslate">summary</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tatami.doctor.Doctor"><code class="docutils literal notranslate"><span class="pre">Doctor</span></code></a><ul>
+<li><a class="reference internal" href="#tatami.doctor.Doctor.__init__"><code class="docutils literal notranslate">__init__()</span></code></a></li>
+<li><a class="reference internal" href="#tatami.doctor.Doctor.add_message"><code class="docutils literal notranslate">add_message()</span></code></a></li>
+<li><a class="reference internal" href="#tatami.doctor.Doctor.get_diagnose"><code class="docutils literal notranslate">get_diagnose()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tatami.doctor.Message"><code class="docutils literal notranslate"><span class="pre">Message</span></code></a><ul>
+<li><a class="reference internal" href="#tatami.doctor.Message.frame"><code class="docutils literal notranslate">frame</span></code></a></li>
+<li><a class="reference internal" href="#tatami.doctor.Message.level"><code class="docutils literal notranslate">level</span></code></a></li>
+<li><a class="reference internal" href="#tatami.doctor.Message.message"><code class="docutils literal notranslate">message</span></code></a></li>
+<li><a class="reference internal" href="#tatami.doctor.Message.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tatami.doctor.MessageLevel"><code class="docutils literal notranslate"><span class="pre">MessageLevel</span></code></a><ul>
+<li><a class="reference internal" href="#tatami.doctor.MessageLevel.CRITICAL"><code class="docutils literal notranslate">CRITICAL</span></code></a></li>
+<li><a class="reference internal" href="#tatami.doctor.MessageLevel.DEFAULT"><code class="docutils literal notranslate">DEFAULT</span></code></a></li>
+<li><a class="reference internal" href="#tatami.doctor.MessageLevel.HIGH"><code class="docutils literal notranslate">HIGH</span></code></a></li>
+<li><a class="reference internal" href="#tatami.doctor.MessageLevel.LOW"><code class="docutils literal notranslate">LOW</span></code></a></li>
+<li><a class="reference internal" href="#tatami.doctor.MessageLevel.MEDIUM"><code class="docutils literal notranslate">MEDIUM</span></code></a></li>
+<li><a class="reference internal" href="#tatami.doctor.MessageLevel.WARNING"><code class="docutils literal notranslate">WARNING</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tatami.doctor.Summary"><code class="docutils literal notranslate"><span class="pre">Summary</span></code></a><ul>
+<li><a class="reference internal" href="#tatami.doctor.Summary.critical"><code class="docutils literal notranslate">critical</span></code></a></li>
+<li><a class="reference internal" href="#tatami.doctor.Summary.high"><code class="docutils literal notranslate">high</span></code></a></li>
+<li><a class="reference internal" href="#tatami.doctor.Summary.low"><code class="docutils literal notranslate">low</span></code></a></li>
+<li><a class="reference internal" href="#tatami.doctor.Summary.medium"><code class="docutils literal notranslate">medium</span></code></a></li>
+<li><a class="reference internal" href="#tatami.doctor.Summary.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+<li><a class="reference internal" href="#tatami.doctor.Summary.warning"><code class="docutils literal notranslate">warning</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tatami.doctor.diagnose_project"><code class="docutils literal notranslate"><span class="pre">diagnose_project()</span></code></a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
   </aside>
   <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
   <main class="sy-main w-full max-sm:max-w-full print:pt-6">
@@ -126,8 +168,206 @@ data-aria-dark="Switch to auto color mode">
 </div><div class="flex flex-col break-words justify-between">
       <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
         <article class="yue" role="main">
-          <section id="tatami-doctor-module">
-<h1>tatami.doctor module<a class="headerlink" href="#tatami-doctor-module" title="Link to this heading">¶</a></h1>
+          <section id="module-tatami.doctor">
+<span id="tatami-doctor-module"></span><h1>tatami.doctor module<a class="headerlink" href="#module-tatami.doctor" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="tatami.doctor.Diagnose">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tatami.doctor.</span></span><span class="sig-name descname"><span class="pre">Diagnose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">detail</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/doctor.html#Diagnose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.doctor.Diagnose" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>detail</strong> (<em>list</em><em>[</em><a class="reference internal" href="#tatami.doctor.Message" title="tatami.doctor.Message"><em>Message</em></a><em>]</em>)</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.doctor.Diagnose.detail">
+<span class="sig-name descname"><span class="pre">detail</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#tatami.doctor.Message" title="tatami.doctor.Message"><span class="pre">Message</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#tatami.doctor.Diagnose.detail" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.doctor.Diagnose.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#tatami.doctor.Diagnose.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tatami.doctor.Diagnose.summary">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">summary</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#tatami.doctor.Summary" title="tatami.doctor.Summary"><span class="pre">Summary</span></a></em><a class="headerlink" href="#tatami.doctor.Diagnose.summary" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tatami.doctor.Doctor">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tatami.doctor.</span></span><span class="sig-name descname"><span class="pre">Doctor</span></span><a class="reference internal" href="../../_modules/tatami/doctor.html#Doctor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.doctor.Doctor" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tatami.doctor.Doctor.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/doctor.html#Doctor.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.doctor.Doctor.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tatami.doctor.Doctor.add_message">
+<span class="sig-name descname"><span class="pre">add_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">MessageLevel.DEFAULT</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/doctor.html#Doctor.add_message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.doctor.Doctor.add_message" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>)</p></li>
+<li><p><strong>level</strong> (<a class="reference internal" href="#tatami.doctor.MessageLevel" title="tatami.doctor.MessageLevel"><em>MessageLevel</em></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Self</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tatami.doctor.Doctor.get_diagnose">
+<span class="sig-name descname"><span class="pre">get_diagnose</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/doctor.html#Doctor.get_diagnose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.doctor.Doctor.get_diagnose" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#tatami.doctor.Diagnose" title="tatami.doctor.Diagnose"><em>Diagnose</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tatami.doctor.Message">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tatami.doctor.</span></span><span class="sig-name descname"><span class="pre">Message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame=&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/doctor.html#Message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.doctor.Message" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>level</strong> (<a class="reference internal" href="#tatami.doctor.MessageLevel" title="tatami.doctor.MessageLevel"><em>MessageLevel</em></a>)</p></li>
+<li><p><strong>message</strong> (<em>str</em>)</p></li>
+<li><p><strong>frame</strong> (<em>FrameInfo</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.doctor.Message.frame">
+<span class="sig-name descname"><span class="pre">frame</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">FrameInfo</span></em><a class="headerlink" href="#tatami.doctor.Message.frame" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.doctor.Message.level">
+<span class="sig-name descname"><span class="pre">level</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#tatami.doctor.MessageLevel" title="tatami.doctor.MessageLevel"><span class="pre">MessageLevel</span></a></em><a class="headerlink" href="#tatami.doctor.Message.level" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.doctor.Message.message">
+<span class="sig-name descname"><span class="pre">message</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#tatami.doctor.Message.message" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.doctor.Message.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#tatami.doctor.Message.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tatami.doctor.MessageLevel">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tatami.doctor.</span></span><span class="sig-name descname"><span class="pre">MessageLevel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/doctor.html#MessageLevel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.doctor.MessageLevel" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.doctor.MessageLevel.CRITICAL">
+<span class="sig-name descname"><span class="pre">CRITICAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'critical'</span></em><a class="headerlink" href="#tatami.doctor.MessageLevel.CRITICAL" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.doctor.MessageLevel.DEFAULT">
+<span class="sig-name descname"><span class="pre">DEFAULT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'default'</span></em><a class="headerlink" href="#tatami.doctor.MessageLevel.DEFAULT" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.doctor.MessageLevel.HIGH">
+<span class="sig-name descname"><span class="pre">HIGH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'high'</span></em><a class="headerlink" href="#tatami.doctor.MessageLevel.HIGH" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.doctor.MessageLevel.LOW">
+<span class="sig-name descname"><span class="pre">LOW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'low'</span></em><a class="headerlink" href="#tatami.doctor.MessageLevel.LOW" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.doctor.MessageLevel.MEDIUM">
+<span class="sig-name descname"><span class="pre">MEDIUM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'medium'</span></em><a class="headerlink" href="#tatami.doctor.MessageLevel.MEDIUM" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.doctor.MessageLevel.WARNING">
+<span class="sig-name descname"><span class="pre">WARNING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'warning'</span></em><a class="headerlink" href="#tatami.doctor.MessageLevel.WARNING" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tatami.doctor.Summary">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tatami.doctor.</span></span><span class="sig-name descname"><span class="pre">Summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">warning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">medium</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">critical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/doctor.html#Summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.doctor.Summary" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>warning</strong> (<em>int</em>)</p></li>
+<li><p><strong>low</strong> (<em>int</em>)</p></li>
+<li><p><strong>medium</strong> (<em>int</em>)</p></li>
+<li><p><strong>high</strong> (<em>int</em>)</p></li>
+<li><p><strong>critical</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.doctor.Summary.critical">
+<span class="sig-name descname"><span class="pre">critical</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#tatami.doctor.Summary.critical" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.doctor.Summary.high">
+<span class="sig-name descname"><span class="pre">high</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#tatami.doctor.Summary.high" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.doctor.Summary.low">
+<span class="sig-name descname"><span class="pre">low</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#tatami.doctor.Summary.low" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.doctor.Summary.medium">
+<span class="sig-name descname"><span class="pre">medium</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#tatami.doctor.Summary.medium" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.doctor.Summary.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#tatami.doctor.Summary.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tatami.doctor.Summary.warning">
+<span class="sig-name descname"><span class="pre">warning</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#tatami.doctor.Summary.warning" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tatami.doctor.diagnose_project">
+<span class="sig-prename descclassname"><span class="pre">tatami.doctor.</span></span><span class="sig-name descname"><span class="pre">diagnose_project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/doctor.html#diagnose_project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.doctor.diagnose_project" title="Link to this definition">¶</a></dt>
+<dd><p>Diagnose a Tatami project and return a detailed analysis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>project_path</strong> (<em>str</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#tatami.doctor.Diagnose" title="tatami.doctor.Diagnose"><em>Diagnose</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
         </article><button class="back-to-top" type="button">
@@ -159,5 +399,7 @@ data-aria-dark="Switch to auto color mode">
       <script src="../../_static/documentation_options.js?v=8af993ce"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
       <script src="../../_static/shibuya.js?v=c477d091"></script></body>
 </html>

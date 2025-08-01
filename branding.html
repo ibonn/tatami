@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>🎨 Branding &amp; Assets - Tatami 0.0.2rc0 documentation</title><link rel="shortcut icon" href="_static/favicon.ico"/><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="API Reference 📚" href="reference/api.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=397bb51e" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=76b6f612" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="🎨 Branding &amp; Assets"/>
+<meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="index.html">
+      <img class="light-logo" src="_static/tatami-logo-black.png" alt="Tatami" height="28" loading="lazy" />
+      <img class="dark-logo" src="_static/tatami-logo-white.png" alt="Tatami" height="28" loading="lazy" />
+      <strong>Tatami</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2 -translate-x-2"></span>
+          <span class="hamburger_3 -translate-x-1"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Learn Tatami Step by Step</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/your_first_api.html">Your First API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/project_structure.html">Project Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/routing_guide.html">Routing Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/working_with_data.html">Working with Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/dependency_injection.html">Dependency Injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/middleware_and_services.html">Middleware and Services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/testing_your_api.html">Testing Your API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/deployment.html">Deployment</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">CLI &amp; Tools</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cli/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli/commands.html">CLI Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli/docker_deployment.html">Docker Deployment</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Migration Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="migration/from_flask.html">From Flask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="migration/from_fastapi.html">From FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="migration/from_django.html">From Django</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Advanced Topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advanced/index.html">Advanced Topics Index</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="reference/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/api.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Branding &amp; Assets</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#logo-gallery">Logo Gallery</a><ul>
+<li><a class="reference internal" href="#full-logos">Full Logos</a></li>
+<li><a class="reference internal" href="#icons">Icons</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#powered-by-tatami-badges">&#8220;Powered by Tatami&#8221; Badges</a><ul>
+<li><a class="reference internal" href="#ready-to-use-badges">Ready-to-use Badges</a></li>
+<li><a class="reference internal" href="#html-links-clickable-badges">HTML Links (Clickable Badges)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#download-assets">Download Assets</a></li>
+<li><a class="reference internal" href="#usage-rights-guidelines">Usage Rights &amp; Guidelines</a><ul>
+<li><a class="reference internal" href="#license">License</a></li>
+<li><a class="reference internal" href="#guidelines">Guidelines</a></li>
+<li><a class="reference internal" href="#questions">Questions?</a></li>
+</ul>
+</li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">Tatami</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">🎨 Branding &amp; Assets</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="branding-assets">
+<h1>🎨 Branding &amp; Assets<a class="headerlink" href="#branding-assets" title="Link to this heading">¶</a></h1>
+<p>This page contains all the official Tatami branding assets, including logos, icons, and usage guidelines.</p>
+<section id="logo-gallery">
+<h2>Logo Gallery<a class="headerlink" href="#logo-gallery" title="Link to this heading">¶</a></h2>
+<p>We provide various versions of the Tatami logo for different use cases. All assets are available in both PNG and SVG formats.</p>
+<section id="full-logos">
+<h3>Full Logos<a class="headerlink" href="#full-logos" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-given docutils container" id="id1">
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Logo Variants</span><a class="headerlink" href="#id1" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 35.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Logo Variant</p></th>
+<th class="head"><p>Preview</p></th>
+<th class="head"><p>Files</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Tatami mats logo</strong></p></td>
+<td><a class="reference internal image-reference" href="_images/tatami-logo.png"><img alt="Default Logo" src="_images/tatami-logo.png" style="width: 200px;" />
+</a>
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tatami-logo.png</span></code>, <code class="docutils literal notranslate"><span class="pre">svg/tatami-logo.svg</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Gradient</strong></p></td>
+<td><a class="reference internal image-reference" href="_images/tatami-logo-gradient.png"><img alt="Gradient Logo" src="_images/tatami-logo-gradient.png" style="width: 200px;" />
+</a>
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tatami-logo-gradient.png</span></code>, <code class="docutils literal notranslate"><span class="pre">svg/tatami-logo-gradient.svg</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Black text</strong></p></td>
+<td><a class="reference internal image-reference" href="_images/tatami-logo-black.png"><img alt="Black Logo" src="_images/tatami-logo-black.png" style="width: 200px;" />
+</a>
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tatami-logo-black.png</span></code>, <code class="docutils literal notranslate"><span class="pre">svg/tatami-logo-black.svg</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>White text</strong></p></td>
+<td><a class="reference internal image-reference" href="_images/tatami-logo-white.png"><img alt="White Logo" src="_images/tatami-logo-white.png" style="width: 200px;" />
+</a>
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tatami-logo-white.png</span></code>, <code class="docutils literal notranslate"><span class="pre">svg/tatami-logo-white.svg</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Gradient Transparent</strong></p></td>
+<td><a class="reference internal image-reference" href="_images/tatami-logo-gradient-transparent.png"><img alt="Gradient Transparent Logo" src="_images/tatami-logo-gradient-transparent.png" style="width: 200px;" />
+</a>
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tatami-logo-gradient-transparent.png</span></code>, <code class="docutils literal notranslate"><span class="pre">svg/tatami-logo-gradient-transparent.svg</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="icons">
+<h3>Icons<a class="headerlink" href="#icons" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-given docutils container" id="id2">
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text">Icon Variants</span><a class="headerlink" href="#id2" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 35.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Icon Variant</p></th>
+<th class="head"><p>Preview</p></th>
+<th class="head"><p>Files</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Standard Icon</strong></p></td>
+<td><a class="reference internal image-reference" href="_images/icon.png"><img alt="Standard Icon" src="_images/icon.png" style="width: 64px;" />
+</a>
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">icon.png</span></code>, <code class="docutils literal notranslate"><span class="pre">svg/tatami-icon.svg</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Cropped Icon</strong></p></td>
+<td><a class="reference internal image-reference" href="_images/icon-cropped.png"><img alt="Cropped Icon" src="_images/icon-cropped.png" style="width: 64px;" />
+</a>
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">icon-cropped.png</span></code>, <code class="docutils literal notranslate"><span class="pre">svg/tatami-icon-cropped.svg</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Favicon</strong></p></td>
+<td><a class="reference internal image-reference" href="_images/favicon.ico"><img alt="Favicon" src="_images/favicon.ico" style="width: 32px;" />
+</a>
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">favicon.ico</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="powered-by-tatami-badges">
+<h2>“Powered by Tatami” Badges<a class="headerlink" href="#powered-by-tatami-badges" title="Link to this heading">¶</a></h2>
+<p>You can use these badges to show your project is powered by Tatami:</p>
+<section id="ready-to-use-badges">
+<h3>Ready-to-use Badges<a class="headerlink" href="#ready-to-use-badges" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-given docutils container" id="id3">
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-text">Badge Styles</span><a class="headerlink" href="#id3" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 40.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Style</p></th>
+<th class="head"><p>Preview</p></th>
+<th class="head"><p>Code</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Standard</strong></p></td>
+<td><img alt="Powered by Tatami" src="https://img.shields.io/badge/Powered%20by-Tatami-d35f5f?style=flat-square" />
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">![Powered</span> <span class="pre">by</span> <span class="pre">Tatami](https://img.shields.io/badge/Powered%20by-Tatami-d35f5f?style=flat-square)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>For the Badge</strong></p></td>
+<td><img alt="Powered by Tatami" src="https://img.shields.io/badge/Powered%20by-Tatami-d35f5f?style=for-the-badge" />
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">![Powered</span> <span class="pre">by</span> <span class="pre">Tatami](https://img.shields.io/badge/Powered%20by-Tatami-d35f5f?style=for-the-badge)</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Framework</strong></p></td>
+<td><img alt="Built with Tatami" src="https://img.shields.io/badge/framework-tatami-d35f5f?style=flat-square" />
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">![Built</span> <span class="pre">with</span> <span class="pre">Tatami](https://img.shields.io/badge/framework-tatami-d35f5f?style=flat-square)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Web Framework</strong></p></td>
+<td><img alt="Web Framework" src="https://img.shields.io/badge/web%20framework-Tatami-d35f5f?style=flat-square" />
+</td>
+<td><p><code class="docutils literal notranslate"><span class="pre">![Web</span> <span class="pre">Framework](https://img.shields.io/badge/web%20framework-Tatami-d35f5f?style=flat-square)</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="html-links-clickable-badges">
+<h3>HTML Links (Clickable Badges)<a class="headerlink" href="#html-links-clickable-badges" title="Link to this heading">¶</a></h3>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="cm">&lt;!-- Standard badge --&gt;</span>
+</span><span data-line="2"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;https://github.com/ibonn/tatami&quot;</span><span class="p">&gt;</span>
+</span><span data-line="3">  <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://img.shields.io/badge/Powered%20by-Tatami-4f46e5?style=flat-square&quot;</span> <span class="na">alt</span><span class="o">=</span><span class="s">&quot;Powered by Tatami&quot;</span> <span class="p">/&gt;</span>
+</span><span data-line="4"><span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="cm">&lt;!-- For the badge style --&gt;</span>
+</span><span data-line="7"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;https://github.com/ibonn/tatami&quot;</span><span class="p">&gt;</span>
+</span><span data-line="8">  <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://img.shields.io/badge/Powered%20by-Tatami-4f46e5?style=for-the-badge&quot;</span> <span class="na">alt</span><span class="o">=</span><span class="s">&quot;Powered by Tatami&quot;</span> <span class="p">/&gt;</span>
+</span><span data-line="9"><span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span><span data-line="10">
+</span><span data-line="11"><span class="cm">&lt;!-- Framework badge --&gt;</span>
+</span><span data-line="12"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;https://github.com/ibonn/tatami&quot;</span><span class="p">&gt;</span>
+</span><span data-line="13">  <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://img.shields.io/badge/framework-tatami-brightgreen?style=flat-square&quot;</span> <span class="na">alt</span><span class="o">=</span><span class="s">&quot;Built with Tatami&quot;</span> <span class="p">/&gt;</span>
+</span><span data-line="14"><span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="download-assets">
+<h2>Download Assets<a class="headerlink" href="#download-assets" title="Link to this heading">¶</a></h2>
+<p>All branding assets are available in the <a class="reference external" href="https://github.com/ibonn/tatami/tree/main/images">GitHub repository</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>File Locations:</strong></p>
+<ul class="simple">
+<li><p>PNG files: <code class="docutils literal notranslate"><span class="pre">images/</span></code></p></li>
+<li><p>SVG files: <code class="docutils literal notranslate"><span class="pre">images/svg/</span></code></p></li>
+<li><p>Icons: <code class="docutils literal notranslate"><span class="pre">images/</span></code> (PNG) and <code class="docutils literal notranslate"><span class="pre">images/svg/</span></code> (SVG)</p></li>
+</ul>
+</div>
+</section>
+<section id="usage-rights-guidelines">
+<h2>Usage Rights &amp; Guidelines<a class="headerlink" href="#usage-rights-guidelines" title="Link to this heading">¶</a></h2>
+<section id="license">
+<h3>License<a class="headerlink" href="#license" title="Link to this heading">¶</a></h3>
+<p>All Tatami logos, icons, and branding assets are <strong>free to use</strong> for:</p>
+<p>✅ <strong>Allowed Uses:</strong></p>
+<ul class="simple">
+<li><p>Open source projects</p></li>
+<li><p>Personal projects</p></li>
+<li><p>Documentation and tutorials</p></li>
+<li><p>Blog posts and articles</p></li>
+<li><p>Conference presentations</p></li>
+<li><p>Educational materials</p></li>
+<li><p>Community content</p></li>
+</ul>
+<p>❌ <strong>Restrictions:</strong></p>
+<ul class="simple">
+<li><p><strong>No commercial merchandise</strong>: You may not sell physical products (mugs, t-shirts, stickers, etc.) featuring Tatami branding</p></li>
+<li><p><strong>No profit from branding</strong>: The Tatami brand is not-for-profit and should not be used for commercial gain</p></li>
+<li><p><strong>No trademark claims</strong>: You cannot claim ownership of the Tatami brand or logos</p></li>
+</ul>
+<p>✅ <strong>Personal Use Exception:</strong></p>
+<p>Feel free to create items for <strong>personal use</strong> (your own mug, shirt, etc.) - just don’t sell them!</p>
+</section>
+<section id="guidelines">
+<h3>Guidelines<a class="headerlink" href="#guidelines" title="Link to this heading">¶</a></h3>
+<p>When using Tatami branding assets:</p>
+<ol class="arabic simple">
+<li><p><strong>Maintain Quality</strong>: Use high-resolution versions appropriate for your medium</p></li>
+<li><p><strong>Respect Proportions</strong>: Don’t stretch, skew, or modify the aspect ratio</p></li>
+<li><p><strong>Adequate Spacing</strong>: Provide clear space around logos (minimum 1x the logo height)</p></li>
+<li><p><strong>Color Integrity</strong>: Use the provided color variants - don’t recolor the logos</p></li>
+<li><p><strong>Attribution Appreciated</strong>: While not required, attribution to the Tatami project is always welcome</p></li>
+</ol>
+</section>
+<section id="questions">
+<h3>Questions?<a class="headerlink" href="#questions" title="Link to this heading">¶</a></h3>
+<p>If you’re unsure about a specific use case, please:</p>
+<ul class="simple">
+<li><p>Open an issue on <a class="reference external" href="https://github.com/ibonn/tatami/issues">GitHub</a></p></li>
+<li><p>Reach out to the maintainers</p></li>
+<li><p>When in doubt, ask! We’re happy to clarify usage rights.</p></li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><strong>Community Showcase</strong>: If you create something cool with Tatami branding, we’d love to see it! Tag us or share it in the community discussions.</p>
+</div>
+</section>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="reference/api.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">API Reference 📚</div></div>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Ibon</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=8af993ce"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+      <script src="_static/shibuya.js?v=c477d091"></script></body>
+</html>

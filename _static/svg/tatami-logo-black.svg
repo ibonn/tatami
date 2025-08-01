@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="123.2386mm"
+   height="35mm"
+   viewBox="0 0 123.2386 35.000001"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   sodipodi:docname="tatami-logo-black.svg"
+   inkscape:export-filename="tatami-logo-black.png"
+   inkscape:export-xdpi="183.97186"
+   inkscape:export-ydpi="183.97186"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="1.8620677"
+     inkscape:cx="213.20385"
+     inkscape:cy="33.0278"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <rect
+       x="171.64374"
+       y="255.18715"
+       width="1380.7448"
+       height="599.99359"
+       id="rect1" />
+    <rect
+       x="171.64374"
+       y="255.18715"
+       width="1380.7448"
+       height="599.99359"
+       id="rect1-2" />
+    <rect
+       x="171.64374"
+       y="255.18715"
+       width="1380.7448"
+       height="599.99359"
+       id="rect1-6" />
+    <rect
+       x="171.64374"
+       y="255.18715"
+       width="1380.7448"
+       height="599.99359"
+       id="rect1-7" />
+    <rect
+       x="171.64374"
+       y="255.18715"
+       width="1380.7448"
+       height="599.99359"
+       id="rect1-2-5" />
+    <rect
+       x="171.64374"
+       y="255.18715"
+       width="1380.7448"
+       height="599.99359"
+       id="rect1-6-0" />
+    <rect
+       x="171.64374"
+       y="255.18715"
+       width="1380.7448"
+       height="599.99359"
+       id="rect1-78" />
+  </defs>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-75.571045,-69.259865)">
+    <g
+       id="g1"
+       transform="translate(-0.99454762)">
+      <g
+         id="g16"
+         transform="matrix(0.7,0,0,0.7,42.976131,20.777959)">
+        <g
+           id="g12-9"
+           transform="matrix(0.71286822,0,0,0.71286822,69.666089,79.207574)">
+          <g
+             id="g15"
+             transform="matrix(0.55064283,0,0,0.55064283,147.10243,-32.53855)">
+            <rect
+               style="fill:#d35f5f;fill-opacity:1;stroke:none;stroke-width:3.0446;stroke-dasharray:none;stroke-opacity:1"
+               id="rect2-1-8"
+               width="44.876331"
+               height="32.274693"
+               x="132.02533"
+               y="100.33964"
+               transform="matrix(0.96490215,0.26260966,-0.77460073,0.63245056,0,0)" />
+            <rect
+               style="fill:#ff5555;fill-opacity:1;stroke:none;stroke-width:3.0446;stroke-dasharray:none;stroke-opacity:1"
+               id="rect2-1-3"
+               width="44.876331"
+               height="32.274693"
+               x="116.0403"
+               y="80.427422"
+               transform="matrix(0.96490215,0.26260966,-0.77460073,0.63245056,0,0)" />
+            <rect
+               style="fill:#ffb380;fill-opacity:1;stroke:none;stroke-width:3.0446;stroke-dasharray:none;stroke-opacity:1"
+               id="rect2-1"
+               width="44.876331"
+               height="32.274693"
+               x="100.05527"
+               y="60.515209"
+               transform="matrix(0.96490215,0.26260966,-0.77460073,0.63245056,0,0)" />
+          </g>
+        </g>
+      </g>
+      <text
+         xml:space="preserve"
+         transform="matrix(0.26458333,0,0,0.26458333,40.183087,8.5671062)"
+         id="text1"
+         style="font-size:74.6667px;font-family:Orbotron;-inkscape-font-specification:Orbotron;white-space:pre;shape-inside:url(#rect1);display:inline;fill:#000000;stroke-width:1.13386"><tspan
+           x="171.64453"
+           y="323.81318"
+           id="tspan2"><tspan
+             style="font-weight:800;font-family:Montserrat;-inkscape-font-specification:'Montserrat Ultra-Bold'"
+             id="tspan1">TATAMI</tspan></tspan></text>
+    </g>
+  </g>
+</svg>

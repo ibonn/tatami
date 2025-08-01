@@ -7,6 +7,7 @@
     setColorMode(localStorage._theme||"auto");
   </script><link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=397bb51e" />
     <link rel="stylesheet" type="text/css" href="../../_static/shibuya.css?v=76b6f612" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link media="print" rel="stylesheet" type="text/css" href="../../_static/print.css?v=20ff2c19" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,8 +25,8 @@
   <div class="sy-head-blur"></div>
   <div class="sy-head-inner sy-container mx-auto">
     <a class="sy-head-brand" href="../../index.html">
-      <img class="light-logo" src="../../_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
-      <img class="dark-logo" src="../../_static/tatami-logo.png" alt="Tatami" height="28" loading="lazy" />
+      <img class="light-logo" src="../../_static/tatami-logo-black.png" alt="Tatami" height="28" loading="lazy" />
+      <img class="dark-logo" src="../../_static/tatami-logo-white.png" alt="Tatami" height="28" loading="lazy" />
       <strong>Tatami</strong>
     </a>
     <div class="sy-head-nav" id="head-nav">
@@ -86,6 +87,7 @@ data-aria-dark="Switch to auto color mode">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../reference/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../reference/api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../branding.html">Branding &amp; Assets</a></li>
 </ul>
 
         </div>
@@ -97,7 +99,13 @@ data-aria-dark="Switch to auto color mode">
     <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
       <i class="i-lucide close"></i>
     </button>
-    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#tatami.convention.build_app_from_dir"><code class="docutils literal notranslate"><span class="pre">build_app_from_dir()</span></code></a></li>
+<li><a class="reference internal" href="#tatami.convention.build_from_dir"><code class="docutils literal notranslate"><span class="pre">build_from_dir()</span></code></a></li>
+<li><a class="reference internal" href="#tatami.convention.create_project"><code class="docutils literal notranslate"><span class="pre">create_project()</span></code></a></li>
+<li><a class="reference internal" href="#tatami.convention.get_favicon_router"><code class="docutils literal notranslate"><span class="pre">get_favicon_router()</span></code></a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
   </aside>
   <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
   <main class="sy-main w-full max-sm:max-w-full print:pt-6">
@@ -126,8 +134,88 @@ data-aria-dark="Switch to auto color mode">
 </div><div class="flex flex-col break-words justify-between">
       <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
         <article class="yue" role="main">
-          <section id="tatami-convention-module">
-<h1>tatami.convention module<a class="headerlink" href="#tatami-convention-module" title="Link to this heading">¶</a></h1>
+          <section id="module-tatami.convention">
+<span id="tatami-convention-module"></span><h1>tatami.convention module<a class="headerlink" href="#module-tatami.convention" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="tatami.convention.build_app_from_dir">
+<span class="sig-prename descclassname"><span class="pre">tatami.convention.</span></span><span class="sig-name descname"><span class="pre">build_app_from_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/convention.html#build_app_from_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.convention.build_app_from_dir" title="Link to this definition">¶</a></dt>
+<dd><p>Backward compatibility function that returns only the app.
+For new code, prefer using build_from_dir which returns both app and introspection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>)</p></li>
+<li><p><strong>mode</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="../../reference/api.html#tatami.router.BaseRouter" title="tatami.router.BaseRouter"><em>BaseRouter</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tatami.convention.build_from_dir">
+<span class="sig-prename descclassname"><span class="pre">tatami.convention.</span></span><span class="sig-name descname"><span class="pre">build_from_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">routers_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'routers'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">services_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'services'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">middleware_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'middleware'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'models'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mounts_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mounts'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'static'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">templates_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'templates'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">favicon_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'favicon.ico'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">readme_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'README.md'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/convention.html#build_from_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.convention.build_from_dir" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>)</p></li>
+<li><p><strong>mode</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>routers_dir</strong> (<em>str</em>)</p></li>
+<li><p><strong>services_dir</strong> (<em>str</em>)</p></li>
+<li><p><strong>middleware_dir</strong> (<em>str</em>)</p></li>
+<li><p><strong>models_dir</strong> (<em>str</em>)</p></li>
+<li><p><strong>mounts_dir</strong> (<em>str</em>)</p></li>
+<li><p><strong>static_dir</strong> (<em>str</em>)</p></li>
+<li><p><strong>templates_dir</strong> (<em>str</em>)</p></li>
+<li><p><strong>favicon_file</strong> (<em>str</em>)</p></li>
+<li><p><strong>readme_file</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple[<a class="reference internal" href="../../reference/api.html#tatami.router.BaseRouter" title="tatami.router.BaseRouter"><em>BaseRouter</em></a>, <a class="reference internal" href="../../reference/api.html#tatami.router.ProjectIntrospection" title="tatami.router.ProjectIntrospection"><em>ProjectIntrospection</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tatami.convention.create_project">
+<span class="sig-prename descclassname"><span class="pre">tatami.convention.</span></span><span class="sig-name descname"><span class="pre">create_project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">routers_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'routers'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">services_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'services'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">middleware_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'middleware'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'models'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mounts_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mounts'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'static'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">templates_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'templates'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">favicon_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'favicon.ico'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">readme_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'README.md'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/convention.html#create_project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.convention.create_project" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>)</p></li>
+<li><p><strong>routers_dir</strong> (<em>str</em>)</p></li>
+<li><p><strong>services_dir</strong> (<em>str</em>)</p></li>
+<li><p><strong>middleware_dir</strong> (<em>str</em>)</p></li>
+<li><p><strong>models_dir</strong> (<em>str</em>)</p></li>
+<li><p><strong>mounts_dir</strong> (<em>str</em>)</p></li>
+<li><p><strong>static_dir</strong> (<em>str</em>)</p></li>
+<li><p><strong>templates_dir</strong> (<em>str</em>)</p></li>
+<li><p><strong>favicon_file</strong> (<em>str</em>)</p></li>
+<li><p><strong>readme_file</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tatami.convention.get_favicon_router">
+<span class="sig-prename descclassname"><span class="pre">tatami.convention.</span></span><span class="sig-name descname"><span class="pre">get_favicon_router</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">favicon_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/tatami/convention.html#get_favicon_router"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tatami.convention.get_favicon_router" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>favicon_path</strong> (<em>str</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Callable</em>[[<em>Request</em>], <em>FileResponse</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
         </article><button class="back-to-top" type="button">
@@ -159,5 +247,7 @@ data-aria-dark="Switch to auto color mode">
       <script src="../../_static/documentation_options.js?v=8af993ce"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
       <script src="../../_static/shibuya.js?v=c477d091"></script></body>
 </html>
