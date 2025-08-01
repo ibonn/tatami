@@ -49,8 +49,6 @@ html_static_path = ['_static']
 html_logo = '_static/tatami-logo.png'
 html_favicon = '_static/favicon.ico'
 html_theme_options = {
-    "external_links": [
-        ("GitHub", "https://github.com/ibonn/tatami"),
-        ("Example (PetStore)", "https://github.com/ibonn/tatami-petstore")
-    ]
+    "light_logo": "_static/tatami-logo-black.png",
+    "dark_logo": "_static/tatami-logo-white.png",
 }

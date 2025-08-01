@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="138.06459mm"
+   height="35mm"
+   viewBox="0 0 138.06459 35.000001"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   sodipodi:docname="tatami-logo-gradient-transparent.svg"
+   inkscape:export-filename="tatami-logo-gradient-transparent.png"
+   inkscape:export-xdpi="183.97186"
+   inkscape:export-ydpi="183.97186"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="1.8620677"
+     inkscape:cx="391.76878"
+     inkscape:cy="154.39825"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <linearGradient
+       id="linearGradient3"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#d35f5f;stop-opacity:1"
+         offset="0"
+         id="stop3" />
+      <stop
+         style="stop-color:#ff5555;stop-opacity:1;"
+         offset="0.4600302"
+         id="stop6" />
+      <stop
+         style="stop-color:#ffb380;stop-opacity:1;"
+         offset="0.89441931"
+         id="stop4" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1"
+         id="stop7" />
+    </linearGradient>
+    <rect
+       x="171.64374"
+       y="255.18715"
+       width="1380.7448"
+       height="599.99359"
+       id="rect1" />
+    <rect
+       x="171.64374"
+       y="255.18715"
+       width="1380.7448"
+       height="599.99359"
+       id="rect1-2" />
+    <rect
+       x="171.64374"
+       y="255.18715"
+       width="1380.7448"
+       height="599.99359"
+       id="rect1-6" />
+    <rect
+       x="171.64374"
+       y="255.18715"
+       width="1380.7448"
+       height="599.99359"
+       id="rect1-7" />
+    <rect
+       x="171.64374"
+       y="255.18715"
+       width="1380.7448"
+       height="599.99359"
+       id="rect1-2-5" />
+    <rect
+       x="171.64374"
+       y="255.18715"
+       width="1380.7448"
+       height="599.99359"
+       id="rect1-6-0" />
+    <rect
+       x="171.64374"
+       y="255.18715"
+       width="1380.7448"
+       height="599.99359"
+       id="rect1-78" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3"
+       id="linearGradient4"
+       x1="-22.281502"
+       y1="38.85236"
+       x2="18.640751"
+       y2="38.85236"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.5185464,0,0,1.710561,116.86206,20.300532)" />
+  </defs>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-60.745056,-69.259864)">
+    <rect
+       style="fill:#000000;stroke-width:4;fill-opacity:0"
+       id="rect2"
+       width="48.405075"
+       height="35"
+       x="150.40457"
+       y="69.259865" />
+    <g
+       id="g16"
+       transform="matrix(0.7,0,0,0.7,42.976131,20.777959)">
+      <g
+         id="g12-9"
+         transform="matrix(0.71286822,0,0,0.71286822,69.666089,79.207574)">
+        <g
+           id="g15"
+           transform="matrix(0.55064283,0,0,0.55064283,147.10243,-32.53855)">
+          <rect
+             style="fill:#d35f5f;fill-opacity:1;stroke:none;stroke-width:3.0446;stroke-dasharray:none;stroke-opacity:1"
+             id="rect2-1-8"
+             width="44.876331"
+             height="32.274693"
+             x="132.02533"
+             y="100.33964"
+             transform="matrix(0.96490215,0.26260966,-0.77460073,0.63245056,0,0)" />
+          <rect
+             style="fill:#ff5555;fill-opacity:1;stroke:none;stroke-width:3.0446;stroke-dasharray:none;stroke-opacity:1"
+             id="rect2-1-3"
+             width="44.876331"
+             height="32.274693"
+             x="116.0403"
+             y="80.427422"
+             transform="matrix(0.96490215,0.26260966,-0.77460073,0.63245056,0,0)" />
+          <rect
+             style="fill:#ffb380;fill-opacity:1;stroke:none;stroke-width:3.0446;stroke-dasharray:none;stroke-opacity:1"
+             id="rect2-1"
+             width="44.876331"
+             height="32.274693"
+             x="100.05527"
+             y="60.515209"
+             transform="matrix(0.96490215,0.26260966,-0.77460073,0.63245056,0,0)" />
+        </g>
+      </g>
+    </g>
+    <rect
+       style="fill:url(#linearGradient4);fill-opacity:1;stroke-width:8.30239"
+       id="rect3"
+       width="103.06459"
+       height="35"
+       x="60.745056"
+       y="69.259865" />
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,25.669349,7.9987424)"
+       id="text1"
+       style="font-size:74.6667px;font-family:Orbotron;-inkscape-font-specification:Orbotron;white-space:pre;shape-inside:url(#rect1);display:inline;fill:#ffffff;stroke-width:1.13386"><tspan
+         x="171.64453"
+         y="323.81318"
+         id="tspan4"><tspan
+           style="font-weight:800;font-family:Montserrat;-inkscape-font-specification:'Montserrat Ultra-Bold'"
+           id="tspan3">TATAMI</tspan></tspan></text>
+  </g>
+</svg>
