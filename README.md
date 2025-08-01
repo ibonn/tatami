@@ -1,4 +1,4 @@
-![Tatami Logo](images/tatami-logo-gradient.png)
+![Tatami Logo](docs/source/_static/tatami-logo-gradient.png)
 
 ![Build Status](https://img.shields.io/github/actions/workflow/status/ibonn/tatami/pypi-publish.yml?style=flat-square)
 ![Docs Status](https://img.shields.io/github/actions/workflow/status/ibonn/tatami/gh-pages.yml?label=docs&style=flat-square)
