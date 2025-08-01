@@ -1,4 +1,4 @@
-__version__ = '0.0.2rc0'
+__version__ = '0.0.2rc2'
 
 # Expose starlette request
 from starlette.requests import Request
