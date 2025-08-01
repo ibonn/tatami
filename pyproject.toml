@@ -24,6 +24,8 @@ dependencies = [
   "jinja2==3.1.6",
   "pydantic==2.11.7",
   "colorama==0.4.6",
+  "pyyaml==6.0.2",
+  "python-dotenv==1.1.1",
 ]
 readme = "README.md"
 requires-python = ">=3.8"
