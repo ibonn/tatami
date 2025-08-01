@@ -1,4 +1,5 @@
 sphinx==8.2.3
 shibuya==2025.7.24
+sphinx_copybutton==0.5.2
 # Install the tatami package for autodoc
 -e .
