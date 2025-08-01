@@ -2,19 +2,17 @@ import asyncio
 import inspect
 import logging
 from functools import lru_cache, wraps
-from typing import (TYPE_CHECKING, Annotated, Any, Awaitable, Callable,
-                    Literal, Optional, Type, TypeAlias, TypeVar, Union,
-                    get_args, get_origin, overload)
+from typing import (Annotated, Awaitable, Callable, Literal, Optional, Type,
+                    TypeAlias, TypeVar, Union, get_args, get_origin, overload)
 
 from pydantic import BaseModel
 from starlette.requests import Request
 from starlette.routing import Route
 
-from tatami._utils import (human_friendly_description_from_name,
-                           serialize_json, wrap_response)
+from tatami._utils import human_friendly_description_from_name, wrap_response
 from tatami.core import TatamiObject
 from tatami.di import (__TATAMI_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED,
-                       Inject, Scope, is_injectable, is_tatami_object)
+                       Inject, Scope, is_injectable)
 from tatami.param import Header, Path, Query
 from tatami.responses import JSONResponse, Response
 from tatami.validation import (ValidationException,
